@@ -71,7 +71,7 @@ if ! [ -x "$(command -v ffmpeg)" ]
 	else
 		echo "FFMPEG ALREADY INSTALLED"
 fi
-if ! [ -x "$(command -v mkvtoolnix)" ]
+if ! [ -x "$(command -v mkvmerge)" ]
 	then
 		apt-get update -qq
 		apt-get -y install mkvtoolnix python-sabyenc python-pip python-subliminal python-guessit
