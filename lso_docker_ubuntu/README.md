@@ -1,6 +1,20 @@
 # Script Information
 These scripts are designed to be used with LinuxServer.io Ubuntu based docker containers
 
+## Script Descriptions
+
+#### ffmpeg_install.bash
+Compiles and installs ffmpeg
+
+#### mkvtoolnix_install.bash
+Installs mkvtoolnix
+
+#### audio_tools_install.bash
+Installs mp3val, mp3gain, flac
+
+#### mp4_automator.bash
+Installs mp4 automator script to the following location: /config/scripts/mp4_automator
+
 ## Script Usage
 
 1. Create a "custom-cont-init.d" folder in the "/config/" of your desired ls.io docker container
