@@ -13,7 +13,8 @@ Installs mkvtoolnix
 Installs mp3val, mp3gain, flac
 
 #### mp4_automator.bash
-Installs mp4 automator script to the following location: /config/scripts/mp4_automator
+Installs mp4 automator script to the following location: /config/scripts/mp4_automator<br />
+-- Note, do not use inconjuction with the mkvtoolnix_install.bash script. This script will also instlal mkvtoolnix utlities
 
 ## Script Usage
 
