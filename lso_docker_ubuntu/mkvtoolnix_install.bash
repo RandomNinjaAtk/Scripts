@@ -1,7 +1,7 @@
 #!/bin/bash
 echo ""
 echo "==========INSTALLING TOOLS==========="
-if ! [ -x "$(command -v mkvtoolnix)" ]
+if ! [ -x "$(command -v mkvmerge)" ]
 	then
 		echo "Installing mkvtoolnix..."
 		apt-get update -qq
