@@ -40,8 +40,38 @@ IFS='
 	find "$1"/* -type f -name "*.merged.mkv" -delete
 	find "$1"/* -type f -name "*.original.mkv" -delete
 	
+	movies=($(find "$1" -type f -iregex ".*/.*\.\(mp4\)"))
+	for movie in "${movies[@]}"; do
+		if timeout 10s mkvmerge -i "$movie" > /dev/null; then
+			echo "MP4 found, remuxing to mkv before processing audio/subtitles"
+			mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" "$movie"
+			# cleanup temp files and rename
+			mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
+			mv "$movie.merged.mkv" "${movie/.mp4/.mkv}" && echo "Renamed temp file"
+			rm "$movie.original.mkv" && echo "Deleted source file"
+		else
+			echo "MKVMERGE ERROR"
+			rm "$movie" && echo "DELETED: $movie"
+		fi
+	done
+
+	movies=($(find "$1" -type f -iregex ".*/.*\.\(avi\)"))
+	for movie in "${movies[@]}"; do
+		if timeout 10s mkvmerge -i "$movie" > /dev/null; then
+			echo "AVI found, remuxing to mkv before processing audio/subtitles"
+			mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" "$movie"
+			# cleanup temp files and rename
+			mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
+			mv "$movie.merged.mkv" "${movie/.avi/.mkv}" && echo "Renamed temp file"
+			rm "$movie.original.mkv" && echo "Deleted source file"
+		else
+			echo "MKVMERGE ERROR"
+			rm "$movie" && echo "DELETED: $movie"
+		fi
+	done
+
 	# Finding Preferred Language
-	movies=($(find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)"))
+	movies=($(find "$1" -type f -iregex ".*/.*\.\(mkv\)"))
 	for movie in "${movies[@]}"; do
 		echo ""
 		echo "=========================="
@@ -133,7 +163,7 @@ IFS='
 					echo "\"${audio}\" Audio Found"
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
 					# cleanup temp files and rename
 					mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
 					mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
@@ -143,7 +173,7 @@ IFS='
 					if test ! -z "$track_ids_stringsub"; then
 						echo "Unwanted subtitles found, removing unwanted subtitles"
 						echo "Creating temporary file: $movie.merged.mkv"
-						mkvmerge --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
+						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
 						# cleanup temp files and rename
 						mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
 						mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
@@ -164,12 +194,17 @@ IFS='
 					echo "Setting Unknown (und) audio language to \"${UnkownAudioLanguage}\""
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids --language $audio_track_ids:${UnkownAudioLanguage} -s ${SubtitleLanguage} "$movie"
+					if mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids --language $audio_track_ids:${UnkownAudioLanguage} -s ${SubtitleLanguage} "$movie"; then
+						echo "SUCCESS"
+					else
+						echo "ERROR, skipping language setting"
+						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie";
+					fi
 				else
 					echo "SetUnknownAudioLanguage not enabled, skipping unknown audio language tag modification"
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
 				fi
 				# cleanup temp files and rename
 				mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
@@ -187,7 +222,7 @@ IFS='
 				if test ! -z "$track_ids_stringsub"; then
 					echo "Unwanted subtitles found, removing unwanted subtitles"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
 					# cleanup temp files and rename
 					mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
 					mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
@@ -211,6 +246,40 @@ IFS='
 	echo "VIDEO PROCESSING COMPLETE"
 	IFS=$OLDIFS
 }
+
+files="${StartingDirectory}"
+for f in "$files"/*; do
+	# start cleanup if enabled
+	if [ "${RemoveNonVideoFiles}" = TRUE ]; then
+		clean "$f"
+	fi
+
+	# start remux if enabled
+	if [ "${Remux}" = TRUE ]; then
+		if [ -x "$(command -v mkvmerge)" ]; then
+			if find "$f" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
+				remux "$f"
+			else
+				echo "ERROR: NO VIDEO FILES FOUND TO PROCESS"
+			fi
+		else
+			echo "mkvmerge utility not installed"
+		fi
+	fi
+	if [ "${MoveToDestination}" = TRUE ]; then
+		if find "$f" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
+			mv "$f" "${DestinationDirectory}"/ && echo "SUCCESS, moved $f to ${DestinationDirectory}"
+		else
+			echo "ERROR: NO VIDEO FILES FOUND"
+		fi
+	else
+		echo "MoveToDestination setting disabled, leaving files in place"
+	fi
+done
+
+
+# script complete, now exiting
+exit 0
 
 
 files="${StartingDirectory}"
