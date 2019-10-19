@@ -128,7 +128,7 @@ conversion () {
 replaygain () {
 	if find "$1" -type f -iregex ".*/.*\.\(flac\)" | read; then
 		echo "FLAC - ADDING REPLAYGAIN TAGS"
-		if find "$1" -type f -iregex ".*/.*\.\(flac\)" -exec metaflac --add-replay-gain "\{\}" +; then
+		if find "$1" -type f -iregex ".*/.*\.\(flac\)" -exec metaflac --add-replay-gain "{}" +; then
 			echo "FLAC REPLAYGAIN TAGGING COMPLETE"
 		else
 			echo "ERROR: FLAC REPLAYGAIN TAGGING FAILED" && exit 1
