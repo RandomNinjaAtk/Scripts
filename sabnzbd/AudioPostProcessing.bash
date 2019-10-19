@@ -21,7 +21,7 @@ clean () {
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" | read; then
 		echo "REMOVE NON AUDIO FILES"
 		find "$1"/* -type f -not -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -delete
-		echo "REMOVE NON AUDIO FILES COMLPLETE"
+		echo "REMOVE NON AUDIO FILES COMPLETE"
 	else
 		echo "ERROR: NO AUDIO FILES FOUND" && exit 1
 	fi
