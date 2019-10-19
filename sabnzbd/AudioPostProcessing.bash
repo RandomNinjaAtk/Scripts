@@ -1,6 +1,12 @@
 #!/bin/bash
-
-#============CONFIGURATION============
+#######################################
+#        Audio Post-Processing        #
+#             Bash Script             #
+#            Version 1.0.0            #
+#######################################
+#=============REQUIREMENTS=============
+#        flac, mp3val, ffmpeg         #
+#============CONFIGURATION=============
 RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG files
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
 AudioVerification="TRUE" # TRUE = ENABLED, Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)
@@ -150,7 +156,7 @@ if [ "${AudioVerification}" = TRUE ]; then
 			echo "MP3VAL not installed" && exit 1
 		fi
 	else
-		echo "FLAC not installed"
+		echo "FLAC not installed" && exit 1
 	fi
 else
 	echo "AUDIO VERFICATION DISABLED"
