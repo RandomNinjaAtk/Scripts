@@ -179,5 +179,5 @@ if [ "${ReplaygainTagging}" = TRUE ]; then
 else
 	echo "REPLAYGAIN TAGGING DISABLED"
 fi
-echo "SCRIPT COMPMLETE" && exit 0
+echo "AUDIO POST-PROCESSING COMPLETE" && exit 0
 #============END SCRIPT============
