@@ -27,8 +27,10 @@ Configuration options are found in the top few lines of the script<br /><br />
 Language Preferences require using "ISO 639-2" language codes, list of codes can be found here: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
 
 ### Requirements
-**mkvtoolnix**
-(if using linuxserver.io docker, use mkvtoolnix_install.bash script found here: https://github.com/RandomNinjaAtk/Scripts/tree/master/lso_docker_ubuntu<br />
+* **mkvtoolnix**
+
+### Compatibility Testing
+* Linuxserver.io Sabnzbd Docker (To install requirements, use the mkvtoolnix_install.bash script found here: https://github.com/RandomNinjaAtk/Scripts/tree/master/lso_docker_ubuntu<br />
 
 
 ## AudioPostProcessing.bash
@@ -37,7 +39,7 @@ This script can verify flac files for corruption, fix errors in mp3 files, trans
 ### Configuration Options
 Configuration options are found in the top few lines of the script<br /><br />
 **RemoveNonAudioFiles** - Deletes non FLAC/M4A/MP3/OPUS/OGG files<br />
-**DuplicateFileCleanUp** - Deletes duplicate files, sabnzbd sometimes creates duplicates, or if a download conatains both lossless and lossy version, it deletes lossy version <br />
+**DuplicateFileCleanUp** - Deletes duplicate files, sabnzbd sometimes creates duplicates, or if a download contains both lossless and lossy version, it deletes lossy version <br />
 **AudioVerification** -  Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)<br />
 **Convert** - Only converts lossless FLAC/ALAC files to format in the next setting <br />
 **ConversionFormat** - SET TO: OPUS or AAC or MP3 or FLAC - converts lossless FLAC files to set format<br />
