@@ -13,6 +13,7 @@ These scripts are designed to be used  on linux based systems
 This script removes unwanted audio and subtitle tracks based on configured settings
 
 ### Configuration Options
+Configuration options are found in the top few lines of the script<br /><br />
 **StartingDirectory** - File path to start recursive video file processing <br />
 **DestinationDirectory** - File path to move completed files, only used if next setting is set to enable it <br />
 **MoveToDestination** - Moves files to destination directory, set to FALSE to keep in same location <br />
