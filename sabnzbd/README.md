@@ -32,6 +32,7 @@ Language Preferences require using "ISO 639-2" language codes, list of codes can
 ### Compatibility Testing
 * Linuxserver.io Sabnzbd Docker (To install requirements, use the mkvtoolnix_install.bash script found here: https://github.com/RandomNinjaAtk/Scripts/tree/master/lso_docker_ubuntu<br />
 
+<hr />
 
 ## AudioPostProcessing.bash
 This script can verify flac files for corruption, fix errors in mp3 files, transcode flac/alac files to another format, add replaygain tags to flac files
