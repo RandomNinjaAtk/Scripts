@@ -128,6 +128,14 @@ conversion () {
 				echo "ERROR: FLAC CONVERSION FAILED" && exit 1
 			fi
 		fi
+		if [ "${ConversionFormat}" = ALAC ]; then
+			echo "ALAC CONVERSION START"
+			if { find "${DownloadDir}/files/" -name "*.flac" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec alac -movflags faststart \"@.m4a\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
+				echo "ALAC CONVERSION COMPLETE"
+			else
+				echo "ERROR: ALAC CONVERSION FAILED" && exit 1
+			fi
+		fi
 	else
 		echo "No lossless (FLAC/ALAC) files found to convert"
 	fi
