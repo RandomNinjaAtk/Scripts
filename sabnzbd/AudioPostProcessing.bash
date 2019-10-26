@@ -11,7 +11,7 @@ RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG f
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
 AudioVerification="TRUE" # TRUE = ENABLED, Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)
 Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC/ALAC files
-ConversionFormat="MP3" # SET TO: OPUS or AAC or MP3 or FLAC - converts lossless FLAC files to set format
+ConversionFormat="MP3" # SET TO: OPUS or AAC or MP3 or FLAC or ALAC - converts lossless FLAC files to set format
 Threads="0" # SET TO: "0" to use maximum number of threads for multi-threaded operations
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
 
@@ -84,6 +84,14 @@ conversion () {
 				echo "FLAC CONVERSION COMPLETE"
 			else
 				echo "ERROR: FLAC CONVERSION FAILED" && exit 1
+			fi
+		fi
+		if [ "${ConversionFormat}" = ALAC ]; then
+			echo "ALAC CONVERSION START"
+			if { find "${DownloadDir}/files/" -name "*.flac" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec alac -movflags faststart \"@.m4a\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
+				echo "ALAC CONVERSION COMPLETE"
+			else
+				echo "ERROR: ALAC CONVERSION FAILED" && exit 1
 			fi
 		fi
 	elif find "$1" -type f -iregex ".*/.*\.\(alac\)" | read; then
