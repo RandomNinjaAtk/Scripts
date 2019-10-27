@@ -2,7 +2,6 @@
 #######################################
 #        Audio Post-Processing        #
 #             Bash Script             #
-#            Version 1.0.0            #
 #######################################
 #=============REQUIREMENTS=============
 #        flac, mp3val, ffmpeg         #
