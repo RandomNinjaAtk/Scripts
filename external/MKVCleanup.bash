@@ -2,7 +2,6 @@
 #######################################
 #    MKV Audio & Subtitle Cleanup     #
 #             Bash Script             #
-#            Version 1.0.0            #
 #######################################
 #            Description:             #
 #  This script removes unwated audio  #
@@ -128,6 +127,8 @@ IFS='
 			file=$(mkvmerge --identify-verbose "$movie" | tail --lines=+2)
 			track_ids_stringsub=""
 			found_languagessub=()
+			track_ids_stringsuba=""
+			found_languagessuba=()
 			for tracksub in $file; do
 				track_idsub=""
 				[[ "$tracksub" =~ Track\ ID\ ([0-9]+) ]] &&
@@ -150,8 +151,15 @@ IFS='
 				else
 					found_languagessub+=("$languagesub")
 				fi
+
+				if [[ "$languagesub" == "$SubtitleLanguage" ]]; then
+					track_ids_stringsuba="$track_ids_stringsuba,$track_idsub"
+				else
+					found_languagesa+=("$language")
+				fi
 			done    
 			track_ids_stringsub=${track_ids_stringsub:1} # remove first comma
+			track_ids_stringsuba=${track_ids_stringsuba:1} # remove first comma
 			
 			# Setting Audio language for mkvmerge
 			if test ! -z "$track_ids_string"; then
@@ -219,16 +227,22 @@ IFS='
 				echo "No \"unknown (und)\" audio tracks found"
 				echo "Begin search for all other audio tracks"
 				echo "Audio Detected, keeping all other audio tracks..."
-				if test ! -z "$track_ids_stringsub"; then
-					echo "Unwanted subtitles found, removing unwanted subtitles"
-					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
-					# cleanup temp files and rename
-					mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
-					mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
-					rm "$movie.original.mkv" && echo "Deleted source file"
-				else
-					echo "\"${SubtitleLanguage}\" Subtitle Found, No unwanted subtitle languages to remove"
+				if test ! -z "$track_ids_stringsuba"; then
+					echo "ERROR: \"${SubtitleLanguage}\" Subtitle not found, only foreign audio/subtitles found"
+					echo "Deleting video and marking download as failed because no usuable audio/subititles are found in requested langauge"
+					rm "$movie" && echo "DELETED: $movie"
+				else 
+					if test ! -z "$track_ids_stringsub"; then
+						echo "Unwanted subtitles found, removing unwanted subtitles"
+						echo "Creating temporary file: $movie.merged.mkv"
+						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
+						# cleanup temp files and rename
+						mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
+						mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
+						rm "$movie.original.mkv" && echo "Deleted source file"
+					else
+						echo "\"${SubtitleLanguage}\" Subtitle Found, No unwanted subtitle languages to remove"
+					fi
 				fi
 			else
 				# no audio was found, error and report failed to sabnzbd
