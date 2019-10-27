@@ -206,13 +206,13 @@ IFS='
 						echo "SUCCESS"
 					else
 						echo "ERROR, skipping language setting"
-						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie";
+						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a und -s ${SubtitleLanguage} "$movie";
 					fi
 				else
 					echo "SetUnknownAudioLanguage not enabled, skipping unknown audio language tag modification"
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a und -s ${SubtitleLanguage} "$movie"
 				fi
 				# cleanup temp files and rename
 				mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
