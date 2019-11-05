@@ -2,7 +2,7 @@
 echo "==========INSTALLING TOOLS==========="
 if ! [ -x "$(command -v mkvmerge)" ]; then	
 	echo "INSTALLING mkvtoolnix"
-	apt-get update && \
+	apt-get update -qq && \
 	apt-get install -y mkvtoolnix && \		
 	apt-get purge --auto-remove -y && \
 	apt-get clean
