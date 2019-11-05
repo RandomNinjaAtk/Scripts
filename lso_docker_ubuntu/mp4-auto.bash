@@ -5,17 +5,17 @@ echo "==========INSTALLING TOOLS==========="
 ENV DEBIAN_FRONTEND="noninteractive"
 
 apt-get update && \
-	apt-get install -y \
-		ffmpeg \
-		git \
-		python-pip \
-		openssl \
-		python-dev \
-		libffi-dev \
-		libssl-dev \
-		libxml2-dev \
-		libxslt1-dev \
-		zlib1g-dev
+apt-get install -y \
+	ffmpeg \
+	git \
+	python-pip \
+	openssl \
+	python-dev \
+	libffi-dev \
+	libssl-dev \
+	libxml2-dev \
+	libxslt1-dev \
+	zlib1g-dev
   
 pip install --no-cache-dir -U \
 	requests \
