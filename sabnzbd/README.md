@@ -13,6 +13,11 @@ https://sabnzbd.org/wiki/scripts/post-processing-scripts
 
 # Script Descriptions
 
+## video-processing.bash
+This script automtatically downloads **MKV-Cleaner.bash**, **Deobfuscate.py** and then runs both scripts on the intended download.  
+###### Important
+This script is designed to be used with the following script: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/sabnzbd_script_setup.bash and only for linuxserver.io sabnzbd docker containers.
+
 ## MKV-Cleaner.bash
 This script removes unwanted audio and subtitle tracks based on configured settings
 
