@@ -15,6 +15,7 @@ apt-get install -y \
 	libssl-dev \
 	libxml2-dev \
 	libxslt1-dev \
+	mkvtoolnix \
 	zlib1g-dev
   
 pip install --no-cache-dir -U \
