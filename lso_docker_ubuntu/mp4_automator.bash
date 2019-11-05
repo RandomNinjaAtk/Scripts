@@ -1,5 +1,9 @@
 #!/bin/bash
 echo "==========INSTALLING TOOLS==========="
+
+# global environment settings
+ENV DEBIAN_FRONTEND="noninteractive"
+
 if ! [ -x "$(command -v ffmpeg)" ]
 	then	
 		echo "START INSTALLING FFMPEG"
