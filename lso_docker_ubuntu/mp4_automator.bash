@@ -19,8 +19,10 @@ if ! [ -x "$(command -v ffmpeg)" ]; then
 		libxslt1-dev \
 		mkvtoolnix \
 		zlib1g-dev
+		
 	apt-get purge --auto-remove -y
 	apt-get clean
+	
  	echo "INSTALLING PIP TOOLS"
 	pip install --no-cache-dir -U \
 		requests \
