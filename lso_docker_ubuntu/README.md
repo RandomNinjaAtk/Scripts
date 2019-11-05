@@ -20,7 +20,7 @@ Do not use inconjuction with the mkvtoolnix_install.bash and ffmpeg_install.bash
 #### sabnzbd_script_setup.bash
 Automatically downloads and installs sabnzbd post processing scripts found here: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbdr<br />
 ###### Important:
-1. You need to use fmpeg_install.bash, mkvtoolnix_install.bash, audio_tools_install.bash for full functionality. 
+1. You need to use ffmpeg_install.bash, mkvtoolnix_install.bash, audio_tools_install.bash for full functionality. 
 2. After initial run of the script, configure sabnzbd to point to the scripts directory location "/config/scripts"
 
 ## Script Usage
