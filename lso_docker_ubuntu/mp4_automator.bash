@@ -89,7 +89,7 @@ if ! [ -x "$(command -v mkvmerge)" ]
 			chmod 777 /config/scripts
 			git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/mp4_automator
 			find "/config/scripts/" -type d -exec chmod 777 "{}" \;
-			find "/config/scripts/" -type f -exec chmod 666 "{}" \;
+			find "/config/scripts/" -type f -exec chmod 777 "{}" \;
 			find "/config/scripts/" -name "*.py" -type f -exec chmod +x "{}" \;
 		fi
 		apt-get purge --auto-remove -y
