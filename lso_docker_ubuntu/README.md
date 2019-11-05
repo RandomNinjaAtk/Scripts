@@ -10,11 +10,18 @@ Compiles and installs ffmpeg
 Installs mkvtoolnix
 
 #### audio_tools_install.bash
-Installs mp3val, mp3gain, flac
+Installs mp3val, flac
 
 #### mp4_automator.bash
-Installs mp4 automator script to the following location: /config/scripts/mp4_automator<br />
--- Note, do not use inconjuction with the mkvtoolnix_install.bash script. This script will also instlal mkvtoolnix utlities
+Installs mp4 automator script to the following location: /config/scripts/sickbeard_mp4_automator<br />
+###### Important:
+Do not use inconjuction with the mkvtoolnix_install.bash and ffmpeg_install.bash script. This script will also install both utlities
+
+#### sabnzbd_script_setup.bash
+Automatically downloads and installs sabnzbd post processing scripts found here: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbdr<br />
+###### Important:
+1. You need to use fmpeg_install.bash, mkvtoolnix_install.bash, audio_tools_install.bash for full functionality. 
+2. After initial run of the script, configure sabnzbd to point to the scripts directory location "/config/scripts"
 
 ## Script Usage
 
