@@ -5,16 +5,16 @@ if [ ! -f /config/custom-cont-init.d/audio_tools_install.bash ]; then
     echo "downloading audio_tools_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/audio_tools_install.bash"
     curl -o /config/custom-cont-init.d/audio_tools_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/audio_tools_install.bash
     echo "done"
-	echo "running audio_tools_install.bash..."
-	bash /config/custom-cont-init.d/audio_tools_install.bash
+    echo "running audio_tools_install.bash..."
+    bash /config/custom-cont-init.d/audio_tools_install.bash
 fi
 
 if [ ! -f /config/custom-cont-init.d/ffmpeg_install.bash ]; then
     echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg_install.bash"
     curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg_install.bash
     echo "done"
-	echo "running ffmpeg_install.bash..."
-	bash /config/custom-cont-init.d/ffmpeg_install.bash
+    echo "running ffmpeg_install.bash..."
+    bash /config/custom-cont-init.d/ffmpeg_install.bash
 fi
 
 if [ ! -f /config/custom-cont-init.d/cron_install.bash ]; then
