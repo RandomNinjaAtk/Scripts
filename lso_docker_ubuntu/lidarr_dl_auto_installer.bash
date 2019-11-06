@@ -36,13 +36,13 @@ fi
 
 if [ ! -f /config/scripts/lidarr-download-automation-start.bash ]; then
     echo "downloading lidarr-download-automation-start.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/external/cron_lidarr_jobs.bash"
-    curl -o /config/scripts/lidarr-download-automation-start.bash https://github.com/RandomNinjaAtk/Scripts/raw/master/external/lidarr-download-automation-start.bash
+    curl -o /config/scripts/lidarr-download-automation-start.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/lidarr-download-automation-start.bash
     echo "done"
 fi
 
 if [ ! -f /config/custom-cont-init.d/cron_lidarr_jobs.bash ]; then
     echo "downloading cron_lidarr_jobs.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/external/cron_lidarr_jobs.bash"
-    curl -o /config/custom-cont-init.d/cron_lidarr_jobs.bash https://github.com/RandomNinjaAtk/Scripts/raw/master/external/cron_lidarr_jobs.bash
+    curl -o /config/custom-cont-init.d/cron_lidarr_jobs.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/cron_lidarr_jobs.bash
     echo "done"
 	echo "running cron_lidarr_jobs.bash..."
 	bash /config/custom-cont-init.d/cron_lidarr_jobs.bash
