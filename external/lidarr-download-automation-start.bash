@@ -17,8 +17,8 @@ if [ ! -f /config/scripts/lidarr-download-automation/lidarr-download-automation.
 fi
 
 if [ ! -f /config/scripts/lidarr-download-automation/config ]; then
-    echo "downloading config from: https://github.com/Migz93/lidarr-download-automation/blob/develop/lidarr-download-automation.bash"
-    curl -o /config/scripts/lidarr-download-automation/config https://raw.githubusercontent.com/Migz93/lidarr-download-automation/develop/lidarr-download-automation.bash
+    echo "downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/lidarr-dl-automation-config"
+    curl -o /config/scripts/lidarr-download-automation/config https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/lidarr-dl-automation-config
     echo "done"
 fi
 
