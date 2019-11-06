@@ -5,7 +5,8 @@ if ! [ -x "$(command -v crontab)" ]; then
 	apt-get update -qq && \
 	apt-get install -qq -y \
 		wget \
-    nano \
+		nano \
+		unzip \
 		cron	
 	apt-get purge --auto-remove -y && \
 	apt-get clean
