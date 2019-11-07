@@ -16,5 +16,12 @@ if [ ! -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	chmod 0666 /config/scripts/lidarr-download-automation/config
 fi
 
+if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
+	echo "Updating config with radarr api key..."
+	local search="radarrkey"
+	local apikey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")"
+	sed -i "s/${search}/${apikey}/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini 
+fi
+
 echo "=====RADARR MP4 AUTOMATOR INSTALLER SETUP COMPLETE====="
 exit 0
