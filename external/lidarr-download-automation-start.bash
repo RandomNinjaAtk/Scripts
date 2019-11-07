@@ -14,12 +14,14 @@ if [ ! -f /config/scripts/lidarr-download-automation/lidarr-download-automation.
     echo "downloading lidarr-download-automation.bash from: https://github.com/Migz93/lidarr-download-automation/blob/develop/lidarr-download-automation.bash"
     curl -o /config/scripts/lidarr-download-automation/lidarr-download-automation.bash https://raw.githubusercontent.com/Migz93/lidarr-download-automation/develop/lidarr-download-automation.bash
     echo "done"
+    chmod 0666 /config/scripts/lidarr-download-automation/lidarr-download-automation.bash
 fi
 
 if [ ! -f /config/scripts/lidarr-download-automation/config ]; then
     echo "downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/lidarr-dl-automation-config"
     curl -o /config/scripts/lidarr-download-automation/config https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/lidarr-dl-automation-config
     echo "done"
+    chmod 0666 /config/scripts/lidarr-download-automation/config
 fi
 
 if mkdir /config/scripts/.lidarr-download-automation.exclusivelock; then
