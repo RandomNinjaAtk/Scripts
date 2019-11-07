@@ -3,7 +3,7 @@ echo "==========RADARR MP4 AUTOMATOR INSTALLER==========="
 
 if [ ! -f /config/custom-cont-init.d/mp4_automator.bash ]; then
 	echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/mp4_automator.bash"
-	curl -o /config/custom-cont-init.d/mp4_automator.bashhttps://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/mp4_automator.bash
+	curl -o /config/custom-cont-init.d/mp4_automator.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/mp4_automator.bash
 	echo "done"
 	echo "running mp4_automator.bash..."
 	bash /config/custom-cont-init.d/mp4_automator.bash
