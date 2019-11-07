@@ -25,8 +25,8 @@ if [ ! -f /config/custom-cont-init.d/cron_install.bash ]; then
 	bash /config/custom-cont-init.d/cron_install.bash
 fi
 
-echo "setting up script directory"
 if [ ! -d /config/scripts ]; then
+	echo "setting up script directory"
 	mkdir /config/scripts
 	# Set Permissions
 	echo "setting permissions..."
