@@ -23,7 +23,7 @@ if [ ! -f /config/scripts/video-processing.bash ]; then
   chmod +x /config/scripts/video-processing.bash
   echo "done"
 fi
-if [ ! -f /config/scripts/Deobfuscate.py ]; then
+if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
   echo "downloading AudioPostProcessing.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/AudioPostProcessing.bash"
   curl -o /config/scripts/AudioPostProcessing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/AudioPostProcessing.bash
   echo "done"
