@@ -50,7 +50,7 @@ if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	touch /config/scripts/sickbeard_mp4_automator/info.log && \
 	echo "Restore autoProcess.ini configuration" && \
 	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/ && \
-	chmod a+rwx -R /config/scripts/sickbeard_mp4_automator && \
+	chmod 0777 -R /config/scripts/sickbeard_mp4_automator && \
 	echo "DONE"
 else
 	echo "DOWNLOAD CURRENT SICKBEARD_MP4_AUTOMATOR" && \
@@ -59,7 +59,7 @@ else
 	fi
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/info.log && \
-	chmod a+rwx -R /config/scripts/sickbeard_mp4_automator && \
+	chmod 0777 -R /config/scripts/sickbeard_mp4_automator && \
 	echo "DONE"
 fi
 
