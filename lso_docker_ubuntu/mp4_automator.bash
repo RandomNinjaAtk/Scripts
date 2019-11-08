@@ -20,7 +20,7 @@ if ! [ -x "$(command -v ffmpeg)" ]; then
 	apt-get clean
 	
 	mkdir /tmp/ffmpeg
-	curl -o /tmp/ffmpeg/ffmpegffmpeg-git-amd64-static.tar.xz https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz
+	curl -o /tmp/ffmpeg/ffmpeg-git-amd64-static.tar.xz https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz
 	cd /tmp/ffmpeg
 	tar xvf ffmpeg-git-amd64-static.tar.xz
 	find "/usr/bin/" -type f -iname "ffmpeg" -exec rm {} \;
