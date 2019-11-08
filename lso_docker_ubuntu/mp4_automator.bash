@@ -42,18 +42,19 @@ pip install --no-cache-dir -U \
 	qtfaststart
 
 if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
+	echo "Backup autoProcess.ini configuration"
 	mv /config/scripts/sickbeard_mp4_automator/autoProcess.ini /config/scripts/ && \
-	echo "DOWNLOAD SICKBEARD_MP4_AUTOMATOR" && \
+	echo "DOWNLOAD CURRENT SICKBEARD_MP4_AUTOMATOR" && \
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/info.log && \
-	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/
+	echo "Restore autoProcess.ini configuration" && \
+	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/ && \
 	chmod a+rwx -R /config/scripts/sickbeard_mp4_automator && \
 	echo "DONE"
 else
-	echo "DOWNLOAD SICKBEARD_MP4_AUTOMATOR" && \
+	echo "DOWNLOAD CURRENT SICKBEARD_MP4_AUTOMATOR" && \
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/info.log && \
-	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/
 	chmod a+rwx -R /config/scripts/sickbeard_mp4_automator && \
 	echo "DONE"
 fi
