@@ -13,7 +13,7 @@ if [ ! -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	echo "downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/radarr-autoProcess.ini"
 	curl -o /config/scripts/sickbeard_mp4_automator/autoProcess.ini https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/radarr-autoProcess.ini
 	echo "done"
-	chmod 0666 /config/scripts/lidarr-download-automation/config
+	chmod 0666 /config/scripts/sickbeard_mp4_automator/autoProcess.ini
 fi
 
 if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
