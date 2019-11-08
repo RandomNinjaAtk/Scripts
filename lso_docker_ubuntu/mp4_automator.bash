@@ -48,6 +48,7 @@ if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	rm -rf /config/scripts/sickbeard_mp4_automator && \
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/info.log && \
+	touch /config/scripts/sickbeard_mp4_automator/index.log && \
 	echo "Restore autoProcess.ini configuration" && \
 	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/ && \
 	chmod 0777 -R /config/scripts/sickbeard_mp4_automator && \
@@ -59,6 +60,7 @@ else
 	fi
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/info.log && \
+	touch /config/scripts/sickbeard_mp4_automator/index.log && \
 	chmod 0777 -R /config/scripts/sickbeard_mp4_automator && \
 	echo "DONE"
 fi
