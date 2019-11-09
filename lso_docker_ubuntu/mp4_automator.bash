@@ -19,6 +19,9 @@ apt-get purge --auto-remove -y
 apt-get clean
 
 if ! [ -x "$(command -v ffmpeg)" ]; then
+	if [ -f /config/custom-cont-init.d/ffmpeg_install.bash ]; then
+		rm /config/custom-cont-init.d/ffmpeg_install.bash
+	fi
 	echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg_install.bash"
 	curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg_install.bash
 	echo "done"
