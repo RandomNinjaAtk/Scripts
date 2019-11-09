@@ -18,16 +18,13 @@ apt-get install -y \
 apt-get purge --auto-remove -y
 apt-get clean
 
-mkdir /tmp/ffmpeg
-curl -o /tmp/ffmpeg/ffmpeg-git-amd64-static.tar.xz https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz
-cd /tmp/ffmpeg
-tar xvf ffmpeg-git-amd64-static.tar.xz
-find "/usr/bin/" -type f -iname "ffmpeg" -exec rm {} \;
-find "/usr/bin/" -type f -iname "ffprobe" -exec rm {} \;
-find "/tmp/ffmpeg" -type f -iname "ffmpeg" -exec mv {} /usr/bin/ \;
-find "/tmp/ffmpeg" -type f -iname "ffprobe" -exec mv {} /usr/bin/ \;
-cd /
-rm -rf /tmp/ffmpeg
+if ! [ -x "$(command -v ffmpeg)" ]; then
+	echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg_install.bash"
+	curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg_install.bash
+	echo "done"
+	echo "running ffmpeg_install.bash..."
+	bash /config/custom-cont-init.d/ffmpeg_install.bash
+fi
 	
 echo "INSTALLING PIP TOOLS"
 pip install --no-cache-dir -U \
