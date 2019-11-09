@@ -175,4 +175,4 @@ else
 fi
 
 echo "=====FFMPEG INSTALLATION COMPLETE====="
-exit 0=
+exit 0
