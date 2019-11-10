@@ -42,27 +42,27 @@ if [ -f /config/config.xml ]; then
 		fi
 	fi
 else
+	# Compensation for other scrips if using Sabnzbd
+	
+	if [ -f /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash ]; then
+		rm /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
+	fi
+	echo "downloading mp4-video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/mp4-video-processing.bash"
+	curl -o /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/mp4-video-processing.bash
+	echo "done"
+	chmod +x /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
 
-if [ -f /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash ]; then
-	rm /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
-fi
-echo "downloading mp4-video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/mp4-video-processing.bash"
-curl -o /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/mp4-video-processing.bash
-echo "done"
-chmod +x /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
+	if [ -f /config/scripts/video-processing.bash ]; then
+		ln -s /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
+	fi
 
-# Compensation for other scrips if using Sabnzbd
+	if [ -f /config/scripts/AudioPostProcessing.bash ]; then
+		ln -s /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
+	fi
 
-if [ -f /config/scripts/video-processing.bash ]; then
-	ln -s /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
-fi
-
-if [ -f /config/scripts/AudioPostProcessing.bash ]; then
-	ln -s /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
-fi
-
-if [ -f /config/scripts/MKV-Cleaner.bash ]; then
-	ln -s /config/scripts/MKV-Cleaner.bash /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
+	if [ -f /config/scripts/MKV-Cleaner.bash ]; then
+		ln -s /config/scripts/MKV-Cleaner.bash /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
+	fi
 fi
 
 echo "=====MP4 AUTOMATOR INSTALLER SETUP COMPLETE====="
