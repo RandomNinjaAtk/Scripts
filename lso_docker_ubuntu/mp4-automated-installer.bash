@@ -53,15 +53,15 @@ else
 	chmod +x /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
 
 	if [ -f /config/scripts/video-processing.bash ]; then
-		ln -s /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
+		ln /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
 	fi
 
 	if [ -f /config/scripts/AudioPostProcessing.bash ]; then
-		ln -s /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
+		ln /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
 	fi
 
 	if [ -f /config/scripts/MKV-Cleaner.bash ]; then
-		ln -s /config/scripts/MKV-Cleaner.bash /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
+		ln /config/scripts/MKV-Cleaner.bash /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
 	fi
 fi
 
