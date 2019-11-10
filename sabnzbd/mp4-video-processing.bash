@@ -16,4 +16,5 @@ fi
 # Execute on new downloads
 cd /config/scripts
 timeout --foreground 1m python Deobfuscate.py
+cd /config/scripts/sickbeard_mp4_automator
 python manual.py -i "$1" -nt
