@@ -64,11 +64,11 @@ if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	touch /config/scripts/sickbeard_mp4_automator/index.log && \
 	echo "Restore autoProcess.ini configuration" && \
 	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/ && \
-	chmod 0777 -R /config/scripts/sickbeard_mp4_automator && \
-	if [ -d /var/log/sickbeard_mp4_automator ]; then
-		rm -rf /var/log/sickbeard_mp4_automator/*
+	chmod 0777 -R /config/scripts/sickbeard_mp4_automator
+	if [ ! -d /var/log/sickbeard_mp4_automator ]; then
+		mkdir /var/log/sickbeard_mp4_automator
 	fi
-	mkdir /var/log/sickbeard_mp4_automator && \
+	rm -rf /var/log/sickbeard_mp4_automator/* && \
 	chmod 0777 -R /var/log/sickbeard_mp4_automator && \
 	ln -s /config/scripts/sickbeard_mp4_automator/index.log /var/log/sickbeard_mp4_automator/index.log  && \
 	echo "DONE"
@@ -80,12 +80,12 @@ else
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/index.log && \
 	chmod 0777 -R /config/scripts/sickbeard_mp4_automator
-	if [ -d /var/log/sickbeard_mp4_automator ]; then
-		rm -rf /var/log/sickbeard_mp4_automator
+	if [ ! -d /var/log/sickbeard_mp4_automator ]; then
+		mkdir /var/log/sickbeard_mp4_automator
 	fi
-	mkdir /var/log/sickbeard_mp4_automator && \
+	rm -rf /var/log/sickbeard_mp4_automator/* && \
 	chmod 0777 -R /var/log/sickbeard_mp4_automator && \
-	ln -s /config/scripts/sickbeard_mp4_automator/index.log /var/log/sickbeard_mp4_automator/index.log && \
+	ln -s /config/scripts/sickbeard_mp4_automator/index.log /var/log/sickbeard_mp4_automator/index.log  && \
 	echo "DONE"
 fi
 
