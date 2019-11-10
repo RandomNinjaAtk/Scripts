@@ -66,7 +66,7 @@ if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	mv /config/scripts/autoProcess.ini /config/scripts/sickbeard_mp4_automator/ && \
 	chmod 0777 -R /config/scripts/sickbeard_mp4_automator && \
 	if [ -d /var/log/sickbeard_mp4_automator ]; then
-		rm -rf /var/log/sickbeard_mp4_automator
+		rm -rf /var/log/sickbeard_mp4_automator/*
 	fi
 	mkdir /var/log/sickbeard_mp4_automator && \
 	chmod 0777 -R /var/log/sickbeard_mp4_automator && \
@@ -75,7 +75,7 @@ if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 else
 	echo "DOWNLOAD CURRENT SICKBEARD_MP4_AUTOMATOR"
 	if [ -d /config/scripts/sickbeard_mp4_automator ]; then
-		rm -rf /config/scripts/sickbeard_mp4_automator
+		rm -rf /config/scripts/sickbeard_mp4_automator/*
 	fi
 	git clone git://github.com/mdhiggins/sickbeard_mp4_automator.git /config/scripts/sickbeard_mp4_automator/ && \
 	touch /config/scripts/sickbeard_mp4_automator/index.log && \
