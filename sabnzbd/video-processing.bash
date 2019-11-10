@@ -26,4 +26,5 @@ fi
 # Execute on new downloads
 cd /config/scripts
 timeout --foreground 1m python Deobfuscate.py
-./MKV-Cleaner.bash "$1"
+bash MKV-Cleaner.bash "$1"
+echo "COMPLETE"
