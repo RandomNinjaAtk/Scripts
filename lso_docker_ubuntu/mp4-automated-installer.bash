@@ -26,23 +26,27 @@ if [ -f /config/config.xml ]; then
 	# Update config file if radarr
 	if grep -q 7878 /config/config.xml; then
 		if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
-			echo "Updating config with radarr api key..."
-			search="radarrkey"
-			apikey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")"
-			sed -i "s/${search}/${apikey}/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini
-			chmod 0777 -R /config/scripts/sickbeard_mp4_automator
+			if grep -q radarrkey /config/scripts/sickbeard_mp4_automator/autoProcess.ini; then
+				echo "Updating config with radarr api key..."
+				search="radarrkey"
+				apikey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")"
+				sed -i "s/${search}/${apikey}/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini
+				chmod 0777 -R /config/scripts/sickbeard_mp4_automator
+			fi
 		fi
 	fi
 
 	# Update config file if sonarr
 	if grep -q 8989 /config/config.xml; then
 		if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
-			echo "Updating config with sonarr api key..."
-			search="sonarrkey"
-			apikey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")"
-			sed -i "s/${search}/${apikey}/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini
-			sed -i "s/Poster/Thumbnail/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini
-			chmod 0777 -R /config/scripts/sickbeard_mp4_automator
+			if grep -q sonarrkey /config/scripts/sickbeard_mp4_automator/autoProcess.ini; then
+				echo "Updating config with sonarr api key..."
+				search="sonarrkey"
+				apikey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")"
+				sed -i "s/${search}/${apikey}/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini
+				sed -i "s/Poster/Thumbnail/g" /config/scripts/sickbeard_mp4_automator/autoProcess.ini
+				chmod 0777 -R /config/scripts/sickbeard_mp4_automator
+			fi
 		fi
 	fi
 else
