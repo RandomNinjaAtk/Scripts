@@ -2,18 +2,22 @@
 echo "==========MP4 AUTOMATOR INSTALLER==========="
 
 if [ -f /config/custom-cont-init.d/mp4_automator.bash ]; then
+	bash /config/custom-cont-init.d/mp4_automator.bash && \
+	rm /config/custom-cont-init.d/mp4_automator.bash
+else 
+	echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/mp4_automator.bash"  && \
+	curl -o /config/custom-cont-init.d/mp4_automator.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/mp4_automator.bash  && \
+	echo "done" && \
+	echo "running mp4_automator.bash..." && \
+	bash /config/custom-cont-init.d/mp4_automator.bash && \
 	rm /config/custom-cont-init.d/mp4_automator.bash
 fi
-echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/mp4_automator.bash"
-curl -o /config/custom-cont-init.d/mp4_automator.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/mp4_automator.bash
-echo "done"
-echo "running mp4_automator.bash..."
-bash /config/custom-cont-init.d/mp4_automator.bash
+
 
 if [ ! -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
-	echo "downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/autoProcess.ini"
-	curl -o /config/scripts/sickbeard_mp4_automator/autoProcess.ini https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/autoProcess.ini
-	echo "done"
+	echo "downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/autoProcess.ini" && \
+	curl -o /config/scripts/sickbeard_mp4_automator/autoProcess.ini https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/autoProcess.ini && \
+	echo "done" && \
 	chmod 0666 /config/scripts/sickbeard_mp4_automator/autoProcess.ini
 fi
 
@@ -46,22 +50,26 @@ else
 	
 	if [ -f /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash ]; then
 		rm /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
+	else
+		echo "downloading mp4-video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/mp4-video-processing.bash"
+		curl -o /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/mp4-video-processing.bash
+		echo "done"
+		chmod 777 /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
 	fi
-	echo "downloading mp4-video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/mp4-video-processing.bash"
-	curl -o /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/mp4-video-processing.bash
-	echo "done"
-	chmod +x /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
 
 	if [ -f /config/scripts/video-processing.bash ]; then
-		ln /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
+		cp /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
+		chmod 777 /config/scripts/sickbeard_mp4_automator/video-processing.bash
 	fi
 
 	if [ -f /config/scripts/AudioPostProcessing.bash ]; then
-		ln /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
+		cp /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
+		chmod 777 /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
 	fi
 
 	if [ -f /config/scripts/MKV-Cleaner.bash ]; then
-		ln /config/scripts/MKV-Cleaner.bash /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
+		cp /config/scripts/MKV-Cleaner.bash /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
+		chmod 777 /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash
 	fi
 fi
 
