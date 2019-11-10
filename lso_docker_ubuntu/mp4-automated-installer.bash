@@ -30,7 +30,7 @@ if [ -f /config/config.xml ]; then
 		fi
 	fi
 
-	# Update config file if sonnarr
+	# Update config file if sonarr
 	if grep -q 8989 /config/config.xml; then
 		if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 			echo "Updating config with sonarr api key..."
@@ -41,7 +41,15 @@ if [ -f /config/config.xml ]; then
 			chmod 0777 -R /config/scripts/sickbeard_mp4_automator
 		fi
 	fi
+else
+
+if [ -f /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash ]; then
+	rm /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
 fi
+echo "downloading mp4-video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/mp4-video-processing.bash"
+curl -o /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/mp4-video-processing.bash
+echo "done"
+chmod +x /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
 
 # Compensation for other scrips if using Sabnzbd
 
@@ -49,16 +57,8 @@ if [ -f /config/scripts/video-processing.bash ]; then
 	ln -s /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
 fi
 
-if [ -f /config/scripts/mp4-video-processing.bash ]; then
-	ln -s /config/scripts/mp4-video-processing.bash /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
-fi
-
 if [ -f /config/scripts/AudioPostProcessing.bash ]; then
 	ln -s /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
-fi
-
-if [ -f /config/scripts/Deobfuscate.py ]; then
-	ln -s /config/scripts/Deobfuscate.py /config/scripts/sickbeard_mp4_automator/Deobfuscate.py
 fi
 
 if [ -f /config/scripts/MKV-Cleaner.bash ]; then
