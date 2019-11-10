@@ -49,6 +49,10 @@ if [ -f /config/scripts/video-processing.bash ]; then
 	ln -s /config/scripts/video-processing.bash /config/scripts/sickbeard_mp4_automator/video-processing.bash
 fi
 
+if [ -f /config/scripts/mp4-video-processing.bash ]; then
+	ln -s /config/scripts/mp4-video-processing.bash /config/scripts/sickbeard_mp4_automator/mp4-video-processing.bash
+fi
+
 if [ -f /config/scripts/AudioPostProcessing.bash ]; then
 	ln -s /config/scripts/AudioPostProcessing.bash /config/scripts/sickbeard_mp4_automator/AudioPostProcessing.bash
 fi
