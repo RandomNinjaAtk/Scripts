@@ -57,7 +57,7 @@ fi
 
 if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
 	echo "Backup autoProcess.ini configuration" && \
-	mv /config/scripts/sickbeard_mp4_automator/autoProcess.ini /config/scripts/ && \
+	mv /config/scripts/sickbeard_mp4_automator/autoProcess.ini /config/scripts/
 fi
 if [ -d /config/scripts/sickbeard_mp4_automator ]; then
 	rm -rf /config/scripts/sickbeard_mp4_automator
