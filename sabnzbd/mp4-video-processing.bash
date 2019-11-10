@@ -17,3 +17,4 @@ fi
 cd /config/scripts/sickbeard_mp4_automator
 timeout --foreground 1m python Deobfuscate.py
 python manual.py -i "$1" -nt
+echo "COMPLETE"
