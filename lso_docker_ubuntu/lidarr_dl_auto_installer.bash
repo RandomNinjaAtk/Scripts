@@ -7,14 +7,16 @@ if [ ! -f /config/custom-cont-init.d/audio_tools_install.bash ]; then
 	echo "done"
 	echo "running audio_tools_install.bash..."
 	bash /config/custom-cont-init.d/audio_tools_install.bash
+	rm /config/custom-cont-init.d/audio_tools_install.bash
 fi
 
 if [ ! -f /config/custom-cont-init.d/ffmpeg_install.bash ]; then
-	echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg_install.bash"
-	curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg_install.bash
+	echo "downloading ffmpeg-pre-comiple.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg-pre-comiple.bash"
+	curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg-pre-comiple.bash
 	echo "done"
-	echo "running ffmpeg_install.bash..."
-	bash /config/custom-cont-init.d/ffmpeg_install.bash
+	echo "running ffmpeg-pre-comiple.bash..."
+	bash /config/custom-cont-init.d/ffmpeg-pre-comiple.bash
+	rm /config/custom-cont-init.d/ffmpeg-pre-comiple.bash
 fi
 
 if [ ! -f /config/custom-cont-init.d/cron_install.bash ]; then
@@ -23,6 +25,7 @@ if [ ! -f /config/custom-cont-init.d/cron_install.bash ]; then
 	echo "done"
 	echo "running cron_install.bash..."
 	bash /config/custom-cont-init.d/cron_install.bash
+	rm /config/custom-cont-init.d/cron_install.bash
 fi
 
 if [ ! -d /config/scripts ]; then
@@ -46,6 +49,7 @@ if [ ! -f /config/custom-cont-init.d/cron_lidarr_jobs.bash ]; then
 	echo "done"
 	echo "running cron_lidarr_jobs.bash..."
 	bash /config/custom-cont-init.d/cron_lidarr_jobs.bash
+	rm /config/custom-cont-init.d/cron_lidarr_jobs.bash
 fi
 echo "=====LIDARR DL AUTOMATION SETUP COMPLETE====="
 exit 0
