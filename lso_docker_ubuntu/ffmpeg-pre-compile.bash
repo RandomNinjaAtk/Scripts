@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "==========INSTALLING PRE-COMPILED FFMPEG==========="
 
-if ! [ -x "$(command -v ffmpeg)" ]; then	
+if ! [ -x "$(command -v ffmpeg)" ]; then
 	echo "INSTALLING FFMPEG"
 	apt-get update && \
 	apt-get install -y ffmpeg
