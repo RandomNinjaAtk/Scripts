@@ -5,12 +5,12 @@ if [ -f /config/custom-cont-init.d/mp4_automator.bash ]; then
 	bash /config/custom-cont-init.d/mp4_automator.bash && \
 	rm /config/custom-cont-init.d/mp4_automator.bash
 else 
-	echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/mp4_automator.bash"  && \
-	curl -o /config/custom-cont-init.d/mp4_automator.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/mp4_automator.bash  && \
+	echo "downloading ffmpeg-repo-installer.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg-repo-installer.bash" && \
+	curl -o /config/custom-cont-init.d/ffmpeg-repo-installer.bash https://github.com/RandomNinjaAtk/Scripts/raw/master/lso_docker_ubuntu/ffmpeg-repo-installer.bash && \
 	echo "done" && \
 	echo "running mp4_automator.bash..." && \
-	bash /config/custom-cont-init.d/mp4_automator.bash && \
-	rm /config/custom-cont-init.d/mp4_automator.bash
+	bash /config/custom-cont-init.d/ffmpeg-repo-installer.bash && \
+	rm /config/custom-cont-init.d/ffmpeg-repo-installer.bash
 fi
 
 
