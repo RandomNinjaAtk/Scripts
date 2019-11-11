@@ -1,14 +1,14 @@
 #!/bin/bash
-echo "==========INSTALLING TOOLS==========="
+echo "==========INSTALLING PRE-COMPILED FFMPEG==========="
 
 if ! [ -x "$(command -v ffmpeg)" ]; then	
 	echo "INSTALLING FFMPEG"
-apt-get update && \
-apt-get install -y ffmpeg && \		
-apt-get purge --auto-remove -y && \
-apt-get clean
+	apt-get update && \
+	apt-get install -y ffmpeg && \		
+	apt-get purge --auto-remove -y && \
+	apt-get clean
 else
-echo "FFMPEG ALREADY INSTALLED"
+	echo "FFMPEG ALREADY INSTALLED"
 fi
 
 mkdir /tmp/ffmpeg
@@ -22,5 +22,5 @@ find "/tmp/ffmpeg" -type f -iname "ffprobe" -exec mv {} /usr/bin/ \;
 cd /
 rm -rf /tmp/ffmpeg
 
-echo "=====TOOLS INSTALLATION COMPLETE====="
+echo "=====PRE-COMPILED FFMPEG INSTALLATION COMPLETE====="
 exit 0
