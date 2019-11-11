@@ -11,12 +11,12 @@ if [ ! -f /config/custom-cont-init.d/audio_tools_install.bash ]; then
 fi
 
 if [ ! -f /config/custom-cont-init.d/ffmpeg_install.bash ]; then
-	echo "downloading ffmpeg-pre-comiple.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg-pre-comiple.bash"
-	curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg-pre-comiple.bash
+	echo "downloading ffmpeg-pre-compile.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg-pre-compile.bash"
+	curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg-pre-compile.bash
 	echo "done"
 	echo "running ffmpeg-pre-comiple.bash..."
-	bash /config/custom-cont-init.d/ffmpeg-pre-comiple.bash
-	rm /config/custom-cont-init.d/ffmpeg-pre-comiple.bash
+	bash /config/custom-cont-init.d/ffmpeg-pre-compile.bash
+	rm /config/custom-cont-init.d/ffmpeg-pre-compile.bash
 fi
 
 if [ ! -f /config/custom-cont-init.d/cron_install.bash ]; then
