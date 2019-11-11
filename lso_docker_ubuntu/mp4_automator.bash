@@ -20,17 +20,17 @@ if ! [ -x "$(command -v mkvmerge)" ]; then
 fi
 
 if ! [ -x "$(command -v ffmpeg)" ]; then
-	if [ -f /config/custom-cont-init.d/ffmpeg_install.bash ]; then
-		echo "running ffmpeg_install.bash..." && \
-		bash /config/custom-cont-init.d/ffmpeg_install.bash && \
-		rm /config/custom-cont-init.d/ffmpeg_install.bash
+	if [ -f /config/custom-cont-init.d/ffmpeg-repo-installer.bash ]; then
+		echo "running ffmpeg-repo-installer.bash..." && \
+		bash /config/custom-cont-init.d/ffmpeg-repo-installer.bash && \
+		rm /config/custom-cont-init.d/ffmpeg-repo-installer.bash
 	else
-		echo "downloading ffmpeg_install.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg_install.bash" && \
-		curl -o /config/custom-cont-init.d/ffmpeg_install.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg_install.bash && \
+		echo "downloading ffmpeg-repo-installer.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg-repo-installer.bash" && \
+		curl -o /config/custom-cont-init.d/ffmpeg-repo-installer.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg-repo-installer.bash && \
 		echo "done" && \
 		echo "running ffmpeg_install.bash..." && \
-		bash /config/custom-cont-init.d/ffmpeg_install.bash && \
-		rm /config/custom-cont-init.d/ffmpeg_install.bash
+		bash /config/custom-cont-init.d/ffmpeg-repo-installer.bash && \
+		rm /config/custom-cont-init.d/ffmpeg-repo-installer.bash
 	fi
 fi
 
