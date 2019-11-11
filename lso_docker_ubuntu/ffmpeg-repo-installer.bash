@@ -3,7 +3,7 @@ echo "==========INSTALLING REPO FFMPEG==========="
 
 if ! [ -x "$(command -v ffmpeg)" ]; then
 	echo "INSTALLING FFMPEG"
-	apt-get update && \
+	apt-get update -qq
 	apt-get install -y ffmpeg
 else
 	echo "FFMPEG ALREADY INSTALLED"
