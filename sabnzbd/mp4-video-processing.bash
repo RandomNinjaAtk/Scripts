@@ -13,6 +13,8 @@ if [ ! -f /config/scripts/sickbeard_mp4_automator/Deobfuscate.py ]; then
     echo "done"
 fi
 
+set -e
+
 # Execute on new downloads
 cd /config/scripts/sickbeard_mp4_automator
 
@@ -31,4 +33,7 @@ fi
 
 # Manual run of Sickbeard MP4 Automator
 python manual.py -i "$1" -nt
+
 echo "COMPLETE"
+
+exit 0
