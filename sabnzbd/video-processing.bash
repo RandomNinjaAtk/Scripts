@@ -24,7 +24,15 @@ if [ ! -f /config/scripts/Deobfuscate.py ]; then
 fi
 
 # Execute on new downloads
+
+set -e
+
 cd /config/scripts
+
 timeout --foreground 1m python Deobfuscate.py
+
 bash MKV-Cleaner.bash "$1"
+
 echo "COMPLETE"
+
+exit 0
