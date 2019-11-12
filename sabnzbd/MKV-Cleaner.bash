@@ -22,7 +22,7 @@ UnkownAudioLanguage="eng" # Sets unknown language tracks to the language specifi
 clean () {
 	if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
 		echo "REMOVE NON VIDEO FILES"
-		find "$1"/* -type f -not -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -delete
+		find "$1"/* -type f -not -iregex ".*/.*\.\(webvtt\|ass\|srt\|mkv\|mp4\|avi\)" -delete
 		echo "REMOVE NON VIDEO FILES COMPLETE"
 	else
 		echo "ERROR: NO VIDEO FILES FOUND"
