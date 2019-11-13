@@ -10,7 +10,7 @@ if [ ! -f /config/custom-cont-init.d/audio_tools_install.bash ]; then
 	rm /config/custom-cont-init.d/audio_tools_install.bash
 fi
 
-if [ ! -f /config/custom-cont-init.d/ffmpeg_install.bash ]; then
+if [ ! -f /config/custom-cont-init.d/ffmpeg-pre-compile.bash ]; then
 	echo "downloading ffmpeg-pre-compile.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/ffmpeg-pre-compile.bash"
 	curl -o /config/custom-cont-init.d/ffmpeg-pre-compile.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/ffmpeg-pre-compile.bash
 	echo "done"
