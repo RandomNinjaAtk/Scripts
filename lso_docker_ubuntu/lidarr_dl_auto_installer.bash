@@ -51,5 +51,8 @@ if [ ! -f /config/custom-cont-init.d/cron_lidarr_jobs.bash ]; then
 	bash /config/custom-cont-init.d/cron_lidarr_jobs.bash
 	rm /config/custom-cont-init.d/cron_lidarr_jobs.bash
 fi
+
+service cron restart
+
 echo "=====LIDARR DL AUTOMATION SETUP COMPLETE====="
 exit 0
