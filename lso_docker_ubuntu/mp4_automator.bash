@@ -52,7 +52,8 @@ if ! [ -x "$(command -v pip)" ]; then
 		"subliminal<2" \
 		stevedore==1.19.1 \
 		python-dateutil \
-		qtfaststart
+		qtfaststart \
+		tmdbsimple
 fi
 
 if [ -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
