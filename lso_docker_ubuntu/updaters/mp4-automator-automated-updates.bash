@@ -1,4 +1,3 @@
-  
 #!/bin/bash
 echo "==========MP4 AUTOMATOR AUTOMATED UPDATES==========="
 
