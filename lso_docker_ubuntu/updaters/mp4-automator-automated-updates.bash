@@ -1,6 +1,6 @@
   
 #!/bin/bash
-echo "==========MP4 AUTOMATOR AUTOMATED INSTALLER & UPDATER==========="
+echo "==========MP4 AUTOMATOR AUTOMATED UPDATES==========="
 
 if [ -f /config/custom-cont-init.d/mp4-automated-installer.bash ]; then
 	rm /config/custom-cont-init.d/mp4-automated-installer.bash
