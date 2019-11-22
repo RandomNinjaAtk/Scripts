@@ -8,7 +8,7 @@ if [ -f /config/custom-cont-init.d/lidarr_dl_auto_installer.bash ]; then
 else 
 	echo "begining updated script installation..."
 	echo "downloading lidarr_dl_auto_installer.bash from: https://github.com/RandomNinjaAtk/Scripts/raw/master/lso_docker_ubuntu/lidarr_dl_auto_installer.bash"  && \
-	curl -o /config/custom-cont-init.d/mp4-automated-installer.bash	https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/lidarr_dl_auto_installer.bash && \
+	curl -o /config/custom-cont-init.d/lidarr_dl_auto_installer.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/lidarr_dl_auto_installer.bash && \
 	echo "download complete" && \
 	echo "running lidarr_dl_auto_installer.bash..." && \
 	bash /config/custom-cont-init.d/lidarr_dl_auto_installer.bash && \
