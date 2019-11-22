@@ -67,7 +67,7 @@ if [ -f /config/scripts/autoProcess.ini ]; then
 fi
 
 if [ ! -f /config/scripts/sickbeard_mp4_automator/autoProcess.ini ]; then
-	echo "New installation dectected..."
+	echo "New installation detected..."
 	echo "Downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/autoProcess.ini" && \
 	curl -o /config/scripts/sickbeard_mp4_automator/autoProcess.ini https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/autoProcess.ini && \
 	echo "done" && \
