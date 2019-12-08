@@ -87,7 +87,7 @@ conversion () {
 		fi
 		if [ "${ConversionFormat}" = ALAC ]; then
 			echo "ALAC CONVERSION START"
-			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn --acodec aac -ab 320k -movflags faststart \"@.m4a\" && echo \"CONVERSION SUCCESS: @.m4a\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
+			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec alac -movflags faststart \"@.m4a\" && echo \"CONVERSION SUCCESS: @.m4a\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
 				echo "ALAC CONVERSION COMPLETE"
 			else
 				echo "ERROR: ALAC CONVERSION FAILED" && exit 1
