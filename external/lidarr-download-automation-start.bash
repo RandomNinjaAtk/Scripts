@@ -24,12 +24,12 @@ if [ ! -f /config/scripts/lidarr-download-automation/config ]; then
     chmod 0666 /config/scripts/lidarr-download-automation/config
 fi
 
-if mkdir /config/scripts/.lidarr-download-automation.exclusivelock; then
+if mkdir /config/scripts/00-lidarr-download-automation.exclusivelock; then
     rm /config/scripts/script-run.log
     cd /config/scripts/lidarr-download-automation/
     bash lidarr-download-automation.bash > /config/scripts/script-run.log
     sleep 10s
-    rmdir /config/scripts/.lidarr-download-automation.exclusivelock
+    rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
 else 
     echo "ERROR: /config/scripts/lidarr-download-automation/lidarr-download-automation.bash is still running..."
     exit 1
