@@ -15,7 +15,7 @@
 ######################################## PATHS CONFIGURATION ########################################
 ScriptDir="/config/scripts/lidarr-download-automation" # Directory where the script and executables are stored.
 LogDir="/config/scripts/lidarr-download-automation/logs" # Directory where the logs are stored.
-DownloadDir="/downloads" # The directory where files will be downloaded to before processing.
+DownloadDir="/downloads/deezloaderremix" # The directory where files will be downloaded to before processing.
 ExternalProcessDirectory="/config/scripts/lidarr-download-automation/import" # Directory that you want to move downloaded files to for processing with other scripts or applications such as Beets.
 EnableWSLMode="False" # Set to "True" if you're running Lidarr on windows and this script on subsystem for Linux.
 
@@ -24,7 +24,8 @@ LidarrUrl="http://127.0.0.1:8686" # Set domain or IP to your Lidarr instance inc
 LidarrApiKey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")" # Lidarr API key.
 
 ##################################### DOWNLOADER CONFIGURATION #####################################
-Quality="FLAC" # SET TO: MP3_128 or MP3_320 or FLAC - Specifies the initial target download quality.
+DeezloaderRemixUrl="http://127.0.0.1:1730" # Set domain or IP to your Deezloader Remix instance including port.
+Quality="FLAC" # SET TO: 128 or 320 or FLAC - Specifies the initial target download quality.
 KeepOnly="False" # True = ENABLED, Keeps only quality type selected above.
 DownloadLogName="download.log" # Log filename.
 ClearDownloadLog="True" # True = ENABLED, Enables duplicate downloading, disabled prevents duplicate downloads between script runs.
