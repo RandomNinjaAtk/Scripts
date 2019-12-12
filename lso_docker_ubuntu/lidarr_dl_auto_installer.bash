@@ -62,6 +62,45 @@ else
 	echo "cron ALREADY INSTALLED"
 fi
 
+if [ ! -d /config/scripts ]; then
+	echo "setting up script directory"
+	mkdir /config/scripts
+	# Set Permissions
+	echo "setting permissions..."
+	chmod 0777 /config/scripts
+	echo "done"
+fi
+
+if [ -f /config/scripts/lidarr-download-automation-start.bash ]; then
+	rm /config/scripts/lidarr-download-automation-start.bash
+	sleep 1s
+fi
+
+if [ ! -f /config/scripts/lidarr-download-automation-start.bash ]; then
+	echo "downloading lidarr-download-automation-start.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/external/cron_lidarr_jobs.bash"
+	curl -o /config/scripts/lidarr-download-automation-start.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/lidarr-download-automation-start.bash
+	echo "done"
+fi
+
+if [ -x "$(command -v crontab)" ]; then	
+	if grep "lidarr-download-automation-start.bash" /etc/crontab; then
+		echo "job already added..."
+	else
+		echo "adding cron job to crontab..."
+		echo "*/30 * * * *   root   bash /config/scripts/lidarr-download-automation-start.bash > /config/scripts/cron-job.log" >> "/etc/crontab"
+	fi
+else
+	echo "cron NOT INSTALLED"
+fi
+
+# Remove lock file incase, system was rebooted before script finished
+if [ -d /config/scripts/.lidarr-download-automation.exclusivelock ]; then
+	rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
+fi
+
+service cron restart
+
+
 rm -rf /deezloaderremix && \
 rm -rf /config/xdg && \
 curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
@@ -110,48 +149,9 @@ cd /deezloaderremix/app && \
 npm install && \
 cd / && \
 
-nohup node /deezloaderremix/app/app.js &
+nohup node /deezloaderremix/app/app.js &>/dev/null &
 sleep 20s && \
 chmod 0777 -R /config/xdg && \
-
-
-if [ ! -d /config/scripts ]; then
-	echo "setting up script directory"
-	mkdir /config/scripts
-	# Set Permissions
-	echo "setting permissions..."
-	chmod 0777 /config/scripts
-	echo "done"
-fi
-
-if [ -f /config/scripts/lidarr-download-automation-start.bash ]; then
-	rm /config/scripts/lidarr-download-automation-start.bash
-	sleep 1s
-fi
-
-if [ ! -f /config/scripts/lidarr-download-automation-start.bash ]; then
-	echo "downloading lidarr-download-automation-start.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/external/cron_lidarr_jobs.bash"
-	curl -o /config/scripts/lidarr-download-automation-start.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/lidarr-download-automation-start.bash
-	echo "done"
-fi
-
-if [ -x "$(command -v crontab)" ]; then	
-	if grep "lidarr-download-automation-start.bash" /etc/crontab; then
-		echo "job already added..."
-	else
-		echo "adding cron job to crontab..."
-		echo "*/30 * * * *   root   bash /config/scripts/lidarr-download-automation-start.bash > /config/scripts/cron-job.log" >> "/etc/crontab"
-	fi
-else
-	echo "cron NOT INSTALLED"
-fi
-
-# Remove lock file incase, system was rebooted before script finished
-if [ -d /config/scripts/.lidarr-download-automation.exclusivelock ]; then
-	rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
-fi
-
-service cron restart
 
 echo "=====LIDARR DL AUTOMATION SETUP COMPLETE====="
 exit 0
