@@ -62,6 +62,59 @@ else
 	echo "cron ALREADY INSTALLED"
 fi
 
+rm -rf /deezloaderremix && \
+rm -rf /config/xdg && \
+curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+apt-get update -qq && \
+apt-get install -y -qq \
+    nodejs \
+	wget \
+	git \
+	unzip \
+	jq && \
+apt-get purge --auto-remove -y && \
+apt-get clean && \
+mkdir /downloads/deezloaderremix
+ln -sf /downloads/deezloaderremix "/root/Deezloader Music" && \
+cd / && \
+wget https://notabug.org/RemixDevs/DeezloaderRemix/archive/development.zip && \
+unzip development.zip && \
+rm development.zip && \
+sed -i "s/\"trackNameTemplate\": \"%artist% - %title%\"/\"trackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"albumTrackNameTemplate\": \"%number% - %title%\"/\"albumTrackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"playlistTrackNameTemplate\": \"%position% - %artist% - %title%\"/\"playlistTrackNameTemplate\": \"%disc%%position% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% - %album% %explicit%(%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"embeddedArtworkSize\": 800,/\"embeddedArtworkSize\": 1000,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"createCDFolder\": true,/\"createCDFolder\": false,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"createSingleFolder\": false,/\"createSingleFolder\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"syncedlyrics\": false,/\"syncedlyrics\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"\; \"/\" \/ \"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"removeAlbumVersion\": false,/\"removeAlbumVersion\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"trackTotal\": false,/\"trackTotal\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"discTotal\": false,/\"discTotal\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"explicit\": false,/\"explicit\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"barcode\": false,/\"barcode\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"unsynchronisedLyrics\": false,/\"unsynchronisedLyrics\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"copyright\": false,/\"copyright\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"musicpublisher\": false,/\"musicpublisher\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"composer\": false,/\"composer\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"mixer\": false,/\"mixer\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"author\": false,/\"author\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"writer\": false,/\"writer\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"engineer\": false,/\"engineer\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"producer\": false/\"producer\": true/g" "/deezloaderremix/app/default.json" && \
+
+cd /deezloaderremix && \
+npm install && \
+cd /deezloaderremix/app && \
+npm install && \
+cd / && \
+
+nohup node /deezloaderremix/app/app.js &
+sleep 20s && \
+chmod 0777 -R /config/xdg && \
+
+
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
 	mkdir /config/scripts
