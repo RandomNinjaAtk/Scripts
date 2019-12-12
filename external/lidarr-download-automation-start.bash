@@ -10,6 +10,11 @@ if [ ! -d /config/scripts/lidarr-download-automation ]; then
 fi
 
 # Download Scripts
+if [ -f /config/scripts/lidarr-download-automation/lidarr-download-automation.bash ]; then
+	rm /config/scripts/lidarr-download-automation/lidarr-download-automation.bash
+	sleep 1s
+fi
+
 if [ ! -f /config/scripts/lidarr-download-automation/lidarr-download-automation.bash ]; then
     echo "downloading lidarr-download-automation.bash from: https://github.com/Migz93/lidarr-download-automation/blob/develop/lidarr-download-automation.bash"
     curl -o /config/scripts/lidarr-download-automation/lidarr-download-automation.bash https://raw.githubusercontent.com/Migz93/lidarr-download-automation/dremix/lidarr-download-automation.bash
