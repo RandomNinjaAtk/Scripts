@@ -12,7 +12,7 @@ fi
 # Download Scripts
 if [ ! -f /config/scripts/lidarr-download-automation/lidarr-download-automation.bash ]; then
     echo "downloading lidarr-download-automation.bash from: https://github.com/Migz93/lidarr-download-automation/blob/develop/lidarr-download-automation.bash"
-    curl -o /config/scripts/lidarr-download-automation/lidarr-download-automation.bash https://raw.githubusercontent.com/Migz93/lidarr-download-automation/develop/lidarr-download-automation.bash
+    curl -o /config/scripts/lidarr-download-automation/lidarr-download-automation.bash https://raw.githubusercontent.com/Migz93/lidarr-download-automation/dremix/lidarr-download-automation.bash
     echo "done"
     chmod 0666 /config/scripts/lidarr-download-automation/lidarr-download-automation.bash
 fi
