@@ -148,7 +148,7 @@ fi
 
 # Remove lock file incase, system was rebooted before script finished
 if [ -d /config/scripts/.lidarr-download-automation.exclusivelock ]; then
-	rmdir /config/scripts/.lidarr-download-automation.exclusivelock
+	rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
 fi
 
 service cron restart
