@@ -28,7 +28,7 @@ DeezloaderRemixUrl="http://127.0.0.1:1730" # Set domain or IP to your Deezloader
 Quality="FLAC" # SET TO: 128 or 320 or FLAC - Specifies the initial target download quality.
 KeepOnly="False" # True = ENABLED, Keeps only quality type selected above.
 DownloadLogName="download.log" # Log filename.
-ClearDownloadLog="True" # True = ENABLED, Enables duplicate downloading, disabled prevents duplicate downloads between script runs.
+ClearDownloadLog="False" # True = ENABLED, Enables duplicate downloading, disabled prevents duplicate downloads between script runs.
 PreviouslyDownloaded="True" # Checks Download log before downloading artist/albums to prevent downloading duplicates.
 
 ############################## DOWNLOAD POSTPROCESSING CONFIGURATION ###############################
