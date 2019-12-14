@@ -62,6 +62,15 @@ else
 	echo "cron ALREADY INSTALLED"
 fi
 
+echo "INSTALLING BEETS"
+apt-get update -qq && \
+apt-get install -qq -y \
+	python-dev \
+	python-pip && \
+apt-get purge --auto-remove -y && \
+apt-get clean
+pip install beets
+
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
 	mkdir /config/scripts
@@ -100,6 +109,7 @@ fi
 
 service cron restart
 
+echo "INSTALLING DEEZLOADER-REMIX"
 
 rm -rf /deezloaderremix && \
 rm -rf /config/xdg && \
