@@ -1,4 +1,4 @@
-plugins: fetchart embedart chroma
+plugins: chroma
 library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
@@ -65,18 +65,3 @@ import:
     log: /config/scripts/beets/beets.log
     languages: ['en']
     group_albums: no
-
-embedart:
-    auto: yes
-
-fetchart:
-    auto: yes
-    minwidth: 500
-    maxwidth: 1400
-    enforce_ratio: yes
-    cautious: yes
-    sources: ['filesystem', 'coverart', 'itunes', 'amazon', 'albumart'] # []
-    store_source: yes
-
-chroma:
-    auto: yes
