@@ -1,4 +1,4 @@
-plugins: fetchart embedart convert scrub replaygain lastgenre chroma
+plugins: fetchart embedart chroma
 library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
@@ -66,48 +66,17 @@ import:
     languages: ['en']
     group_albums: no
 
-lastgenre:
-    count: 5
-    prefer_specific: no
-    canonical: yes
-    source: track
-    whitelist: yes
-    min_weight: 10
-    fallback:
-    force: yes
-    auto: yes
-    separator: ' / '
-
 embedart:
     auto: yes
-
-acousticbrainz:
-    auto: no
-    force: no
 
 fetchart:
     auto: yes
     minwidth: 500
     maxwidth: 1400
     enforce_ratio: yes
-    fanarttv_key: 3aba20f35de29b998b6b0462a710de6c
     cautious: yes
-    sources: ['filesystem', 'coverart', 'itunes', 'amazon', 'albumart', 'fanarttv'] # []
+    sources: ['filesystem', 'coverart', 'itunes', 'amazon', 'albumart'] # []
     store_source: yes
-    
-replaygain:
-    auto: no
-
-scrub:
-    auto: no
 
 chroma:
     auto: yes
-
-web:
-    host: 0.0.0.0
-    port: 8337
-
-permissions:
-    file: 666
-    dir: 777
