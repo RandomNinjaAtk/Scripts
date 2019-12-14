@@ -1,0 +1,130 @@
+plugins: fetchart embedart convert scrub replaygain lastgenre chroma web permissions acousticbrainz
+directory: /mnt/user/media/music/beets
+library: /config/beets.blb
+art_filename: folder
+threaded: no
+original_date: yes
+per_disc_numbering: yes
+id3v23: no
+asciify_paths: true
+
+match:
+    strong_rec_thresh: 0.10 # 0.04
+    medium_rec_thresh: 0.25 # 0.25
+    rec_gap_thresh: 0.25 # 0.25
+    max_rec:
+        missing_tracks: medium # medium
+        unmatched_tracks: medium # medium
+        track_length: medium
+        media: medium
+    distance_weights:
+        source: 2.0 # 2.0
+        artist: 1.0 # 3.0
+        album: 3.0 # 3.0
+        media: 1.0 # 1.0
+        mediums: 1.0 # 1.0
+        year: 1.0 # 1.0
+        country: 0.5 # 0.5
+        label: 0.5 # 0.5
+        catalognum: 0.5 # 0.5
+        albumdisambig: 0.5 # 0.5
+        album_id: 5.0 # 5.0
+        tracks: 2.0 # 2.0
+        missing_tracks: 5.0 # 0.9
+        unmatched_tracks: 0.6 # 0.6
+        track_title: 3.0 # 3.0
+        track_artist: 0.5 # 2.0
+        track_index: 1.0 # 1.0
+        track_length: 2.0 # 2.0
+        track_id: 5.0 # 5.0
+    preferred:
+        countries: [] # []
+        media: ['Digital Media|CD'] # []
+        original_year: yes # no
+    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'media'] # []
+    required: ['year', 'album', 'artist'] # []
+    ignored_media: [] # []
+    ignore_data_tracks: no # yes
+    ignore_video_tracks: no # yes
+    track_length_grace: 1 # 10
+    track_length_max: 1 # 30
+
+convert:
+    auto: no
+    ffmpeg: /usr/bin/ffmpeg
+    never_convert_lossy_files: yes
+    copy_album_art: yes
+    max_bitrate: 600
+    embed: yes
+    format: opus
+    formats:
+        aac:
+            command: ffmpeg -i $source -y -vn -acodec aac -ab 320k -movflags faststart $dest
+            extension: m4a
+        ogg: ffmpeg -i $source -y -vn -acodec libvorbis -aq 10 $dest
+        mp3: ffmpeg -i $source -y -vn -acodec libmp3lame -ab 320k $dest
+        opus: ffmpeg -i $source -y -vn -acodec libopus -ab 160k $dest
+
+paths:
+    default: $disc$track - $title.MATCHED
+    singleton: $disc$track - $title.MATCHED
+    comp: $disc$track - $title.MATCHED
+    albumtype_soundtrack: $disc$track - $title.MATCHED
+        
+import:
+    write: yes
+    copy: no
+    move: yes
+    resume: ask
+    incremental: no
+    quiet_fallback: skip
+    timid: no
+    log: /config/musiclibrary.log
+    languages: ['en']
+    group_albums: no
+
+lastgenre:
+    count: 5
+    prefer_specific: no
+    canonical: yes
+    source: track
+    whitelist: yes
+    min_weight: 10
+    fallback:
+    force: yes
+    auto: yes
+    separator: ' / '
+
+embedart:
+    auto: yes
+
+acousticbrainz:
+    auto: no
+    force: no
+
+fetchart:
+    auto: yes
+    minwidth: 500
+    maxwidth: 1400
+    enforce_ratio: yes
+    fanarttv_key: 3aba20f35de29b998b6b0462a710de6c
+    cautious: yes
+    sources: ['filesystem', 'coverart', 'itunes', 'amazon', 'albumart', 'fanarttv'] # []
+    store_source: yes
+    
+replaygain:
+    auto: no
+
+scrub:
+    auto: no
+
+chroma:
+    auto: yes
+
+web:
+    host: 0.0.0.0
+    port: 8337
+
+permissions:
+    file: 666
+    dir: 777
