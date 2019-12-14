@@ -1,6 +1,5 @@
-plugins: fetchart embedart convert scrub replaygain lastgenre chroma web permissions acousticbrainz
-directory: /mnt/user/media/music/beets
-library: /config/beets.blb
+plugins: fetchart embedart convert scrub replaygain lastgenre chroma
+library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
 original_date: yes
@@ -49,22 +48,6 @@ match:
     track_length_grace: 1 # 10
     track_length_max: 1 # 30
 
-convert:
-    auto: no
-    ffmpeg: /usr/bin/ffmpeg
-    never_convert_lossy_files: yes
-    copy_album_art: yes
-    max_bitrate: 600
-    embed: yes
-    format: opus
-    formats:
-        aac:
-            command: ffmpeg -i $source -y -vn -acodec aac -ab 320k -movflags faststart $dest
-            extension: m4a
-        ogg: ffmpeg -i $source -y -vn -acodec libvorbis -aq 10 $dest
-        mp3: ffmpeg -i $source -y -vn -acodec libmp3lame -ab 320k $dest
-        opus: ffmpeg -i $source -y -vn -acodec libopus -ab 160k $dest
-
 paths:
     default: $disc$track - $title.MATCHED
     singleton: $disc$track - $title.MATCHED
@@ -79,7 +62,7 @@ import:
     incremental: no
     quiet_fallback: skip
     timid: no
-    log: /config/musiclibrary.log
+    log: /config/scripts/beets/beets.log
     languages: ['en']
     group_albums: no
 
