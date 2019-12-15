@@ -139,10 +139,10 @@ fi
 wget https://notabug.org/RemixDevs/DeezloaderRemix/archive/development.zip && \
 unzip development.zip && \
 rm development.zip && \
-sed -i "s/\"trackNameTemplate\": \"%artist% - %title%\"/\"trackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"albumTrackNameTemplate\": \"%number% - %title%\"/\"albumTrackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"playlistTrackNameTemplate\": \"%position% - %artist% - %title%\"/\"playlistTrackNameTemplate\": \"%disc%%position% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% - %album% %explicit%(%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"trackNameTemplate\": \"%artist% - %title%\"/\"trackNameTemplate\": \"%disc%%number% - %title%\"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"albumTrackNameTemplate\": \"%number% - %title%\"/\"albumTrackNameTemplate\": \"%disc%%number% - %title%\"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"playlistTrackNameTemplate\": \"%position% - %artist% - %title%\"/\"playlistTrackNameTemplate\": \"%disc%%position% - %title%\"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% - %album% (%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"embeddedArtworkSize\": 800,/\"embeddedArtworkSize\": 1000,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"createCDFolder\": true,/\"createCDFolder\": false,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"createSingleFolder\": false,/\"createSingleFolder\": true,/g" "/deezloaderremix/app/default.json" && \
@@ -150,7 +150,6 @@ sed -i "s/\"\; \"/\" \/ \"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"removeAlbumVersion\": false,/\"removeAlbumVersion\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"trackTotal\": false,/\"trackTotal\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"discTotal\": false,/\"discTotal\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"explicit\": false,/\"explicit\": true,/g" "/deezloaderremix/app/default.json" && \
 
 cd /deezloaderremix && \
 npm install && \
