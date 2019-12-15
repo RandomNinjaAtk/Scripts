@@ -1,4 +1,3 @@
-plugins: 
 library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
