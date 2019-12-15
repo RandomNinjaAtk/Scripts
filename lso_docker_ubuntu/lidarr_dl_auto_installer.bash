@@ -70,7 +70,9 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 pip install beets
-mkdir /config/scripts/beets
+if [ ! -d /config/scripts/beets ]; then
+	mkdir /config/scripts/beets
+fi
 
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
