@@ -72,17 +72,6 @@ apt-get clean
 pip install beets
 mkdir /config/scripts/beets
 
-if [ -f /config/scripts/beets/config.xml ]; then
-	rm /config/scripts/beets/config.xml
-	sleep 1s
-fi
-if [ ! -f /config/scripts/beets/config.xml ]; then
-    echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/config.yaml"
-    curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/config.yaml
-    echo "done"
-    chmod 0666 /config/scripts/beets/config.yaml
-fi
-
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
 	mkdir /config/scripts
