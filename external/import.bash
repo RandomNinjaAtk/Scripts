@@ -15,7 +15,7 @@ if [ "$(ls -A "${DownloadDir}")" ]; then
 		if find "${beetdir}" -type f -iname "*.MATCHED.*" | read; then
 			logit "Matched with beets!"
 		else
-			logit "Unable to match using beets to a musicbrainz relase, deleting..."
+			logit "Unable to match using beets to a musicbrainz release, deleting..."
 			rm -rf "${beetdir}"
 		fi
 	done
