@@ -1,6 +1,6 @@
 #!/bin/bash
+source /config/scripts/lidarr-download-automation/config
 if [ "$(ls -A "${DownloadDir}")" ]; then
-	source /config/scripts/lidarr-download-automation/config
 	if [ -f /config/scripts/beets/library.blb ]; then
 		rm /config/scripts/beets/library.blb
 		sleep 1s
