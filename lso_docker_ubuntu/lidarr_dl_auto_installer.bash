@@ -150,6 +150,9 @@ sed -i "s/\"\; \"/\" \/ \"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"removeAlbumVersion\": false,/\"removeAlbumVersion\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"trackTotal\": false,/\"trackTotal\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"discTotal\": false,/\"discTotal\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"date\": true,/\"date\": false,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"isrc\": true,/\"isrc\": false,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"publisher\": true,/\"publisher\": false,/g" "/deezloaderremix/app/default.json" && \
 
 cd /deezloaderremix && \
 npm install && \
