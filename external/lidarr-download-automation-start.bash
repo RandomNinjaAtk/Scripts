@@ -29,6 +29,18 @@ if [ ! -f /config/scripts/lidarr-download-automation/config ]; then
     chmod 0666 /config/scripts/lidarr-download-automation/config
 fi
 
+if [ -f /config/scripts/beets/config.xml ]; then
+	rm /config/scripts/beets/config.xml
+	sleep 1s
+fi
+if [ ! -f /config/scripts/beets/config.xml ]; then
+	echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/config.yaml"
+	curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/config.yaml
+	echo "done"
+	chmod 0666 /config/scripts/beets/config.yaml
+fi
+
+
 if [ -f /config/scripts/beets/import.bash ]; then
 	rm /config/scripts/beets/import.bash
 	sleep 1s
