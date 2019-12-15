@@ -80,7 +80,7 @@ if [ ! -f /config/scripts/beets/config.xml ]; then
     echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/config.yaml"
     curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/config.yaml
     echo "done"
-    chmod 0666 config.yaml
+    chmod 0666 /config/scripts/beets/config.yaml
 fi
 
 if [ ! -d /config/scripts ]; then
