@@ -11,7 +11,7 @@ if [ "$(ls -A "${DownloadDir}")" ]; then
 	fi
 	dlloc=($(find "${DownloadDir}" -type d -mindepth 1 -newer "${DownloadDir}/temp-hold"))
 	for dir in "${dlloc[@]}"; do
-		beet -c /config/scripts/beets/config.xml -d "$dir" import -q "$dir"
+		beet -c /config/scripts/beets/config.yaml -d "$dir" import -q "$dir"
 		if find "$dir" -type f -iname "*.MATCHED.*" | read; then
 			logit "Matched with beets!"
 		else
