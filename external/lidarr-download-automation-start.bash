@@ -34,7 +34,7 @@ if [ -f /config/scripts/beets/import.bash ]; then
 	sleep 1s
 fi
 
-if [ ! -f /config/scripts/lidarr-download-automation/lidarr-download-automation.bash ]; then
+if [ ! -f /config/scripts/beets/import.bash ]; then
     echo "downloading import.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/external/import.bash"
     curl -o /config/scripts/beets/import.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/import.bash
     echo "done"
