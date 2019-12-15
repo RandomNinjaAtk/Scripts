@@ -124,10 +124,12 @@ apt-get install -y -qq \
 	jq && \
 apt-get purge --auto-remove -y && \
 apt-get clean && \
-mkdir /downloads/deezloaderremix
+if [ ! -d /downloads/deezloaderremix ]; then
+	mkdir /downloads/deezloaderremix
+fi
 ln -sf /downloads/deezloaderremix "/root/Deezloader Music" && \
-cd / && \
 
+cd / && \
 if [ -f /development.zip  ]; then
 	rm /development.zip 
 	sleep 1s
