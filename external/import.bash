@@ -9,14 +9,14 @@ if [ "$(ls -A "${DownloadDir}")" ]; then
 		rm /config/scripts/beets/beets.log
 		sleep 1s
 	fi
-	dlloc=($(find "${DownloadDir}"/* -type d -newer "${DownloadDir}/temp-hold"))
-	for dir in "${dlloc[@]}"; do
-		beet -c /config/scripts/beets/config.yaml -d "$dir" import -q "$dir"
+	beets=($(find "${DownloadDir}" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" -newer "${DownloadDir}/temp-hold" -printf '%h\n' | sed -e "s/'/\\'/g" -e 's/\$/\$/g' | sort -u))
+	for beetdir in "${beets[@]}"; do
+		beet -c /config/scripts/beets/config.yaml -d "${beetdir}" import -q "${beetdir}"
 		if find "$dir" -type f -iname "*.MATCHED.*" | read; then
 			logit "Matched with beets!"
 		else
 			logit "Unable to match using beets to a musicbrainz relase, deleting..."
-			rm -rf "$dir"
+			rm -rf "${beetdir}"
 		fi
 	done
 fi
