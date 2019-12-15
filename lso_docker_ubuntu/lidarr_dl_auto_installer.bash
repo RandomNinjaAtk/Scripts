@@ -146,22 +146,11 @@ sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": 
 sed -i "s/\"embeddedArtworkSize\": 800,/\"embeddedArtworkSize\": 1000,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"createCDFolder\": true,/\"createCDFolder\": false,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"createSingleFolder\": false,/\"createSingleFolder\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"syncedlyrics\": false,/\"syncedlyrics\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"\; \"/\" \/ \"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"removeAlbumVersion\": false,/\"removeAlbumVersion\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"trackTotal\": false,/\"trackTotal\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"discTotal\": false,/\"discTotal\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"explicit\": false,/\"explicit\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"barcode\": false,/\"barcode\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"unsynchronisedLyrics\": false,/\"unsynchronisedLyrics\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"copyright\": false,/\"copyright\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"musicpublisher\": false,/\"musicpublisher\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"composer\": false,/\"composer\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"mixer\": false,/\"mixer\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"author\": false,/\"author\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"writer\": false,/\"writer\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"engineer\": false,/\"engineer\": true,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"producer\": false/\"producer\": true/g" "/deezloaderremix/app/default.json" && \
 
 cd /deezloaderremix && \
 npm install && \
