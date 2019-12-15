@@ -39,7 +39,7 @@ if [ ! -f /config/scripts/beets/import.bash ]; then
     curl -o /config/scripts/beets/import.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/import.bash
     echo "done"
     chmod 0666 /config/scripts/beets/import.bash
-    sed -i "s/#INSTERT/source /config/scripts/beets/import.bash/g" "/config/scripts/lidarr-download-automation/lidarr-download-automation.bash"
+    sed -i "s/#INSERT/source \/config\/scripts\/beets\/import.bash/g" "/config/scripts/lidarr-download-automation/lidarr-download-automation.bash"
 fi
 
 if mkdir /config/scripts/00-lidarr-download-automation.exclusivelock; then
