@@ -1,8 +1,13 @@
 #!/bin/bash
 if [ "$(ls -A "${DownloadDir}")" ]; then
-	rm /config/scripts/beets/library.blb
-	rm /config/scripts/beets/beets.log
-	sleep 1s
+	if [ -f /config/scripts/beets/library.blb ]; then
+		rm /config/scripts/beets/library.blb
+		sleep 1s
+	fi
+	if [ -f /config/scripts/beets/beets.log ]; then 
+		rm /config/scripts/beets/beets.log
+		sleep 1s
+	fi
 	dlloc=($(find "${DownloadDir}" -type d -newer "${DownloadDir}/temp-hold"))
 	for dir in "${dlloc[@]}"; do
 		beet -c /config/scripts/beets/config.xml -d "$dir" import -q "$dir"
