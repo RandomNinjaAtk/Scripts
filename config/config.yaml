@@ -1,3 +1,4 @@
+plugins: chroma
 library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
@@ -63,3 +64,6 @@ import:
     log: /config/scripts/beets/beets.log
     languages: ['en']
     group_albums: no
+
+chroma:
+    auto: yes
