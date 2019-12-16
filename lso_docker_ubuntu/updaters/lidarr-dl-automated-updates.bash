@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "==========LIDARR DL AUTO INSTALLER AUTOMATED UPDATES==========="
+echo "==========START LIDARR DL AUTO INSTALLER AUTOMATED UPDATES==========="
 
 if [ -f /config/custom-cont-init.d/lidarr_dl_auto_installer.bash ]; then
 	echo "Previous version detected..."
@@ -14,5 +14,5 @@ else
 	bash /config/custom-cont-init.d/lidarr_dl_auto_installer.bash && \
 	rm /config/custom-cont-init.d/lidarr_dl_auto_installer.bash
 fi
-
+echo "==========END LIDARR DL AUTO INSTALLER AUTOMATED UPDATES==========="
 exit 0
