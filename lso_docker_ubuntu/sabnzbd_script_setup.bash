@@ -9,13 +9,15 @@ apt-get install -qq -y \
 	wget \
 	nano \
 	unzip \
+	chroma \
 	python-dev \
 	python-pip && \
 apt-get purge --auto-remove -y && \
 apt-get clean
 
 pip install --no-cache-dir -U \
-	beets
+	beets \
+	pyacoustid
 	
 if ! [ -x "$(command -v ffmpeg)" ]; then
 	echo "INSTALLING FFMPEG"
@@ -63,6 +65,10 @@ fi
 
 # Download Scripts
 echo "downloading scripts..."
+if [ -f /config/scripts/video-processing.bash ]; then
+	rm /config/scripts/video-processing.bash
+	sleep 1s
+fi
 if [ ! -f /config/scripts/video-processing.bash ]; then
   echo "downloading video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/video-processing.bash"
   curl -o /config/scripts/video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/video-processing.bash
@@ -72,6 +78,10 @@ if [ ! -f /config/scripts/video-processing.bash ]; then
   echo "setting permissions..."
   chmod 777 /config/scripts/video-processing.bash
   echo "done"
+fi
+if [ -f /config/scripts/AudioPostProcessing.bash ]; then
+	rm /config/scripts/AudioPostProcessing.bash
+	sleep 1s
 fi
 if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
   echo "downloading AudioPostProcessing.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/AudioPostProcessing.bash"
