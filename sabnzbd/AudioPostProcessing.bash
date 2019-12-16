@@ -165,6 +165,13 @@ if [ "${Convert}" = TRUE ];	then
 else
 	echo "CONVERSION DISABLED"
 fi
+
+if [ "${BeetsProcessing}" = TRUE ]; then
+	beets "$1"
+else
+	echo "BEETS PROCESSING DISABLED"
+fi
+
 if [ "${ReplaygainTagging}" = TRUE ]; then
 	if [ -x "$(command -v metaflac)" ];	then
 		replaygain "$1"
@@ -173,11 +180,6 @@ if [ "${ReplaygainTagging}" = TRUE ]; then
 	fi
 else
 	echo "REPLAYGAIN TAGGING DISABLED"
-fi
-if [ "${BeetsProcessing}" = TRUE ]; then
-	beets "$1"
-else
-	echo "BEETS PROCESSING DISABLED"
 fi
 echo "AUDIO POST-PROCESSING COMPLETE" && exit 0
 #============END SCRIPT============
