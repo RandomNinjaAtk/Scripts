@@ -41,7 +41,7 @@ if [ ! -d /config/scripts ]; then
 	mkdir /config/scripts
 	# Set Permissions
 	echo "setting permissions..."
-	chmod 0777 /config/scripts
+	chmod 0777 -R /config/scripts
 	echo "done"
 fi
 
