@@ -16,7 +16,7 @@ match:
         track_length: medium
     distance_weights:
         source: 2.0 # 2.0
-        artist: 1.0 # 3.0
+        artist: 3.0 # 3.0
         album: 3.0 # 3.0
         media: 1.0 # 1.0
         mediums: 1.0 # 1.0
@@ -27,7 +27,7 @@ match:
         albumdisambig: 0.5 # 0.5
         album_id: 5.0 # 5.0
         tracks: 2.0 # 2.0
-        missing_tracks: 5.0 # 0.9
+        missing_tracks: 0.9 # 0.9
         unmatched_tracks: 0.6 # 0.6
         track_title: 3.0 # 3.0
         track_artist: 2.0 # 2.0
@@ -41,8 +41,8 @@ match:
     ignored: ['missing_tracks', 'track_length', 'unmatched_tracks'] # []
     required: ['year', 'album', 'artist'] # []
     ignored_media: [] # []
-    ignore_data_tracks: no # yes
-    ignore_video_tracks: no # yes
+    ignore_data_tracks: yes # yes
+    ignore_video_tracks: yes # yes
     track_length_grace: 1 # 10
     track_length_max: 1 # 30
 
