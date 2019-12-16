@@ -1,5 +1,13 @@
 #!/bin/bash
 source /config/scripts/lidarr-download-automation/config
+if [ -f /config/scripts/beets/library.blb ]; then
+	rm /config/scripts/beets/library.blb
+	sleep 1s
+fi
+if [ -f /config/scripts/beets/beets.log ]; then 
+	rm /config/scripts/beets/beets.log
+	sleep 1s
+fi
 if [ "$(ls -A "${DownloadDir}")" ]; then
 	beets=($(find "${DownloadDir}" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" -newer "${DownloadDir}/temp-hold" -printf '%h\n' | sed -e "s/'/\\'/g" -e 's/\$/\$/g' | sort -u))
 	for beetdir in "${beets[@]}"; do
