@@ -1,32 +1,31 @@
 #!/bin/bash
 echo "==========LIDARR DL AUTOMATION SETUP==========="
 
-if ! [ -x "$(command -v mp3val)" ]; then	
-	echo "START MP3VAL INSTALLTION"
-	apt-get update -qq
-	if { apt-get install -y -qq mp3val; }; then
-		apt-get purge --auto-remove -y
-		apt-get clean
-		echo "INSTALLATION SUCCESSFUL"
-	else
-		echo "ERROR: INSTALLTION UNSUCCESSFUL"
-	fi
-else
-	echo "MP3VAL ALREADY INSTALLED"
-fi
-if ! [ -x "$(command -v flac)" ]; then	
-	echo "START FLAC INSTALLTION"
-	apt-get update -qq
-	if { apt-get install -y -qq flac; }; then
-		apt-get purge --auto-remove -y
-		apt-get clean
-		echo "INSTALLATION SUCCESSFUL"
-	else
-		echo "ERROR: INSTALLTION UNSUCCESSFUL"
-	fi
-else
-	echo "FLAC ALREADY INSTALLED"
-fi
+echo "INSTALLING REQUIREMENTS"
+curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+apt-get update -qq && \
+apt-get install -qq -y \
+	mkvtoolnix \
+	mp3val \
+	flac \
+	wget \
+	nano \
+	unzip \
+	chroma \
+	nodejs \
+	git \
+	jq \
+	cron \
+	python-dev \
+	python-pip && \
+apt-get purge --auto-remove -y && \
+apt-get clean
+
+pip install --no-cache-dir -U \
+	beets \
+	pyacoustid
+	
+service cron restart
 
 if ! [ -x "$(command -v ffmpeg)" ]; then
 	echo "INSTALLING FFMPEG"
@@ -46,30 +45,6 @@ if ! [ -x "$(command -v ffmpeg)" ]; then
 else
 	echo "FFMPEG ALREADY INSTALLED"
 fi
-
-if ! [ -x "$(command -v crontab)" ]; then	
-	echo "INSTALLING cron"
-	apt-get update -qq && \
-	apt-get install -qq -y \
-		wget \
-		nano \
-		unzip \
-		cron	
-	apt-get purge --auto-remove -y && \
-	apt-get clean
-	service cron restart
-else
-	echo "cron ALREADY INSTALLED"
-fi
-
-echo "INSTALLING BEETS"
-apt-get update -qq && \
-apt-get install -qq -y \
-	python-dev \
-	python-pip && \
-apt-get purge --auto-remove -y && \
-apt-get clean
-pip install beets
 
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
@@ -101,6 +76,7 @@ if [ -x "$(command -v crontab)" ]; then
 	else
 		echo "adding cron job to crontab..."
 		echo "*/30 * * * *   root   bash /config/scripts/lidarr-download-automation-start.bash > /config/scripts/cron-job.log" >> "/etc/crontab"
+		service cron restart
 	fi
 else
 	echo "cron NOT INSTALLED"
@@ -111,22 +87,11 @@ if [ -d /config/scripts/00-lidarr-download-automation.exclusivelock ]; then
 	rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
 fi
 
-service cron restart
-
 echo "INSTALLING DEEZLOADER-REMIX"
 
 rm -rf /deezloaderremix && \
 rm -rf /config/xdg && \
-curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-apt-get update -qq && \
-apt-get install -y -qq \
-    nodejs \
-	wget \
-	git \
-	unzip \
-	jq && \
-apt-get purge --auto-remove -y && \
-apt-get clean && \
+
 if [ ! -d /downloads/deezloaderremix ]; then
 	mkdir /downloads/deezloaderremix
 fi
