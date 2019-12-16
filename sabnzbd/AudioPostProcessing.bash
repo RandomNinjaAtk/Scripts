@@ -13,6 +13,7 @@ Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
 ConversionFormat="MP3" # SET TO: OPUS or AAC or MP3 or FLAC or ALAC - converts lossless FLAC files to set format
 Threads="0" # SET TO: "0" to use maximum number of threads for multi-threaded operations
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
+BeetsProcessing="TRUE" # TRUE = ENABLED
 
 #============FUNCTIONS============
 
@@ -109,6 +110,27 @@ replaygain () {
 	fi
 }
 
+beets () {
+	echo "MATCING USING BEETS"
+	if [ -f /config/scripts/beets/library.blb ]; then
+		rm /config/scripts/beets/library.blb
+		sleep 1s
+	fi
+	if [ -f /config/scripts/beets/beets.log ]; then 
+		rm /config/scripts/beets/beets.log
+		sleep 1s
+	fi
+	if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | read; then
+		beet -c /config/scripts/beets/config.yaml -d "${beetdir}" import -q "$1"
+		if find "$1" -type f -iname "*.MATCHED.*" | read; then
+			echo "SUCCESS: Matched with beets!"
+		else
+			echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..."
+			rm -rf "$1"
+		fi	
+	fi
+}
+
 #============START SCRIPT============
 
 if [ "${RemoveNonAudioFiles}" = TRUE ]; then
@@ -151,6 +173,11 @@ if [ "${ReplaygainTagging}" = TRUE ]; then
 	fi
 else
 	echo "REPLAYGAIN TAGGING DISABLED"
+fi
+if [ "${BeetsProcessing}" = TRUE ]; then
+	beets "$1"
+else
+	echo "BEETS PROCESSING DISABLED"
 fi
 echo "AUDIO POST-PROCESSING COMPLETE" && exit 0
 #============END SCRIPT============
