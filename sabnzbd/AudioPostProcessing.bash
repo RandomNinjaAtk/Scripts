@@ -121,7 +121,7 @@ beets () {
 		sleep 1s
 	fi
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | read; then
-		beet -c /config/scripts/beets/config.yaml -d "${beetdir}" import -q "$1"
+		beet -c /config/scripts/beets/config.yaml -d "$1" import -q "$1"
 		if find "$1" -type f -iname "*.MATCHED.*" | read; then
 			echo "SUCCESS: Matched with beets!"
 		else
