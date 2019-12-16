@@ -30,7 +30,7 @@ match:
         missing_tracks: 5.0 # 0.9
         unmatched_tracks: 0.6 # 0.6
         track_title: 3.0 # 3.0
-        track_artist: 0.5 # 2.0
+        track_artist: 2.0 # 2.0
         track_index: 1.0 # 1.0
         track_length: 2.0 # 2.0
         track_id: 5.0 # 5.0
