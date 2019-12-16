@@ -125,8 +125,8 @@ beets () {
 		if find "$1" -type f -iname "*.MATCHED.*" | read; then
 			echo "SUCCESS: Matched with beets!"
 		else
-			echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..."
-			rm -rf "$1"
+			rm -rf "$1" 
+			echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..." && exit 1
 		fi	
 	fi
 }
