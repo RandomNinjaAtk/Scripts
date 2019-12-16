@@ -111,7 +111,7 @@ replaygain () {
 }
 
 beets () {
-	echo "MATCING USING BEETS"
+	echo "MATCHING WITH BEETS"
 	if [ -f /config/scripts/beets/library.blb ]; then
 		rm /config/scripts/beets/library.blb
 		sleep 1s
