@@ -70,9 +70,6 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 pip install beets
-if [ ! -d /config/scripts/beets ]; then
-	mkdir /config/scripts/beets
-fi
 
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
@@ -81,6 +78,10 @@ if [ ! -d /config/scripts ]; then
 	echo "setting permissions..."
 	chmod 0777 /config/scripts
 	echo "done"
+fi
+
+if [ ! -d /config/scripts/beets ]; then
+	mkdir /config/scripts/beets
 fi
 
 if [ -f /config/scripts/lidarr-download-automation-start.bash ]; then
