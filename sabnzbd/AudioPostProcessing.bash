@@ -23,7 +23,7 @@ clean () {
 		find "$1" -type f -not -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -delete
 		echo "REMOVE NON AUDIO FILES COMPLETE"
 		echo "MOVE FILES TO DIR"
-		find "$1" -type f -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -exec mv "{}" "$1"/ \;
+		find "$1" -type f -mindepth 2 -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -exec mv "{}" "$1"/ \;
 		echo "MOVE FILES TO DIR COMPLETE"
 		echo "REMOVE SUB-DIRECTORIES"
 		find "$1" -type d -mindepth 1 -exec rm -rf "{}" \;
