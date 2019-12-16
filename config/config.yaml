@@ -1,7 +1,6 @@
 library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
-original_date: yes
 per_disc_numbering: yes
 id3v23: no
 asciify_paths: true
