@@ -7,7 +7,7 @@ if [ -f /config/custom-cont-init.d/sabnzbd_script_setup.bash ]; then
 	rm /config/custom-cont-init.d/sabnzbd_script_setup.bash
 else 
 	echo "begining updated script installation..."
-	echo "downloading lidarr_dl_auto_installer.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/sabnzbd_script_setup.bash"  && \
+	echo "downloading sabnzbd_script_setup.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lso_docker_ubuntu/sabnzbd_script_setup.bash"  && \
 	curl -o /config/custom-cont-init.d/sabnzbd_script_setup.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/sabnzbd_script_setup.bash && \
 	echo "download complete" && \
 	echo "running sabnzbd_script_setup.bash..." && \
