@@ -9,7 +9,7 @@ apt-get install -qq -y \
 	wget \
 	nano \
 	unzip \
-	chroma \
+	libchromaprint-tools \
 	python-dev \
 	python-pip && \
 apt-get purge --auto-remove -y && \
