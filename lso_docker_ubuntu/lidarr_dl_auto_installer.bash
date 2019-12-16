@@ -11,7 +11,7 @@ apt-get install -qq -y \
 	wget \
 	nano \
 	unzip \
-	chroma \
+	libchromaprint-tools \
 	nodejs \
 	git \
 	jq \
