@@ -54,6 +54,15 @@ if [ ! -f /config/scripts/beets/import.bash ]; then
     sed -i "s/#INSERT/source \/config\/scripts\/beets\/import.bash/g" "/config/scripts/lidarr-download-automation/lidarr-download-automation.bash"
 fi
 
+if [ -f /config/scripts/beets/library.blb ]; then
+	rm /config/scripts/beets/library.blb
+	sleep 1s
+fi
+if [ -f /config/scripts/beets/beets.log ]; then 
+	rm /config/scripts/beets/beets.log
+	sleep 1s
+fi
+
 if mkdir /config/scripts/00-lidarr-download-automation.exclusivelock; then
     rm /config/scripts/script-run.log
     cd /config/scripts/lidarr-download-automation/
