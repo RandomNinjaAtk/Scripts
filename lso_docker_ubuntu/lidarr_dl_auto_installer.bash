@@ -111,7 +111,8 @@ sed -i "s/\"playlistTrackNameTemplate\": \"%position% - %artist% - %title%\"/\"p
 sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% - %album%  %explicit%(%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"embeddedArtworkSize\": 800,/\"embeddedArtworkSize\": 1000,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"localArtworkSize\": 1000,/\"localArtworkSize\": 1400,/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"saveArtwork\": false,/\"saveArtwork\": true,/g" "/deezloaderremix/app/default.json" && \
+# sed -i "s/\"saveArtwork\": false,/\"saveArtwork\": true,/g" "/deezloaderremix/app/default.json" && \
+# sed -i "s/cover/folder/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"createCDFolder\": true,/\"createCDFolder\": false,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"createSingleFolder\": false,/\"createSingleFolder\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"syncedlyrics\": false,/\"syncedlyrics\": true,/g" "/deezloaderremix/app/default.json" && \
