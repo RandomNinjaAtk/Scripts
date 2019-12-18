@@ -14,15 +14,16 @@ match:
         missing_tracks: medium # medium
         unmatched_tracks: medium # medium
         track_length: medium
+        mediums: medium
     distance_weights:
-        source: 2.0 # 2.0
+        source: 0 # 2.0
         artist: 3.0 # 3.0
         album: 3.0 # 3.0
-        media: 1.0 # 1.0
+        media: 0.1 # 1.0
         mediums: 1.0 # 1.0
         year: 1.0 # 1.0
-        country: 0.5 # 0.5
-        label: 0.5 # 0.5
+        country: 0.1 # 0.5
+        label: 0.1 # 0.5
         catalognum: 0.5 # 0.5
         albumdisambig: 0.5 # 0.5
         album_id: 5.0 # 5.0
@@ -38,7 +39,7 @@ match:
         countries: [] # []
         media: ['Digital Media|CD'] # []
         original_year: no # no
-    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks'] # []
+    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums'] # []
     required: ['year', 'album', 'artist'] # []
     ignored_media: [] # []
     ignore_data_tracks: yes # yes
