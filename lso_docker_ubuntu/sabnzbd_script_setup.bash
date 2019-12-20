@@ -9,6 +9,7 @@ apt-get install -qq -y \
 	wget \
 	nano \
 	unzip \
+	jq \
 	libchromaprint-tools \
 	python-dev \
 	python-pip && \
