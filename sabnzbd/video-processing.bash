@@ -8,7 +8,7 @@ if [ ! -f /config/scripts/MKV-Cleaner.bash ]; then
 
     # Set Permissions
     echo "setting permissions..."
-    chmod +x /config/scripts/MKV-Cleaner.bash
+    chmod 777 /config/scripts/MKV-Cleaner.bash
     echo "done"
 fi
 
@@ -19,7 +19,7 @@ if [ ! -f /config/scripts/Deobfuscate.py ]; then
 
     # Set Permissions
     echo "setting permissions..."
-    chmod +x /config/scripts/Deobfuscate.py
+    chmod 777 /config/scripts/Deobfuscate.py
     echo "done"
 fi
 
@@ -33,6 +33,6 @@ timeout --foreground 1m python Deobfuscate.py
 
 bash MKV-Cleaner.bash "$1"
 
-echo "COMPLETE"
+echo "VIDEO PROCESSING COMPLETE"
 
 exit 0
