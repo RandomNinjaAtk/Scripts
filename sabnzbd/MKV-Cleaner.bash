@@ -72,9 +72,11 @@ remux () {
 		echo "=========================="
 		echo "PROCESSING $movie"
 		if timeout 10s mkvmerge -i "$movie" > /dev/null; then
+			perfvideo=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"video\") and select(.properties.language==\"${PerferredLanguage}\")) | .id")
+			allvideo=$(mkvmerge -J "$movie" | jq ".tracks[] | select(.type==\"video\") | .id")
 			perfaudio=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==\"${PerferredLanguage}\")) | .id")
 			undaudio=$(mkvmerge -J "$movie" | jq '.tracks[] | select((.type=="audio") and select(.properties.language=="und")) | .id')
-			allaudio=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language!=\"${PerferredLanguage}\")) | .id")
+			allaudio=$(mkvmerge -J "$movie" | jq ".tracks[] | select(.type==\"audio\") | .id")
 			perfsub=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language==\"${SubtitleLanguage}\")) | .id")
 			allsub=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language!=\"${SubtitleLanguage}\")) | .id")
 
@@ -87,7 +89,7 @@ remux () {
 					echo "\"${audio}\" Audio Found"
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -d ${allvideo} --language ${allvideo}:${PerferredLanguage} -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
 					# cleanup temp files and rename
 					mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
 					mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
@@ -97,7 +99,7 @@ remux () {
 					if test ! -z "$allsub"; then
 						echo "Unwanted subtitles found, removing unwanted subtitles"
 						echo "Creating temporary file: $movie.merged.mkv"
-						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
+						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -d ${allvideo} --language ${allvideo}:${PerferredLanguage} -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
 						# cleanup temp files and rename
 						mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
 						mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
@@ -117,17 +119,17 @@ remux () {
 					echo "Setting Unknown (und) audio language to \"${UnkownAudioLanguage}\""
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					if mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $undaudio --language $undaudio:${UnkownAudioLanguage} -s ${SubtitleLanguage} "$movie"; then
+					if mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -d ${allvideo} --language ${allvideo}:${PerferredLanguage} -a $undaudio --language $undaudio:${UnkownAudioLanguage} -s ${SubtitleLanguage} "$movie"; then
 						echo "SUCCESS"
 					else
 						echo "ERROR, skipping language setting"
-						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a und -s ${SubtitleLanguage} "$movie";
+						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -d ${allvideo} --language ${allvideo}:${PerferredLanguage} -a und -s ${SubtitleLanguage} "$movie";
 					fi
 				else
 					echo "SetUnknownAudioLanguage not enabled, skipping unknown audio language tag modification"
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a und -s ${SubtitleLanguage} "$movie"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -d ${allvideo} --language ${allvideo}:${PerferredLanguage} -a und -s ${SubtitleLanguage} "$movie"
 				fi
 				# cleanup temp files and rename
 				mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
