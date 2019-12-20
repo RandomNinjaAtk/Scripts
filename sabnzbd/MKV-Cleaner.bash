@@ -2,7 +2,7 @@
 #######################################
 #    MKV Audio & Subtitle Cleanup     #
 #             Bash Script             #
-#            Version 1.0.1            #
+#            Version 1.2.0            #
 #######################################
 #            Description:             #
 #  This script removes unwated audio  #
