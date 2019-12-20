@@ -31,9 +31,6 @@ clean () {
 }
 
 remux () {
-OLDIFS=$IFS
-IFS='
-'
 	# Removing previously unfinished operations
 	find "$1"/* -type f -name "*.merged.mkv" -delete
 	find "$1"/* -type f -name "*.original.mkv" -delete
@@ -75,98 +72,18 @@ IFS='
 		echo "=========================="
 		echo "PROCESSING $movie"
 		if timeout 10s mkvmerge -i "$movie" > /dev/null; then
-			file=$(mkvmerge --identify-verbose "$movie" | tail --lines=+2)
-			track_ids_string=""
-			found_languages=()
-			track_ids_stringa=""
-			found_languagesa=()
-			track_ids_stringb=""
-			found_languagesb=()
-			for track in $file; do
-				track_id=""
-				[[ "$track" =~ Track\ ID\ ([0-9]+) ]] &&
-					track_id=${BASH_REMATCH[1]}
-				[[ "$track" =~ language:([a-z]+) ]] &&
-					language=${BASH_REMATCH[1]}
-				[[ "$track" =~ Track\ ID\ [0-9]+:\ ([a-z]*) ]] &&
-					track_type=${BASH_REMATCH[1]}
-
-				if [[ "$track_id" == "" ]]; then
-					continue
-				fi
-
-				if [[ "$track_type" != "audio" ]]; then
-					continue
-				fi
-
-				if [[ "$language" == "$PerferredLanguage" ]]; then
-					track_ids_string="$track_ids_string,$track_id"
-				else
-					found_languages+=("$language")
-				fi
-				
-				if [[ "$language" == "und" ]]; then
-					track_ids_stringa="$track_ids_stringa,$track_id"
-				else
-					found_languagesa+=("$language")
-				fi
-				
-				if [[ "$language" != "$PerferredLanguage" ]]; then
-					track_ids_stringb="$track_ids_stringb,$track_id"
-				else
-					found_languagesb+=("$language")
-				fi
-				
-			done    
-			track_ids_string=${track_ids_string:1} # remove first comma
-			track_ids_stringa=${track_ids_stringa:1} # remove first comma
-			track_ids_stringb=${track_ids_stringb:1} # remove first comma 
-
-			# Subtitle Language
-			file=$(mkvmerge --identify-verbose "$movie" | tail --lines=+2)
-			track_ids_stringsub=""
-			found_languagessub=()
-			track_ids_stringsuba=""
-			found_languagessuba=()
-			for tracksub in $file; do
-				track_idsub=""
-				[[ "$tracksub" =~ Track\ ID\ ([0-9]+) ]] &&
-					track_idsub=${BASH_REMATCH[1]}
-				[[ "$tracksub" =~ language:([a-z]+) ]] &&
-					languagesub=${BASH_REMATCH[1]}
-				[[ "$tracksub" =~ Track\ ID\ [0-9]+:\ ([a-z]*) ]] &&
-					track_typesub=${BASH_REMATCH[1]}
-
-				if [[ "$track_idsub" == "" ]]; then
-					continue
-				fi
-
-				if [[ "$track_typesub" != "subtitles" ]]; then
-					continue
-				fi
-
-				if [[ "$languagesub" != "$SubtitleLanguage" ]]; then
-					track_ids_stringsub="$track_ids_stringsub,$track_idsub"
-				else
-					found_languagessub+=("$languagesub")
-				fi
-
-				if [[ "$languagesub" == "$SubtitleLanguage" ]]; then
-					track_ids_stringsuba="$track_ids_stringsuba,$track_idsub"
-				else
-					found_languagesa+=("$language")
-				fi
-			done    
-			track_ids_stringsub=${track_ids_stringsub:1} # remove first comma
-			track_ids_stringsuba=${track_ids_stringsuba:1} # remove first comma
+			perfaudio=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==\"${PerferredLanguage}\")) | .id")
+			undaudio=$(mkvmerge -J "$movie" | jq '.tracks[] | select((.type=="audio") and select(.properties.language=="und")) | .id')
+			allaudio=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language!=\"${PerferredLanguage}\")) | .id")
+			perfsub=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language==\"${SubtitleLanguage}\")) | .id")
+			allsub=$(mkvmerge -J "$movie" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language!=\"${SubtitleLanguage}\")) | .id")
 
 			# Setting Audio language for mkvmerge
-			if test ! -z "$track_ids_string"; then
+			if test ! -z "$perfaudio"; then
 				# If preferred found, use it
-				audio_track_ids="$track_ids_string"
 				audio="${PerferredLanguage}"
 				echo "Begin search for preferred \"${PerferredLanguage}\" audio"
-				if test ! -z "$track_ids_stringb"; then
+				if test ! -z "$allaudio"; then
 					echo "\"${audio}\" Audio Found"
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
@@ -177,7 +94,7 @@ IFS='
 					rm "$movie.original.mkv" && echo "Deleted source file"
 				else
 					echo "\"${audio}\" Audio Found, No unwanted audio languages to remove"
-					if test ! -z "$track_ids_stringsub"; then
+					if test ! -z "$allsub"; then
 						echo "Unwanted subtitles found, removing unwanted subtitles"
 						echo "Creating temporary file: $movie.merged.mkv"
 						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a ${PerferredLanguage} -s ${SubtitleLanguage} "$movie"
@@ -189,9 +106,8 @@ IFS='
 						echo "\"${SubtitleLanguage}\" Subtitle Found, No unwanted subtitle languages to remove"
 					fi
 				fi
-			elif test ! -z "$track_ids_stringa"; then
+			elif test ! -z "$undaudio"; then
 				# If preferred not found, use unknown audio
-				audio_track_ids="$track_ids_stringa"
 				audio="uknown (und)"
 				echo "No preferred \"${PerferredLanguage}\" audio tracks found"
 				echo "Begin search for \"unknown (und)\" audio tracks"
@@ -201,7 +117,7 @@ IFS='
 					echo "Setting Unknown (und) audio language to \"${UnkownAudioLanguage}\""
 					echo "Removing unwanted audio and subtitle tracks"
 					echo "Creating temporary file: $movie.merged.mkv"
-					if mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids --language $audio_track_ids:${UnkownAudioLanguage} -s ${SubtitleLanguage} "$movie"; then
+					if mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $undaudio --language $undaudio:${UnkownAudioLanguage} -s ${SubtitleLanguage} "$movie"; then
 						echo "SUCCESS"
 					else
 						echo "ERROR, skipping language setting"
@@ -217,32 +133,29 @@ IFS='
 				mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
 				mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
 				rm "$movie.original.mkv" && echo "Deleted source file"
-			elif test ! -z "$track_ids_stringb"; then
+			elif test ! -z "$allaudio"; then
 				# If preferred and unknown not found, pass-through remaining audio tracks
-				audio_track_ids="$track_ids_stringb"
 				audio="all"
 				echo "No preferred \"${PerferredLanguage}\" audio tracks found"
 				echo "Begin search for \"unknown (und)\" audio tracks"
 				echo "No \"unknown (und)\" audio tracks found"
 				echo "Begin search for all other audio tracks"
 				echo "Audio Detected, keeping all other audio tracks..."
-				if test ! -z "$track_ids_stringsuba"; then
+				if test ! -z "$allsub"; then
 					echo "ERROR: \"${SubtitleLanguage}\" Subtitle not found, only foreign audio/subtitles found"
 					echo "Deleting video and marking download as failed because no usuable audio/subititles are found in requested langauge"
 					rm "$movie" && echo "DELETED: $movie"
 					exit 1
-				else 
-					if test ! -z "$track_ids_stringsub"; then
-						echo "Unwanted subtitles found, removing unwanted subtitles"
-						echo "Creating temporary file: $movie.merged.mkv"
-						mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $audio_track_ids -s ${SubtitleLanguage} "$movie"
-						# cleanup temp files and rename
-						mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
-						mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
-						rm "$movie.original.mkv" && echo "Deleted source file"
-					else
-						echo "\"${SubtitleLanguage}\" Subtitle Found, No unwanted subtitle languages to remove"
-					fi
+				elif test ! -z "$perfsub"; then
+					echo "Unwanted subtitles found, removing unwanted subtitles"
+					echo "Creating temporary file: $movie.merged.mkv"
+					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$movie.merged.mkv" -a $allaudio -s ${SubtitleLanguage} "$movie"
+					# cleanup temp files and rename
+					mv "$movie" "$movie.original.mkv" && echo "Renamed source file"
+					mv "$movie.merged.mkv" "$movie" && echo "Renamed temp file"
+					rm "$movie.original.mkv" && echo "Deleted source file"
+				else
+					echo "\"${SubtitleLanguage}\" Subtitle Found, No unwanted subtitle languages to remove"
 				fi
 			else
 				# no audio was found, error and report failed to sabnzbd
@@ -260,7 +173,6 @@ IFS='
 		fi
 	done
 	echo "VIDEO PROCESSING COMPLETE"
-	IFS=$OLDIFS
 }
 
 # start cleanup if enabled
@@ -271,14 +183,18 @@ fi
 # start Remux if enabled
 if [ "${Remux}" = TRUE ]; then
 	if [ -x "$(command -v mkvmerge)" ]; then
-		if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
-			remux "$1"
+		if [ -x "$(command -v jq)" ]; then
+			if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
+				remux "$1"
+			else
+				echo "ERROR: NO VIDEO FILES FOUND"
+				exit 1
+			fi
 		else
-			echo "ERROR: NO VIDEO FILES FOUND"
-			exit 1
+			echo "jq package not installed" && exit 1
 		fi
 	else
-		echo "mkvmerge utility not installed"
+		echo "mkvmerge utility not installed" && exit 1
 	fi
 fi
 
