@@ -110,7 +110,7 @@ if [ "${Remux}" = TRUE ]; then
 							rm "$video.original.mkv" && echo "Deleted source file"
 						elif test ! -z "$nonperfvideo"; then
 							echo "\"${SubtitleLanguage}\" Subtitle Found, No unwanted subtitle languages to remove"
-							echo "Setting video language to match preferred language"
+							echo "Setting video language to match \"${PerferredLanguage}\" language"
 							mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" -d ${allvideo} --language ${allvideo}:${PerferredLanguage} -a ${PerferredLanguage} -s ${SubtitleLanguage} "$video"
 							# cleanup temp files and rename
 							mv "$video" "$video.original.mkv" && echo "Renamed source file"
