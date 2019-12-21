@@ -37,36 +37,35 @@ if [ "${Remux}" = TRUE ]; then
 		echo "jq package not installed" && exit 1
 	fi
 	if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
-		if find "$1" -type f -iregex ".*/.*\.\(mp4\)" | read; then
-			find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' video; do
-				if timeout 10s mkvmerge -i "$video" > /dev/null; then
-					echo "MP4 found, remuxing to mkv before processing audio/subtitles"
-					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
-					# cleanup temp files and rename
-					mv "$video" "$video.original.mkv" && echo "Renamed source file"
-					mv "$video.merged.mkv" "${movie/.mp4/.mkv}" && echo "Renamed temp file"
-					rm "$video.original.mkv" && echo "Deleted source file"
-				else
-					echo "MKVMERGE ERROR"
-					rm "$video" && echo "DELETED: $video"
-				fi
-			done
-		fi
-		if find "$1" -type f -iregex ".*/.*\.\(avi\)" | read; then
-			find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' video; do
-				if timeout 10s mkvmerge -i "$video" > /dev/null; then
-					echo "AVI found, remuxing to mkv before processing audio/subtitles"
-					mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
-					# cleanup temp files and rename
-					mv "$video" "$video.original.mkv" && echo "Renamed source file"
-					mv "$video.merged.mkv" "${movie/.avi/.mkv}" && echo "Renamed temp file"
-					rm "$video.original.mkv" && echo "Deleted source file"
-				else
-					echo "MKVMERGE ERROR"
-					rm "$video" && echo "DELETED: $video"
-				fi
-			done
-		fi
+	
+		find "$1" -type f -iregex ".*/.*\.\(mp4\)" -print0 | while IFS= read -r -d '' video; do
+			if timeout 10s mkvmerge -i "$video" > /dev/null; then
+				echo "MP4 found, remuxing to mkv before processing audio/subtitles"
+				mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
+				# cleanup temp files and rename
+				mv "$video" "$video.original.mkv" && echo "Renamed source file"
+				mv "$video.merged.mkv" "${movie/.mp4/.mkv}" && echo "Renamed temp file"
+				rm "$video.original.mkv" && echo "Deleted source file"
+			else
+				echo "MKVMERGE ERROR"
+				rm "$video" && echo "DELETED: $video"
+			fi
+		done
+		
+		find "$1" -type f -iregex ".*/.*\.\(avi\)" -print0 | while IFS= read -r -d '' video; do
+			if timeout 10s mkvmerge -i "$video" > /dev/null; then
+				echo "AVI found, remuxing to mkv before processing audio/subtitles"
+				mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
+				# cleanup temp files and rename
+				mv "$video" "$video.original.mkv" && echo "Renamed source file"
+				mv "$video.merged.mkv" "${movie/.avi/.mkv}" && echo "Renamed temp file"
+				rm "$video.original.mkv" && echo "Deleted source file"
+			else
+				echo "MKVMERGE ERROR"
+				rm "$video" && echo "DELETED: $video"
+			fi
+		done
+		
 		# Finding Preferred Language
 		find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' video; do
 			echo ""
