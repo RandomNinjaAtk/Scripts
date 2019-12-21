@@ -124,6 +124,15 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		rm "$video" && echo "DELETED: $video" && exit 1
 	fi
 	
+	# Checking for subtitles
+	if test ! -z "$allsub"; then
+		echo "Checking for subtitles"
+		echo "Subtitles found"
+		subtitles="true"
+	else
+		subtitles="false"
+	fi
+	
 	# Checking for preferred audio
 	if test ! -z "$perfaudio"; then
 		echo "Checking for \"${PerferredLanguage}\" audio"
@@ -137,17 +146,23 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			echo "No unwanted audio to remove"
 			removeaudio="false"
 		fi
-		echo "Checking for preferred subtitles"
-		if test ! -z "$perfsub"; then
-			echo "Preferred Subs found"
-			echo "Checking for unwanted subtitles"
-			if test ! -z "$nonperfsub"; then
-				echo "Unwanted subtitles found"
-				removesubs="true"
-			else 
-				echo "No unwanted subtitles to remove"
-				removeasubs="false"
+		
+		if [ "${subtitles}" = true ]; then
+			echo "Checking for preferred subtitles"
+			if test ! -z "$perfsub"; then
+				echo "Preferred Subs found"
+				echo "Checking for unwanted subtitles"
+				if test ! -z "$nonperfsub"; then
+					echo "Unwanted subtitles found"
+					removesubs="true"
+				else 
+					echo "No unwanted subtitles to remove"
+					removeasubs="false"
+				fi
 			fi
+		else
+			echo "No unwanted subtitles to remove"
+			removeasubs="false"
 		fi
 		echo "Checking video laguange"
 		if test ! -z "$nonperfvideo"; then
@@ -169,18 +184,24 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			echo "No unwanted audio to remove"
 			removeaudio="false"
 		fi
-		echo "Checking for preferred subtitles"
-		if test ! -z "$perfsub"; then
-			echo "Preferred Subs found"
-			echo "Checking for unwanted subtitles"
-			if test ! -z "$nonperfsub"; then
-				echo "Unwanted subtitles found"
-				removesubs="true"
-			else 
-				echo "No unwanted subtitles to remove"
-				removeasubs="false"
+		if [ "${subtitles}" = true ]; then
+			echo "Checking for preferred subtitles"
+			if test ! -z "$perfsub"; then
+				echo "Preferred Subs found"
+				echo "Checking for unwanted subtitles"
+				if test ! -z "$nonperfsub"; then
+					echo "Unwanted subtitles found"
+					removesubs="true"
+				else 
+					echo "No unwanted subtitles to remove"
+					removeasubs="false"
+				fi
 			fi
+		else
+			echo "No unwanted subtitles to remove"
+			removeasubs="false"
 		fi
+			
 		echo "Checking video laguange"
 		if test ! -z "$nonperfvideo"; then
 			echo "Unwanted video lang found"
@@ -202,6 +223,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 				echo "No unwanted subtitles to remove"
 				removeasubs="false"
 			fi
+			echo "Skipping unwanted audo check"
+			echo "Skip setting video language"
 			removeaudio="false"
 			setundaudio="false"
 			setvideolanguage="false"
@@ -239,11 +262,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		fi
 		
 		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} ${mkvaudio} ${mkvsubs} "$video"; then
-			echo "SUCCESS"	
+			echo "MKVMERGE SUCCESS"
+			echo "Options used: ${mkvvideo} ${mkvaudio} ${mkvsubs}"
 		elif [ "${setundaudio}" = true ]; then
 			echo "ERROR setting und audio to \"${PerferredLanguage}\" , skipping language setting"
 			if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} -a und ${mkvsubs} "$video"; then
-				echo "SUCCESS"
+				echo "MKVMERGE SUCCESS"
+				echo "Options used: ${mkvvideo} -a und ${mkvsubs}"
 			else
 				echo "ERROR: MKVMERGE FAILURE" && exit 1
 			fi
