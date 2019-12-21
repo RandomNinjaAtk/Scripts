@@ -26,7 +26,6 @@ if [ "${RemoveNonVideoFiles}" = TRUE ]; then
 		echo "REMOVE NON VIDEO FILES COMPLETE"
 	else
 		echo "ERROR: NO VIDEO FILES FOUND"
-		exit 1
 	fi
 fi
 
@@ -176,7 +175,6 @@ if [ "${Remux}" = TRUE ]; then
 					# no audio was found, error and report failed to sabnzbd
 					echo "No audio tracks found"
 					rm "$video" && echo "DELETED: $video"
-					exit 1
 				fi
 				echo "PROCESSING COMPLETE"
 				echo "=========================="
@@ -184,11 +182,10 @@ if [ "${Remux}" = TRUE ]; then
 			else
 				echo "MKVMERGE ERROR"
 				rm "$video" && echo "DELETED: $video"
-				exit 1
 			fi
 		done
 	else
-		echo "ERROR: NO VIDEO FILES FOUND" && exit 1
+		echo "ERROR: NO VIDEO FILES FOUND"
 	fi
 	echo "VIDEO PROCESSING COMPLETE"
 fi
