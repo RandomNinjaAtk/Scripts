@@ -60,7 +60,7 @@ if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
 			mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
 			# cleanup temp files and rename
 			mv "$video" "$video.original.mkv" && echo "Renamed source file"
-			mv "$video.merged.mkv" "${vdieo/.avi/.mkv}" && echo "Renamed temp file"
+			mv "$video.merged.mkv" "${video/.avi/.mkv}" && echo "Renamed temp file"
 			rm "$video.original.mkv" && echo "Deleted source file"
 		else
 			echo "MKVMERGE ERROR"
