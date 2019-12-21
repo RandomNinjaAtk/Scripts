@@ -105,8 +105,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 	fi
 	
 	# Checking for video
+	echo "Checking for video..."
 	if test ! -z "$allvideo"; then
-		echo "Checking for video..."
 		echo "Video found"
 	else
 		# no video was found, error and report failed to sabnzbd
@@ -115,8 +115,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 	fi
 		
 	# Checking for audio
+	echo "Checking for audio..."
 	if test ! -z "$allaudio"; then
-		echo "Checking for audio"
 		echo "Audio found"
 	else
 		# no audio was found, error and report failed to sabnzbd
@@ -125,11 +125,12 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 	fi
 	
 	# Checking for subtitles
+	echo "Checking for subtitles..."
 	if test ! -z "$allsub"; then
-		echo "Checking for subtitles"
 		echo "Subtitles found"
 		subtitles="true"
 	else
+		echo "No subtitles found"
 		subtitles="false"
 	fi
 	
@@ -148,9 +149,9 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		fi
 		
 		if [ "${subtitles}" = true ]; then
-			echo "Checking for preferred subtitles"
+			echo "Checking for \"${SubtitleLanguage}\" subtitles"
 			if test ! -z "$perfsub"; then
-				echo "Preferred Subs found"
+				echo "\"${SubtitleLanguage}\" subs found"
 				echo "Checking for unwanted subtitles"
 				if test ! -z "$nonperfsub"; then
 					echo "Unwanted subtitles found"
@@ -185,9 +186,9 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			removeaudio="false"
 		fi
 		if [ "${subtitles}" = true ]; then
-			echo "Checking for preferred subtitles"
+			echo "Checking for \"${SubtitleLanguage}\" subtitles"
 			if test ! -z "$perfsub"; then
-				echo "Preferred Subs found"
+				echo "\"${SubtitleLanguage}\" Subs found"
 				echo "Checking for unwanted subtitles"
 				if test ! -z "$nonperfsub"; then
 					echo "Unwanted subtitles found"
@@ -212,9 +213,9 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		fi
 	elif test ! -z "$allaudio"; then
 		echo "Audio tracks found"
-		echo "Checking for preferred subtitles"
+		echo "Checking for \"${SubtitleLanguage}\" subtitles"
 		if test ! -z "$perfsub"; then
-			echo "Preferred Subs found"
+			echo "\"${SubtitleLanguage}\" Subs found"
 			echo "Checking for unwanted subtitles"
 			if test ! -z "$nonperfsub"; then
 				echo "Unwanted subtitles found"
