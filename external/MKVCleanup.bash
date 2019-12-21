@@ -44,7 +44,7 @@ if [ "${Remux}" = TRUE ]; then
 				mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
 				# cleanup temp files and rename
 				mv "$video" "$video.original.mkv" && echo "Renamed source file"
-				mv "$video.merged.mkv" "${movie/.mp4/.mkv}" && echo "Renamed temp file"
+				mv "$video.merged.mkv" "${video/.mp4/.mkv}" && echo "Renamed temp file"
 				rm "$video.original.mkv" && echo "Deleted source file"
 			else
 				echo "MKVMERGE ERROR"
@@ -58,7 +58,7 @@ if [ "${Remux}" = TRUE ]; then
 				mkvmerge --no-global-tags --default-language ${PerferredLanguage} --title "" -o "$video.merged.mkv" "$video"
 				# cleanup temp files and rename
 				mv "$video" "$video.original.mkv" && echo "Renamed source file"
-				mv "$video.merged.mkv" "${movie/.avi/.mkv}" && echo "Renamed temp file"
+				mv "$video.merged.mkv" "${video/.avi/.mkv}" && echo "Renamed temp file"
 				rm "$video.original.mkv" && echo "Deleted source file"
 			else
 				echo "MKVMERGE ERROR"
