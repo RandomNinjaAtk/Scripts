@@ -53,7 +53,7 @@ if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
 			rm "$video.original.mkv" && echo "Deleted source file"
 		else
 			echo "MKVMERGE ERROR"
-			rm "$video" && echo "DELETED: $video"
+			rm "$video" && echo "DELETED: $video" && exit 1
 		fi
 	done
 	
@@ -68,7 +68,7 @@ if find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
 			rm "$video.original.mkv" && echo "Deleted source file"
 		else
 			echo "MKVMERGE ERROR"
-			rm "$video" && echo "DELETED: $video"
+			rm "$video" && echo "DELETED: $video" && exit 1
 		fi
 	done
 		
