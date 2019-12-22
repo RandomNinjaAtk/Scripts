@@ -13,7 +13,7 @@
 #============CONFIGURATION=============
 PerferredLanguage="eng" # Keeps only the audio for the language selected, if not found, fall-back to unknown tracks and if also not found, a final fall-back to all other audio tracks
 SubtitleLanguage="eng" # Removes all subtitles not matching specified language
-SetUnknownAudioLanguage="TRUE" # TRUE = ENABLED, if enabled, sets found unknown (und) audio tracks to the language in the next setting
+SetUnknownAudioLanguage="true" # true = ENABLED, if enabled, sets found unknown (und) audio tracks to the language in the next setting
 UnkownAudioLanguage="eng" # Sets unknown language tracks to the language specified
 #===============FUNCTIONS==============
 
