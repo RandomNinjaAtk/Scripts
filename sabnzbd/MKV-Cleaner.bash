@@ -160,6 +160,16 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 					echo "No unwanted subtitles to remove"
 					removeasubs="false"
 				fi
+			else
+				echo "\"${SubtitleLanguage}\" subtitles not found"
+				echo "Checking for unwanted subtitles"
+				if test ! -z "$nonperfsub"; then
+					echo "Unwanted subtitles found"
+					removesubs="true"
+				else 
+					echo "No unwanted subtitles to remove"
+					removeasubs="false"
+				fi
 			fi
 		else
 			echo "No unwanted subtitles to remove"
@@ -189,6 +199,16 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			echo "Checking for \"${SubtitleLanguage}\" subtitles"
 			if test ! -z "$perfsub"; then
 				echo "\"${SubtitleLanguage}\" Subs found"
+				echo "Checking for unwanted subtitles"
+				if test ! -z "$nonperfsub"; then
+					echo "Unwanted subtitles found"
+					removesubs="true"
+				else 
+					echo "No unwanted subtitles to remove"
+					removeasubs="false"
+				fi
+			else
+				echo "\"${SubtitleLanguage}\" subtitles not found"
 				echo "Checking for unwanted subtitles"
 				if test ! -z "$nonperfsub"; then
 					echo "Unwanted subtitles found"
