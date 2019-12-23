@@ -33,6 +33,4 @@ timeout --foreground 1m python Deobfuscate.py
 
 bash MKV-Cleaner.bash "$1"
 
-echo "VIDEO PROCESSING COMPLETE"
-
 exit 0
