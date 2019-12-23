@@ -191,7 +191,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 					removesubs="true"
 				else 
 					echo "SUCCESS: No unwanted subtitle tracks found"
-					removeasubs="false"
+					removesubs="false"
 				fi
 			else
 				echo "INFO: \"${SubtitleLanguage}\" subtitle tracks not found"
