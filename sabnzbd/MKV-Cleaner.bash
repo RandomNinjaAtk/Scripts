@@ -31,17 +31,17 @@ echo "=========================="
 echo ""
 
 #cleanup unwanted files
-echo ""
-echo "=========================="
 if find "$1" -type f -not -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
+	echo ""
+	echo "=========================="
 	echo "CHECK: Searching for unwanted files"
 	echo "SUCCESS: Unwanted files found"
 	echo "INFO: Deleting unwanted file types"
 	find "$1"/* -type f -not -iregex ".*/.*\.\(webvtt\|ass\|srt\|mkv\|mp4\|avi\)" -delete
 	echo "INFO: Complete"
+	echo "=========================="
+	echo ""
 fi
-echo "=========================="
-echo ""
 
 #check for required applications
 echo ""
@@ -358,9 +358,9 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			fi
 		fi
 		# cleanup temp files and rename
-		mv "$video" "$video.original.mkv" && echo "Renamed source file"
-		mv "$video.merged.mkv" "$video" && echo "Renamed temp file"
-		rm "$video.original.mkv" && echo "Deleted source file"
+		mv "$video" "$video.original.mkv" && echo "INFO: Renamed source file"
+		mv "$video.merged.mkv" "$video" && echo "INFO: Renamed temp file"
+		rm "$video.original.mkv" && echo "INFO: Deleted source file"
 
 	fi
 	echo "INFO: Processing complete"
