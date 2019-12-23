@@ -46,14 +46,13 @@ fi
 #check for required applications
 echo ""
 echo "=========================="
-echo "INFO: Begin checking requirements"
+echo "INFO: Begin checking for required applications"
 echo "CHECK: for mkvmerge utility"
 if [ ! -x "$(command -v mkvmerge)" ]; then
 	echo "ERROR: mkvmerge utility not installed" && exit 1
 else
 	echo "SUCCESS: mkvmerge installed"
 fi
-echo ""
 echo "CHECK: for jq utility"
 if [ ! -x "$(command -v jq)" ]; then
 	echo "ERROR: jq package not installed" && exit 1
@@ -77,7 +76,7 @@ find "$1" -type f -iregex ".*/.*\.\(mp4\)" -print0 | while IFS= read -r -d '' vi
 		rm "$video.original.mkv" && echo "INFO: Deleted source file"
 	else
 		echo "ERROR: mkvmerge failed"
-		rm "$video" && echo "DELETED: $video"
+		rm "$video" && echo "INFO: deleted: $video"
 		exit 1
 	fi
 	echo "INFO: Processing complete"
