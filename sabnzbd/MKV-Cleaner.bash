@@ -343,7 +343,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			mkvvideo=""
 		fi
 		
-		echo "INFO: Begin processign file with mkvmerge"
+		echo "INFO: Begin processing file with mkvmerge"
 		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} ${mkvaudio} ${mkvsubs} "$video"; then
 			echo "SUCCESS: mkvmerge complete"
 			echo "INFO: Options used: ${mkvvideo} ${mkvaudio} ${mkvsubs}"
