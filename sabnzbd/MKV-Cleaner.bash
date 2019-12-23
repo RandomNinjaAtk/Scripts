@@ -16,6 +16,7 @@ PerferredLanguage="eng" # Keeps only the audio for the language selected, if not
 SubtitleLanguage="eng" # Removes all subtitles not matching specified language
 SetUnknownAudioLanguage="true" # true = ENABLED, if enabled, sets found unknown (und) audio tracks to the language in the next setting
 UnkownAudioLanguage="eng" # Sets unknown language tracks to the language specified
+MatchVideoLanguage="true" # Sets video language to match perferred language
 #===============FUNCTIONS==============
 
 echo ""
@@ -210,13 +211,18 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			echo "INFO: No unwanted subtitle tracks to remove"
 			removesubs="false"
 		fi
-		
-		echo "CHECK: Analyzing video laguange"
-		if test ! -z "$nonperfvideo"; then
-			echo "INFO: Unwanted video lang found"
-			setvideolanguage="true"
+
+		if [ "${MatchVideoLanguage}" = true ]; then
+			echo "CHECK: Analyzing video laguange"
+			if test ! -z "$nonperfvideo"; then
+				echo "INFO: Video language does not match \"${PerferredLanguage}\""
+				echo "INFO: Updating video language to match \"${PerferredLanguage}\""
+				setvideolanguage="true"
+			else
+				echo "SUCCESS: Video language matches \"${PerferredLanguage}\""
+				setvideolanguage="false"
+			fi
 		else
-			echo "SUCCESS: No unwanted video lang to change"
 			setvideolanguage="false"
 		fi
 	elif test ! -z "$undaudio"; then
@@ -266,12 +272,17 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 			removesubs="false"
 		fi
 			
-		echo "CHECK: Analyzing video laguange"
-		if test ! -z "$nonperfvideo"; then
-			echo "INFO: Unwanted video lang found"
-			setvideolanguage="true"
+		if [ "${MatchVideoLanguage}" = true ]; then
+			echo "CHECK: Analyzing video laguange"
+			if test ! -z "$nonperfvideo"; then
+				echo "INFO: Video language does not match \"${PerferredLanguage}\""
+				echo "INFO: Updating video language to match \"${PerferredLanguage}\""
+				setvideolanguage="true"
+			else
+				echo "SUCCESS: Video language matches \"${PerferredLanguage}\""
+				setvideolanguage="false"
+			fi
 		else
-			echo "SUCCESS: No unwanted video lang to change"
 			setvideolanguage="false"
 		fi
 		
