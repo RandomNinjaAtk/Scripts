@@ -161,7 +161,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 					removesubs="true"
 				else 
 					echo "SUCCESS: No unwanted subtitle tracks found"
-					removeasubs="false"
+					removesubs="false"
 				fi
 			else
 				echo "INFO: \"${SubtitleLanguage}\" subtitle tracks not found"
@@ -172,13 +172,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 					removesubs="true"
 				else 
 					echo "SUCCESS: No unwanted subtitle tracks found"
-					removeasubs="false"
+					removesubs="false"
 				fi
 			fi
 		else
 			echo "ERROR: No subtitle tracks found"
 			echo "INFO: No unwanted subtitle tracks to remove"
-			removeasubs="false"
+			removesubs="false"
 		fi
 		
 		echo "CHECK: Analyzing video laguange"
@@ -227,13 +227,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 					removesubs="true"
 				else 
 					echo "SUCCESS: No unwanted subtitle tracks found"
-					removeasubs="false"
+					removesubs="false"
 				fi
 			fi
 		else
 			echo "ERROR: No subtitle tracks found"
 			echo "INFO: No unwanted subtitle tracks to remove"
-			removeasubs="false"
+			removesubs="false"
 		fi
 			
 		echo "CHECK: Analyzing video laguange"
@@ -261,7 +261,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 					removesubs="true"
 				else 
 					echo "SUCCESS: No unwanted subtitle tracks found"
-					removeasubs="false"
+					removesubs="false"
 				fi
 			else
 				echo "ERROR: No subtitle tracks found, only foreign audio tracks found"
@@ -313,14 +313,14 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		fi
 		
 		echo "INFO: Begin processing file with mkvmerge"
-		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} ${mkvaudio} ${mkvsubs} "$video"; then
+		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv"${mkvvideo}${mkvaudio}${mkvsubs} "$video"; then
 			echo "SUCCESS: mkvmerge complete"
-			echo "INFO: Options used: ${mkvvideo} ${mkvaudio} ${mkvsubs}"
+			echo "INFO: Options used:${mkvvideo}${mkvaudio}${mkvsubs}"
 		elif [ "${SetUnknownAudioLanguage}" = true ]; then
 			echo "ERROR: mkvmerge failed setting \"und\" audio to \"${PerferredLanguage}\", skipping language setting"
-			if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} -a und ${mkvsubs} "$video"; then
+			if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv"${mkvvideo} -a und${mkvsubs} "$video"; then
 				echo "SUCCESS: mkverge complete"
-				echo "INFO: Options used: ${mkvvideo} -a und ${mkvsubs}"
+				echo "INFO: Options used:${mkvvideo} -a und${mkvsubs}"
 			else
 				echo "ERROR: mkvmerge failed"
 			fi
