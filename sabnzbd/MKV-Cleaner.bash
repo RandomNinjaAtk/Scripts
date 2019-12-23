@@ -318,41 +318,41 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		
 		if [ "${setundaudio}" = true ]; then
 			if [ "${SetUnknownAudioLanguage}" = true ]; then
-				mkvaudio="-a $undaudio --language $undaudio:${UnkownAudioLanguage}"
+				mkvaudio=" -a $undaudio --language $undaudio:${UnkownAudioLanguage}"
 			elif [ "${removeaudio}" = true ]; then
-				mkvaudio="-a und"
+				mkvaudio=" -a und"
 			else
 				mkvaudio=""
 			fi
 		else
 			if [ "${removeaudio}" = true ]; then
-				mkvaudio="-a ${PerferredLanguage}"
+				mkvaudio=" -a ${PerferredLanguage}"
 			else
 				mkvaudio=""
 			fi
 		fi
 
 		if [ "${removesubs}" = true ]; then
-			mkvsubs="-s ${SubtitleLanguage}"
+			mkvsubs=" -s ${SubtitleLanguage}"
 		else
 			mkvsubs=""
 		fi
 
 		if [ "${setvideolanguage}" = true ]; then
-			mkvvideo="-d ${nonperfvideo} --language ${nonperfvideo}:${PerferredLanguage}"
+			mkvvideo=" -d ${nonperfvideo} --language ${nonperfvideo}:${PerferredLanguage}"
 		else
 			mkvvideo=""
 		fi
 		
 		echo "INFO: Begin processing file with mkvmerge"
-		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} ${mkvaudio} ${mkvsubs} "$video"; then
+		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv"${mkvvideo}${mkvaudio}${mkvsubs} "$video"; then
 			echo "SUCCESS: mkvmerge complete"
-			echo "INFO: Options used: ${mkvvideo} ${mkvaudio} ${mkvsubs}"
+			echo "INFO: Options used:${mkvvideo}${mkvaudio}${mkvsubs}"
 		elif [ "${SetUnknownAudioLanguage}" = true ]; then
 			echo "ERROR: mkvmerge failed setting \"und\" audio to \"${PerferredLanguage}\", skipping language setting"
-			if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} -a und ${mkvsubs} "$video"; then
+			if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv"${mkvvideo} -a und${mkvsubs} "$video"; then
 				echo "SUCCESS: mkverge complete"
-				echo "INFO: Options used: ${mkvvideo} -a und ${mkvsubs}"
+				echo "INFO: Options used:${mkvvideo} -a und${mkvsubs}"
 			else
 				echo "ERROR: mkvmerge failed"
 				exit 1
