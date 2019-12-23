@@ -49,13 +49,15 @@ echo "=========================="
 echo "INFO: Begin checking for required applications"
 echo "CHECK: for mkvmerge utility"
 if [ ! -x "$(command -v mkvmerge)" ]; then
-	echo "ERROR: mkvmerge utility not installed" && exit 1
+	echo "ERROR: mkvmerge utility not installed"
+	exit 1
 else
 	echo "SUCCESS: mkvmerge installed"
 fi
 echo "CHECK: for jq utility"
 if [ ! -x "$(command -v jq)" ]; then
-	echo "ERROR: jq package not installed" && exit 1
+	echo "ERROR: jq package not installed"
+	exit 1
 else
 	echo "SUCCESS: mkvmerge installed"
 fi
