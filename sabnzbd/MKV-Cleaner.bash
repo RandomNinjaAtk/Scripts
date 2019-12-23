@@ -312,7 +312,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		fi	
 	fi
 	
-	if [ "${removeaudio}" = false ] && [ "${setundaudio}" = false ] && [ "${removeasubs}" = false ] && [ "${setvideolanguage}" = false ]; then
+	if [ "${removeaudio}" = false ] && [ "${setundaudio}" = false ] && [ "${removesubs}" = false ] && [ "${setvideolanguage}" = false ]; then
 		echo "INFO: Video passed all checks, no processing needed"
 	else
 		
