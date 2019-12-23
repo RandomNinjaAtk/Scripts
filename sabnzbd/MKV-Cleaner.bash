@@ -10,6 +10,7 @@
 #  preferences...                     #
 #=============REQUIREMENTS=============
 #        mkvtoolsnix (mkvmerge)       #
+#                  jq                 #
 #============CONFIGURATION=============
 PerferredLanguage="eng" # Keeps only the audio for the language selected, if not found, fall-back to unknown tracks and if also not found, a final fall-back to all other audio tracks
 SubtitleLanguage="eng" # Removes all subtitles not matching specified language
@@ -20,7 +21,8 @@ UnkownAudioLanguage="eng" # Sets unknown language tracks to the language specifi
 if find "$1" -type f  -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
 	echo "Found video files for processing..."
 else
-	echo "ERROR: NO VIDEO FILES FOUND" && exit 1
+	echo "ERROR: NO VIDEO FILES FOUND"
+	exit 1
 fi
 
 #cleanup unwanted files
@@ -54,7 +56,8 @@ find "$1" -type f -iregex ".*/.*\.\(mp4\)" -print0 | while IFS= read -r -d '' vi
 		rm "$video.original.mkv" && echo "Deleted source file"
 	else
 		echo "MKVMERGE ERROR"
-		rm "$video" && echo "DELETED: $video" && exit 1
+		rm "$video" && echo "DELETED: $video"
+		exit 1
 	fi
 	echo "PROCESSING COMPLETE"
 	echo "=========================="
@@ -75,7 +78,8 @@ find "$1" -type f -iregex ".*/.*\.\(avi\)" -print0 | while IFS= read -r -d '' vi
 		rm "$video.original.mkv" && echo "Deleted source file"
 	else
 		echo "MKVMERGE ERROR"
-		rm "$video" && echo "DELETED: $video" && exit 1
+		rm "$video" && echo "DELETED: $video"
+		exit 1
 	fi
 	echo "PROCESSING COMPLETE"
 	echo "=========================="
@@ -101,7 +105,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		nonperfsub=$(mkvmerge -J "$video" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language!=\"${SubtitleLanguage}\")) | .id")
 	else
 		echo "MKVMERGE ERROR: FAILED to get values from mkvmerge"
-		rm "$video" && echo "DELETED: $video" && exit 1
+		rm "$video" && echo "DELETED: $video"
+		exit 1
 	fi
 	
 	# Checking for video
@@ -111,7 +116,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 	else
 		# no video was found, error and report failed to sabnzbd
 		echo "ERROR: No video tracks found"
-		rm "$video" && echo "DELETED: $video" && exit 1
+		rm "$video" && echo "DELETED: $video"
+		exit 1
 	fi
 		
 	# Checking for audio
@@ -121,7 +127,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 	else
 		# no audio was found, error and report failed to sabnzbd
 		echo "ERROR: No audio tracks found"
-		rm "$video" && echo "DELETED: $video" && exit 1
+		rm "$video" && echo "DELETED: $video"
+		exit 1
 	fi
 	
 	# Checking for subtitles
@@ -252,7 +259,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		else
 			echo "ERROR: \"${SubtitleLanguage}\" Subtitle not found, only foreign audio/subtitles found"
 			echo "Deleting video and marking download as failed because no usuable audio/subititles are found in requested langauge"
-			rm "$video" && echo "DELETED: $video" && exit 1
+			rm "$video" && echo "DELETED: $video"
+			exit 1
 		fi
 	fi
 	
@@ -297,7 +305,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 				echo "MKVMERGE SUCCESS"
 				echo "Options used: ${mkvvideo} -a und ${mkvsubs}"
 			else
-				echo "ERROR: MKVMERGE FAILURE" && exit 1
+				echo "ERROR: MKVMERGE FAILURE"
+				exit 1
 			fi
 		fi
 		# cleanup temp files and rename
