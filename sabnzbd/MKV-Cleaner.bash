@@ -345,7 +345,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		
 		echo "INFO: Begin processign file with mkvmerge"
 		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv" ${mkvvideo} ${mkvaudio} ${mkvsubs} "$video"; then
-			echo "SUCCESS: mkverge complete"
+			echo "SUCCESS: mkvmerge complete"
 			echo "INFO: Options used: ${mkvvideo} ${mkvaudio} ${mkvsubs}"
 		elif [ "${SetUnknownAudioLanguage}" = true ]; then
 			echo "ERROR: mkvmerge failed setting \"und\" audio to \"${PerferredLanguage}\", skipping language setting"
