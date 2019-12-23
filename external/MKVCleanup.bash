@@ -286,28 +286,28 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		
 		if [ "${setundaudio}" = true ]; then
 			if [ "${SetUnknownAudioLanguage}" = true ]; then
-				mkvaudio="-a $undaudio --language $undaudio:${UnkownAudioLanguage}"
+				mkvaudio=" -a $undaudio --language $undaudio:${UnkownAudioLanguage}"
 			elif [ "${removeaudio}" = true ]; then
-				mkvaudio="-a und"
+				mkvaudio=" a und"
 			else
 				mkvaudio=""
 			fi
 		else
 			if [ "${removeaudio}" = true ]; then
-				mkvaudio="-a ${PerferredLanguage}"
+				mkvaudio=" -a ${PerferredLanguage}"
 			else
 				mkvaudio=""
 			fi
 		fi
 
 		if [ "${removesubs}" = true ]; then
-			mkvsubs="-s ${SubtitleLanguage}"
+			mkvsubs=" -s ${SubtitleLanguage}"
 		else
 			mkvsubs=""
 		fi
 
 		if [ "${setvideolanguage}" = true ]; then
-			mkvvideo="-d ${nonperfvideo} --language ${nonperfvideo}:${PerferredLanguage}"
+			mkvvideo=" -d ${nonperfvideo} --language ${nonperfvideo}:${PerferredLanguage}"
 		else
 			mkvvideo=""
 		fi
