@@ -1,4 +1,4 @@
-plugins: chroma
+plugins: chroma embedart
 library: /config/scripts/beets/library.blb
 art_filename: folder
 threaded: no
@@ -67,4 +67,7 @@ import:
     group_albums: no
 
 chroma:
+    auto: yes
+
+embedart:
     auto: yes
