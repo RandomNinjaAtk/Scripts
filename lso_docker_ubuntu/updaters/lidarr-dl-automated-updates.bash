@@ -1,6 +1,11 @@
 #!/bin/bash
 echo "==========START LIDARR DL AUTO INSTALLER AUTOMATED UPDATES==========="
 
+# Check for folder, create folder if needed (hotio docker image compatibility)
+if [ ! -d /config/custom-cont-init.d ]; then
+	mkdir /config/custom-cont-init.d
+fi
+
 if [ -f /config/custom-cont-init.d/lidarr_dl_auto_installer.bash ]; then
 	echo "Previous version detected..."
 	echo "removing....lidarr_dl_auto_installer.bash"
