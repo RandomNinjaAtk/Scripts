@@ -117,6 +117,8 @@ sed -i "s/\"createCDFolder\": true,/\"createCDFolder\": false,/g" "/deezloaderre
 sed -i "s/\"createSingleFolder\": false,/\"createSingleFolder\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"syncedlyrics\": false,/\"syncedlyrics\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"\; \"/\" \/ \"/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"logErrors\": false,/\"logErrors\": true,/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"logSearched\": false,/\"logSearched\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"trackTotal\": false,/\"trackTotal\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"discTotal\": false,/\"discTotal\": true,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"explicit\": false,/\"explicit\": true,/g" "/deezloaderremix/app/default.json" && \
