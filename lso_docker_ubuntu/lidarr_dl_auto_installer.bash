@@ -102,13 +102,14 @@ if [ -f /development.zip  ]; then
 	rm /development.zip 
 	sleep 1s
 fi
-wget https://notabug.org/RemixDevs/DeezloaderRemix/archive/development.zip && \
+# wget https://notabug.org/RemixDevs/DeezloaderRemix/archive/development.zip && \
+wget https://notabug.org/spAILDEcle/DeezloaderRemix/archive/development.zip && \
 unzip development.zip && \
 rm development.zip && \
 sed -i "s/\"trackNameTemplate\": \"%artist% - %title%\"/\"trackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"albumTrackNameTemplate\": \"%number% - %title%\"/\"albumTrackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"playlistTrackNameTemplate\": \"%position% - %artist% - %title%\"/\"playlistTrackNameTemplate\": \"%disc%%position% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% - %album% %explicit%(%year%) (%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% (%artist_id%) - %album% %explicit%(%year%) (%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"embeddedArtworkSize\": 800,/\"embeddedArtworkSize\": 1000,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"localArtworkSize\": 1000,/\"localArtworkSize\": 1400,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"saveArtwork\": false,/\"saveArtwork\": true,/g" "/deezloaderremix/app/default.json" && \
