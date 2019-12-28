@@ -102,8 +102,7 @@ if [ -f /development.zip  ]; then
 	rm /development.zip 
 	sleep 1s
 fi
-# wget https://notabug.org/RemixDevs/DeezloaderRemix/archive/development.zip && \
-wget https://notabug.org/spAILDEcle/DeezloaderRemix/archive/development.zip && \
+wget https://notabug.org/RemixDevs/DeezloaderRemix/archive/development.zip && \
 unzip development.zip && \
 rm development.zip && \
 sed -i "s/\"trackNameTemplate\": \"%artist% - %title%\"/\"trackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
