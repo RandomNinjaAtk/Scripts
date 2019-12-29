@@ -11,6 +11,12 @@ fi
 
 if mkdir /config/scripts/00-lidarr-download-automation.exclusivelock; then
 	
+	#hotio compatibility fix
+	if [ ! -f /config/config.xml ]; then
+		ln -s /config/app/config.xml /config/config.xml
+		sleep 1s
+	fi
+	
 	# Download Scripts
 	if [ -f /config/scripts/lidarr-download-automation/lidarr-download-automation.bash ]; then
 		rm /config/scripts/lidarr-download-automation/lidarr-download-automation.bash
