@@ -67,6 +67,10 @@ if mkdir /config/scripts/00-lidarr-download-automation.exclusivelock; then
 	bash lidarr-download-automation.bash > /config/scripts/script-run.log
 	sleep 10s
 	rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
+	
+	find /config/scripts -type f -exec chmod 0666 {} \;
+	find /config/scripts -type d -exec chmod 0777 {} \;
+	
 else
 	echo "ERROR: /config/scripts/lidarr-download-automation/lidarr-download-automation.bash is still running..."
 	exit 1
