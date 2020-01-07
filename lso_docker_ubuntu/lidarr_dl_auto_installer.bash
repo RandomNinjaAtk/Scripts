@@ -108,7 +108,7 @@ rm development.zip && \
 sed -i "s/\"trackNameTemplate\": \"%artist% - %title%\"/\"trackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"albumTrackNameTemplate\": \"%number% - %title%\"/\"albumTrackNameTemplate\": \"%disc%%number% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"playlistTrackNameTemplate\": \"%position% - %artist% - %title%\"/\"playlistTrackNameTemplate\": \"%disc%%position% - %title% %explicit%\"/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% (%artist_id%) - %album% %explicit%(%type%) (%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
+sed -i "s/\"albumNameTemplate\": \"%artist% - %album%\",/\"albumNameTemplate\": \"%artist% (%artist_id%) - %album% %explicit%(%type%) (%year%) (%album_id%) (WEB)-DREMIX\",/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"embeddedArtworkSize\": 800,/\"embeddedArtworkSize\": 1000,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"localArtworkSize\": 1000,/\"localArtworkSize\": 1400,/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"saveArtwork\": false,/\"saveArtwork\": true,/g" "/deezloaderremix/app/default.json" && \
