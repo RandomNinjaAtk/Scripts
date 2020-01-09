@@ -142,6 +142,7 @@ cd /deezloaderremix/app && \
 npm install && \
 cd / && \
 
+echo "Starting Deezloader Remix"
 nohup node /deezloaderremix/app/app.js &>/dev/null &
 sleep 20s && \
 chmod 0777 -R /config/xdg && \
