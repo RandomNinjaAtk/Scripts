@@ -70,18 +70,6 @@ if [ ! -f /config/scripts/lidarr-download-automation-start.bash ]; then
 	echo "done"
 fi
 
-if [ -x "$(command -v crontab)" ]; then	
-	if grep "lidarr-download-automation-start.bash" /etc/crontab; then
-		echo "job already added..."
-	else
-		echo "adding cron job to crontab..."
-		echo "*/15 * * * *   root   bash /config/scripts/lidarr-download-automation-start.bash > /config/scripts/cron-job.log" >> "/etc/crontab"
-		service cron restart
-	fi
-else
-	echo "cron NOT INSTALLED"
-fi
-
 # Remove lock file incase, system was rebooted before script finished
 if [ -d /config/scripts/00-lidarr-download-automation.exclusivelock ]; then
 	rmdir /config/scripts/00-lidarr-download-automation.exclusivelock
@@ -149,6 +137,18 @@ echo "Starting Deezloader Remix"
 nohup node /deezloaderremix/app/app.js &>/dev/null &
 sleep 20s && \
 chmod 0777 -R /config/xdg && \
+
+if [ -x "$(command -v crontab)" ]; then	
+	if grep "lidarr-download-automation-start.bash" /etc/crontab; then
+		echo "job already added..."
+	else
+		echo "adding cron job to crontab..."
+		echo "*/15 * * * *   root   bash /config/scripts/lidarr-download-automation-start.bash > /config/scripts/cron-job.log" >> "/etc/crontab"
+		service cron restart
+	fi
+else
+	echo "cron NOT INSTALLED"
+fi
 
 echo "=====LIDARR DL AUTOMATION SETUP COMPLETE====="
 exit 0
