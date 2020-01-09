@@ -135,9 +135,6 @@ sed -i "s/\"writer\": false/\"writer\": true/g" "/deezloaderremix/app/default.js
 sed -i "s/\"engineer\": false/\"engineer\": true/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"producer\": false/\"producer\": true/g" "/deezloaderremix/app/default.json" && \
 sed -i "s/\"fullArtists\": false/\"fullArtist\": true/g" "/deezloaderremix/app/default.json" && \
-sed -i "s/\'TPE1\', \[changeCase(track.artistsString, track.fullArtistettings.artistCasing)\]/'TPE1', track.fullArtist/g" "/deezloaderremix/app/app.js" && \
-sed -i "s/value: track.fullArtist/value: \[changeCase(track.artistsString, settings.artistCasing)\]/g" "/deezloaderremix/app/app.js" && \
-
 
 cd /deezloaderremix && \
 npm install && \
