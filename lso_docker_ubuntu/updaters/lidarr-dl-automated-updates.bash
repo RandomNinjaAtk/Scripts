@@ -10,7 +10,8 @@ if [ -f /config/custom-cont-init.d/lidarr_dl_auto_installer.bash ]; then
 	echo "Previous version detected..."
 	echo "removing....lidarr_dl_auto_installer.bash"
 	rm /config/custom-cont-init.d/lidarr_dl_auto_installer.bash
-else 
+fi
+if [ ! -f /config/custom-cont-init.d/lidarr_dl_auto_installer.bash ]; then
 	echo "begining updated script installation..."
 	echo "downloading lidarr_dl_auto_installer.bash from: https://github.com/RandomNinjaAtk/Scripts/raw/master/lso_docker_ubuntu/lidarr_dl_auto_installer.bash"  && \
 	curl -o /config/custom-cont-init.d/lidarr_dl_auto_installer.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lso_docker_ubuntu/lidarr_dl_auto_installer.bash && \
