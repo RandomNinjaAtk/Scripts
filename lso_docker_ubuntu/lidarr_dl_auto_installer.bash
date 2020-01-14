@@ -23,6 +23,7 @@ apt-get install -qq -y \
 	gcc \
 	make \
 	pkg-config \
+	openssl \
 	python-pip && \
 apt-get purge --auto-remove -y && \
 apt-get clean
