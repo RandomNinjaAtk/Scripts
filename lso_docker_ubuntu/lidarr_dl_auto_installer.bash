@@ -21,6 +21,26 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 
+mkdir /temp
+cd /temp
+git -C opus pull 2> /dev/null || git clone --depth 1 https://github.com/xiph/opus.git && \
+cd opus && \
+./autogen.sh && \
+./configure && \
+make && \
+make install
+cd /
+
+ldconfig
+
+cd /temp 
+git -C opus-tools pull 2> /dev/null || git clone https://gitlab.xiph.org/xiph/opus-tools.git && \
+cd opus-tools
+./configure && \
+make && \
+make install
+cd /
+
 pip install --no-cache-dir -U \
 	beets \
 	pyacoustid
