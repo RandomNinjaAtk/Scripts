@@ -22,6 +22,7 @@ apt-get install -qq -y \
 	libtool \
 	gcc \
 	make \
+	pkg-config \
 	python-pip && \
 apt-get purge --auto-remove -y && \
 apt-get clean
