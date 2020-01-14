@@ -17,6 +17,11 @@ apt-get install -qq -y \
 	jq \
 	cron \
 	python-dev \
+	autoconf \
+	automake \
+	libtool \
+	gcc \
+	make \
 	python-pip && \
 apt-get purge --auto-remove -y && \
 apt-get clean
@@ -31,11 +36,10 @@ make && \
 make install
 cd /
 
-ldconfig
-
 cd /temp 
 git -C opus-tools pull 2> /dev/null || git clone https://gitlab.xiph.org/xiph/opus-tools.git && \
 cd opus-tools
+./autogen.sh && \
 ./configure && \
 make && \
 make install
