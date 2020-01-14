@@ -26,6 +26,9 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 
+set -e 
+set -o pipefail
+
 # Install packages needed
  
 apt update > /dev/null 2>&1 && apt install -y curl libflac-dev > /dev/null 2>&1
