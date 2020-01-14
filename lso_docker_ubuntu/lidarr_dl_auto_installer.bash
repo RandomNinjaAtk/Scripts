@@ -58,23 +58,23 @@ curl -Ls https://archive.mozilla.org/pub/opus/opus-tools-0.2.tar.gz | tar xz -C 
 cd "$TEMP_FOLDER"/opus-1.3.1 || exit
 
 ./configure
-make && sudo make install
+make && make install
 
 cd "$TEMP_FOLDER"/opusfile-0.11 || exit
 
 ./configure
-make && sudo make install
+make && make install
 
 cd "$TEMP_FOLDER"/libopusenc-0.2.1 || exit
 
 ./configure
-make && sudo make install
+make && make install
 
 cd "$TEMP_FOLDER"/opus-tools-0.2 || exit
 ./configure
 make
-sudo make install
-sudo ldconfig
+make install
+ldconfig
 
 # Cleanup
 
