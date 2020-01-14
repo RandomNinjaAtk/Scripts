@@ -24,6 +24,7 @@ apt-get install -qq -y \
 	make \
 	pkg-config \
 	openssl \
+	libssl-dev \
 	python-pip && \
 apt-get purge --auto-remove -y && \
 apt-get clean
