@@ -83,6 +83,8 @@ ldconfig
 
 rm -rf "$TEMP_FOLDER"
 
+cd /
+
 pip install --no-cache-dir -U \
 	beets \
 	pyacoustid
