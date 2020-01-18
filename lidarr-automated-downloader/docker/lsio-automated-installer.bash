@@ -119,8 +119,8 @@ if [ -f /config/scripts/lidarr-download-automation-start.bash ]; then
 fi
 
 if [ ! -f /config/scripts/lidarr-download-automation-start.bash ]; then
-	echo "downloading lidarr-automated-downloader-start.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/external/cron_lidarr_jobs.bash"
-	curl -o /config/scripts/lidarr-automated-downloader-start.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/external/lidarr-download-automation-start.bash
+	echo "downloading lidarr-automated-downloader-start.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lidarr-automated-downloader/docker/lidarr-automated-downloader-start.bash"
+	curl -o /config/scripts/lidarr-automated-downloader-start.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/docker/lidarr-automated-downloader-start.bash
 	echo "done"
 fi
 
