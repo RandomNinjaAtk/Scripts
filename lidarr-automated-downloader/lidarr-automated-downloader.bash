@@ -17,10 +17,15 @@ tempalbumjson="albuminfo.json"
 artistalbumlistjson="discography.json"
 
 ArtistsLidarrReq(){
+		
+	ConfigSettings
+	
+	if ! [ -f "musicbrainzerror.log" ]; then
+		touch "musicbrainzerror.log"
+	fi
+	
 	wantit=$(curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET  "$LidarrUrl/api/v1/Artist/")
 	TotalLidArtistNames=$(echo "${wantit}"|jq -r '.[].sortName' | wc -l)
-	
-	ConfigSettings
 	
 	MBArtistID="$(echo "${wantit}" | jq -r ".[$i].foreignArtistId")"
 	for url in $MBArtistID[@]; do
@@ -41,9 +46,12 @@ ArtistsLidarrReq(){
 			fi
 			echo "Skip... musicbrainz id: $url is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
 			if [ -f "musicbrainzerror.log" ]; then
-				rm "musicbrainzerror.log"
+				if cat "musicbrainzerror.log" | grep "$url" | read; then
+					sleep 0.5
+				else
+					echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$url/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
+				fi
 			fi
-			echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$url/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
 		else
 			lidarrartists
 			
