@@ -1,7 +1,7 @@
 #!/bin/bash
 #####################################################################################################
-#                                   Automated Deezer Archiving Script                               #
-#                                          (Deezloader Remix)                                       #
+#                                     Lidarr Automated Downloader                                   #
+#                                    (Powered by: Deezloader Remix)                                 #
 #                                       Credit: RandomNinjaAtk                                      #
 #####################################################################################################
 #                                           Script Start                                            #
