@@ -9,7 +9,7 @@ if [ ! -d /config/scripts/lidarr-automated-downloader ]; then
     echo "done"
 fi
 
-if mkdir /config/scripts/00-lidarr-download-automation.exclusivelock; then
+if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
 	
 	#hotio compatibility fix
 	if [ ! -f /config/config.xml ]; then
