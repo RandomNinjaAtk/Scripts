@@ -21,3 +21,4 @@ replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normaliz
 
 ############ Other Options
 debug="false" # true = enabled :: Increases cli output for diagnosing
+
