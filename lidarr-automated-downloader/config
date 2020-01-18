@@ -1,0 +1,23 @@
+############ Paths
+downloaddir="/downloads/deezloaderremix" # Deezloader download directory location
+
+############ Lidarr Settings
+LidarrUrl="http://127.0.0.1:8686" # Set domain or IP to your Lidarr instance including port. If using reverse proxy, do not use a trailing slash. Ensure you specify http/s.
+LidarrApiKey="$(grep "<ApiKey>" /config/config.xml | sed "s/\  <ApiKey>//;s/<\/ApiKey>//")" # Lidarr API key.
+
+############ Download Settings
+deezloaderurl="http://127.0.0.1:1730" # Url to the download client
+downloadmethod="album" # album or track :: album method will fallback to track method if it runs into an issue
+enablefallback="true" # enables fallback to lower quality if required...
+LyricType="all" # all or clean or explicit :: sets the desired lyric type for downloads, all is explicit albums preferred
+dlcheck=2 # Set the number to desired wait time before checking for completed downloads (if your connection is unstable, longer may be better)
+albumtimeoutpercentage=8 # Set the number between 1 and 100 :: This number is used to caculate album download timeout length by multiplying Album Length by ##%
+tracktimeoutpercentage=25 # Set the number between 1 and 100 :: This number is used to caculate  track download timeout length by multiplying Track Length by ##%
+
+############ File Options
+quality="opus" # flac or mp3 or opus or aac or alac :: Downloads flac or mp3 and then converts to requested format
+replaygaintaggingflac="true" # true = enabled :: Adds replaygain audio normalization tags to flac files
+replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normalization tags to opus files
+
+############ Other Options
+debug="false" # true = enabled :: Increases cli output for diagnosing
