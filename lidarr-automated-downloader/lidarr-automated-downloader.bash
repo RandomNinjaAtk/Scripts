@@ -19,6 +19,9 @@ artistalbumlistjson="discography.json"
 ArtistsLidarrReq(){
 	wantit=$(curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET  "$LidarrUrl/api/v1/Artist/")
 	TotalLidArtistNames=$(echo "${wantit}"|jq -r '.[].sortName' | wc -l)
+	
+	ConfigSettings
+	
 	MBArtistID="$(echo "${wantit}" | jq -r ".[$i].foreignArtistId")"
 	for url in $MBArtistID[@]; do
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .path")"
@@ -456,15 +459,6 @@ DurationCalc () {
   printf '%02ds\n' $S
 }
 
-sanitize() {
-   local s="${1?need a string}" # receive input in first argument
-   s="${s//[^[:alnum:]]/-}"     # replace all non-alnum characters to -
-   s="${s//+(-)/-}"             # convert multiple - to single -
-   s="${s/#-}"                  # remove - from start
-   s="${s/%-}"                  # remove - from end
-   echo "${s,,}"                # convert to lowercase
-}
-
 if [ "${LyricType}" = explicit ]; then
 	LyricDLType="Explicit"
 elif [ "${LyricType}" = clean ]; then
@@ -479,7 +473,6 @@ ConfigSettings () {
 	echo "Global Settings"
 	echo "Download Client: $deezloaderurl"
 	echo "Download Directory: $downloaddir"
-	echo "Library Directory: $library"
 	echo "Download Quality: $quality"
 	echo "Download Lyric Type: $LyricDLType"
 	echo "Total Artists To Process: $TotalLidArtistNames"
@@ -494,8 +487,6 @@ if [ ! -d "$downloaddir" ];	then
 fi
 
 lidarrartists () {
-
-	ConfigSettings
 
 	if [ -f "$tempartistjson" ]; then
 		rm "$tempartistjson"
