@@ -37,10 +37,13 @@ ArtistsLidarrReq(){
 				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
 					rm "$LidArtistPath/musicbrainzerror.log"
 				fi
-				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/${MBArtistID}/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
+				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$url/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
 			fi
 			echo "Skip... musicbrainz id: $url is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
-			echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/${MBArtistID}/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
+			if [ -f "musicbrainzerror.log" ]; then
+				rm "musicbrainzerror.log"
+			fi
+			echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$url/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
 		else
 			lidarrartists
 			
