@@ -488,12 +488,6 @@ ConfigSettings () {
 	sleep 5s
 }
 
-
-if [ ! -d "$library" ];	then
-	mkdir -p "$library"
-	chmod 0777 "$library"
-fi
-
 if [ ! -d "$downloaddir" ];	then
 	mkdir -p "$downloaddir"
 	chmod 0777 "$downloaddir"
