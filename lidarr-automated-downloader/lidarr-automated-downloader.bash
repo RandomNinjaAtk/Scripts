@@ -7,10 +7,6 @@
 #                                           Script Start                                            #
 #####################################################################################################
 
-
-quality="$1"
-startnumber=$2
-
 source ./config
 
 tempalbumfile="temp-archive-album"
