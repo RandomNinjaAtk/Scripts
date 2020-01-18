@@ -31,12 +31,16 @@ ArtistsLidarrReq(){
 		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
 		DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")
 		artistdir="$(basename "$LidArtistPath")"
-		if [ "${DeezerArtistID}" = "" ]; then
-			echo "Skip... musicbrainz id: $url is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
-			if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
-				rm "$LidArtistPath/musicbrainzerror.log"
-			fi			
-			echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/${MBArtistID}/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
+		if [ "${DeezerArtistID}" = "" ]; then			
+			if [ -d "$LidArtistPath" ]; then
+				echo "Skip... musicbrainz id: $url is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
+				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
+					rm "$LidArtistPath/musicbrainzerror.log"
+				fi
+				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/${MBArtistID}/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
+			fi
+			echo "Skip... musicbrainz id: $url is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
+			echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/${MBArtistID}/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
 		else
 			lidarrartists
 			
