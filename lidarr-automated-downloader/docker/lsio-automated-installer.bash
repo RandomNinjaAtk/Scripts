@@ -27,61 +27,64 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 
-set -e 
-set -o pipefail
+if ! [ -x "$(command -v opusenc)" ]; then
 
-# Install packages needed
- 
-apt update > /dev/null 2>&1 && apt install -y curl libflac-dev > /dev/null 2>&1
+	set -e 
+	set -o pipefail
 
-# Remove packages that can cause issues
+	# Install packages needed
 
-apt -y purge opus* > /dev/null 2>&1 && apt -y purge libopus-dev > /dev/null 2>&1
+	apt update > /dev/null 2>&1 && apt install -y curl libflac-dev > /dev/null 2>&1
 
-# Download necessary files
+	# Remove packages that can cause issues
 
-TEMP_FOLDER="$(mktemp -d)"
+	apt -y purge opus* > /dev/null 2>&1 && apt -y purge libopus-dev > /dev/null 2>&1
 
-# Opusfile 0.11
-curl -Ls https://downloads.xiph.org/releases/opus/opusfile-0.11.tar.gz | tar xz -C "$TEMP_FOLDER"
+	# Download necessary files
 
-# Opus 1.3.1
-curl -Ls https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz | tar xz -C "$TEMP_FOLDER"
+	TEMP_FOLDER="$(mktemp -d)"
 
-# Libopusenc 0.2.1
-curl -Ls https://archive.mozilla.org/pub/opus/libopusenc-0.2.1.tar.gz | tar xz -C "$TEMP_FOLDER"
+	# Opusfile 0.11
+	curl -Ls https://downloads.xiph.org/releases/opus/opusfile-0.11.tar.gz | tar xz -C "$TEMP_FOLDER"
 
-# Opus Tools 0.2
-curl -Ls https://archive.mozilla.org/pub/opus/opus-tools-0.2.tar.gz | tar xz -C "$TEMP_FOLDER"
+	# Opus 1.3.1
+	curl -Ls https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz | tar xz -C "$TEMP_FOLDER"
 
-# Compile
+	# Libopusenc 0.2.1
+	curl -Ls https://archive.mozilla.org/pub/opus/libopusenc-0.2.1.tar.gz | tar xz -C "$TEMP_FOLDER"
 
-cd "$TEMP_FOLDER"/opus-1.3.1 || exit
+	# Opus Tools 0.2
+	curl -Ls https://archive.mozilla.org/pub/opus/opus-tools-0.2.tar.gz | tar xz -C "$TEMP_FOLDER"
 
-./configure
-make && make install
+	# Compile
 
-cd "$TEMP_FOLDER"/opusfile-0.11 || exit
+	cd "$TEMP_FOLDER"/opus-1.3.1 || exit
 
-./configure
-make && make install
+	./configure
+	make && make install
 
-cd "$TEMP_FOLDER"/libopusenc-0.2.1 || exit
+	cd "$TEMP_FOLDER"/opusfile-0.11 || exit
 
-./configure
-make && make install
+	./configure
+	make && make install
 
-cd "$TEMP_FOLDER"/opus-tools-0.2 || exit
-./configure
-make
-make install
-ldconfig
+	cd "$TEMP_FOLDER"/libopusenc-0.2.1 || exit
 
-# Cleanup
+	./configure
+	make && make install
 
-rm -rf "$TEMP_FOLDER"
+	cd "$TEMP_FOLDER"/opus-tools-0.2 || exit
+	./configure
+	make
+	make install
+	ldconfig
 
-cd /
+	# Cleanup
+
+	rm -rf "$TEMP_FOLDER"
+
+	cd /
+fi
 	
 service cron restart
 
