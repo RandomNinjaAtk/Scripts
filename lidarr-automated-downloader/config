@@ -1,3 +1,12 @@
+#!/bin/bash
+#####################################################################################################
+#                                     Lidarr Automated Downloader                                   #
+#                                    (Powered by: Deezloader Remix)                                 #
+#                                       Credit: RandomNinjaAtk                                      #
+#####################################################################################################
+#                                           Script Start                                            #
+#####################################################################################################
+
 ############ Paths
 downloaddir="/downloads/deezloaderremix" # Deezloader download directory location
 
