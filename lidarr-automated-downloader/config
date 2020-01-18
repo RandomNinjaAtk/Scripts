@@ -4,7 +4,11 @@
 #                                    (Powered by: Deezloader Remix)                                 #
 #                                       Credit: RandomNinjaAtk                                      #
 #####################################################################################################
-#                                           Script Start                                            #
+#                                           Instructions                                            #
+#                                                                                                   #
+#  1. Configure the settings below                                                                  #
+#  2. Execute script from linux cli with the following command:                                     #
+#     bash lidarr-automated-downloader.bash                                                        #
 #####################################################################################################
 
 ############ Paths
