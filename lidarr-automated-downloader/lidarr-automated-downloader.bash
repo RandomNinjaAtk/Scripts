@@ -663,6 +663,7 @@ lidarrartists () {
 												else
 													continue
 												fi
+											fi
 										fi										
 									fi
 									if [ "$albumlyrictype" = "Clean" ]; then
