@@ -28,7 +28,7 @@ albumtimeoutpercentage=8 # Set the number between 1 and 100 :: This number is us
 tracktimeoutpercentage=25 # Set the number between 1 and 100 :: This number is used to caculate  track download timeout length by multiplying Track Length by ##%
 
 ############ File Options
-quality="opus" # flac or mp3 or opus or aac or alac :: Downloads flac or mp3 and then converts to requested format
+quality="flac" # flac or mp3 or opus or aac or alac :: Downloads flac or mp3 and then converts to requested format
 replaygaintaggingflac="true" # true = enabled :: Adds replaygain audio normalization tags to flac files
 replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normalization tags to opus files
 
