@@ -204,7 +204,7 @@ if [ -x "$(command -v crontab)" ]; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
-		echo "0 */12 * * *   root   rm /config/scripts/lidarr-automated-downloader/musicbrainzerror.log"
+		echo "0 */12 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\""  >> "/etc/crontab"
 		service cron restart
 	fi
 else
