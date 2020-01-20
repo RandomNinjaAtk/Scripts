@@ -519,6 +519,7 @@ lidarrartists () {
 		rm "$temptrackfile"
 	fi
 	rm -rf "$downloaddir"/*
+	
 	if curl -sL --fail "https://api.deezer.com/artist/$DeezerArtistID" -o "$tempartistjson"; then
 		artistartwork=($(cat "$tempartistjson" | jq -r '.picture_xl'))
 		artistname="$(cat "$tempartistjson" | jq -r '.name')"
@@ -526,6 +527,22 @@ lidarrartists () {
 		sanatizedartistname="$(echo "$artistname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
 		shortartistpath="$artistname ($artistid)"
 		fullartistpath="$LidArtistPath"
+		
+		if [ -d "$fullartistpath" ]; then
+			if find "$fullartistpath" -iname "$tempalbumjson" | read; then
+				if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+					rm "$fullartistpath/$artistalbumlistjson"
+					sleep 0.5
+				fi
+				jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+			else
+				if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+					rm "$fullartistpath/$artistalbumlistjson"
+					sleep 0.5
+				fi
+			fi
+		fi
+		
 		if [ "$artistname" == null ]; then
 			echo ""
 			echo "Error no artist returned with Deezer Artist ID \"$artistid\""
