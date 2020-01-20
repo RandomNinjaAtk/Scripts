@@ -29,6 +29,9 @@ ArtistsLidarrReq(){
 	
 	MBArtistID="$(echo "${wantit}" | jq -r ".[$i].foreignArtistId")"
 	for url in $MBArtistID[@]; do
+		
+		source ./config
+		
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .path")"
 		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .id")"
 		LidArtistNameCap="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .artistName")"
