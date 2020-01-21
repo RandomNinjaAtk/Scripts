@@ -617,10 +617,27 @@ lidarrartists () {
 								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
 									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .dlquality")"
 									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .foldername")"
+									archivebitrate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .bitrate")"
 									if [ "$targetformat" = "$archivequality" ]; then
-										echo "Previously Downloaded \"$albumname\", skipping..."									
-										continue
+										if [ "${bitrate}k" = "$archivebitrate" ]; then
+											echo "Previously Downloaded \"$albumname\", skipping..."									
+											continue
+										else
+											echo ""
+											echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
+											echo ""
+											if [ -d "$fullartistpath/$archivefoldername" ]; then
+												rm -rf "$fullartistpath/$archivefoldername"
+												sleep 1
+											fi
+											if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+												rm "$fullartistpath/$artistalbumlistjson"
+												sleep 0.5
+											fi
+											jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+										fi
 									else
+										echo ""
 										echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
 										echo ""
 										if [ -d "$fullartistpath/$archivefoldername" ]; then
