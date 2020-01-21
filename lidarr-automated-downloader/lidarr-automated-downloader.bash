@@ -851,7 +851,7 @@ lidarrartists () {
 									
 								fi
 							fi
-							echo "Archiving Album: $albumname (Format: $archivequality) complete!"
+							echo "Archiving Album: $albumname (Format: $archivequality ($archivebitrate) complete!"
 							
 							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"} + {\"bitrate\": \"$archivebitrate\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
 							
