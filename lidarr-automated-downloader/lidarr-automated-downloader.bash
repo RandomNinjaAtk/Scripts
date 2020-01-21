@@ -615,8 +615,8 @@ lidarrartists () {
 							
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
-									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==\"${albumlist[$album]}\") | .dlquality")"
-									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==\"${albumlist[$album]}\") | .foldername")"
+									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .dlquality")"
+									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .foldername")"
 									if [ "$targetformat" = "$archivequality" ]; then
 										echo "Previously Downloaded \"$albumname\", skipping..."									
 										continue
