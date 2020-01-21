@@ -66,8 +66,10 @@ ArtistsLidarrReq(){
 
 if [ "$quality" = flac ]; then
 	dlquality="flac"
+	targetformat="FLAC"
 elif [ "$quality" = mp3 ]; then
 	dlquality="320"
+	targetformat="MP3"
 elif [ "$quality" = alac ]; then
 	dlquality="flac"
 	targetformat="ALAC"
@@ -607,8 +609,21 @@ lidarrartists () {
 							
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
-									echo "Previously Downloaded \"$albumname\", skipping..."									
-									continue
+									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==\"${albumlist[$album]}\") | .dlquality")"
+									if [ "$targetformat" = "$archivequality" ]; then
+										echo "Previously Downloaded \"$albumname\", skipping..."									
+										continue
+									else
+										echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
+										if [ -d "$fullartistpath/$libalbumfolder" ]; then
+											rm -rf "$fullartistpath/$libalbumfolder"
+											sleep 0.5s
+										fi
+										if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+											rm "$fullartistpath/$artistalbumlistjson"
+											sleep 0.5
+										fi
+										jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 								fi
 							fi
 							
@@ -840,7 +855,7 @@ lidarrartists () {
 							rm "$tempalbumjson"
 						fi
 					done
-				totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" |wc -l)"
+				totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" | wc -l)"
 				echo ""
 				if [ "$totalalbumsarchived" = "$totalnumberalbumlist" ]; then
 					echo "Archived $totalalbumsarchived Albums"
