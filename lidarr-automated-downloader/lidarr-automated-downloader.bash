@@ -616,14 +616,16 @@ lidarrartists () {
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
 									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==\"${albumlist[$album]}\") | .dlquality")"
+									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==\"${albumlist[$album]}\") | .foldername")"
 									if [ "$targetformat" = "$archivequality" ]; then
 										echo "Previously Downloaded \"$albumname\", skipping..."									
 										continue
 									else
 										echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
-										if [ -d "$fullartistpath/$libalbumfolder" ]; then
-											rm -rf "$fullartistpath/$libalbumfolder"
-											sleep 0.5s
+										echo ""
+										if [ -d "$fullartistpath/$archivefoldername" ]; then
+											rm -rf "$fullartistpath/$archivefoldername"
+											sleep 1
 										fi
 										if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 											rm "$fullartistpath/$artistalbumlistjson"
@@ -754,7 +756,7 @@ lidarrartists () {
 									sleep 3
 								fi
 							fi
-							DLArtistArtwork
+							
 							if [[ "$albumtimeout" -le 60 ]]; then
 								albumtimeout="60"
 								albumfallbacktimout=$(($albumtimeout*2))
@@ -862,6 +864,7 @@ lidarrartists () {
 							rm "$tempalbumjson"
 						fi
 					done
+				DLArtistArtwork
 				totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" | wc -l)"
 				echo ""
 				if [ "$totalalbumsarchived" = "$totalnumberalbumlist" ]; then
