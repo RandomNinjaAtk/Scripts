@@ -619,7 +619,10 @@ lidarrartists () {
 									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .foldername")"
 									archivebitrate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .bitrate")"
 									if [ "$targetformat" = "$archivequality" ]; then
-										if [ "${bitrate}k" = "$archivebitrate" ]; then
+										if [ "$archivebitrate" = "lossless" ]; then
+											echo "Previously Downloaded \"$albumname\", skipping..."									
+											continue
+										elif [ "${bitrate}k" = "$archivebitrate" ]; then
 											echo "Previously Downloaded \"$albumname\", skipping..."									
 											continue
 										else
