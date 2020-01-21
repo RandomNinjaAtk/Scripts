@@ -624,6 +624,7 @@ lidarrartists () {
 											sleep 0.5
 										fi
 										jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+									fi
 								fi
 							fi
 							
