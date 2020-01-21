@@ -266,11 +266,11 @@ DownloadURL () {
 Convert () {
 	if [ "${quality}" = opus ]; then
 		if [ -z "$bitrate" ]; then
-			bitrate=128
+			bitrate="128"
 		fi
 		if [ -x "$(command -v opusenc)" ]; then
 			if find "${downloaddir}/" -name "*.flac" | read; then
-				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat)"
+				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
 				for fname in "${downloaddir}"/*.flac; do
 					filename="$(basename "${fname%.flac}")"
 					if opusenc --bitrate $bitrate --vbr --music "$fname" "${fname%.flac}.opus" 2> /dev/null; then
@@ -298,11 +298,11 @@ Convert () {
 	fi
 	if [ "${quality}" = aac ]; then
 		if [ -z "$bitrate" ]; then
-			bitrate=320
+			bitrate="320"
 		fi
 		if [ -x "$(command -v ffmpeg)" ]; then
 			if find "${downloaddir}/" -name "*.flac" | read; then
-				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat)"
+				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
 				for fname in "${downloaddir}"/*.flac; do
 					filename="$(basename "${fname%.flac}")"
 					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec aac -ab ${bitrate}k -movflags faststart "${fname%.flac}.m4a"; then
@@ -825,7 +825,7 @@ lidarrartists () {
 								sleep 0.5s
 							fi
 							
-							mkdir "$fullartistpath/$libalbumfolder"
+							mkdir -p "$fullartistpath/$libalbumfolder"
 							
 							for file in "$downloaddir"/*; do
 								mv "$file" "$fullartistpath/$libalbumfolder"/
