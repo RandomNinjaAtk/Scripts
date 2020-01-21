@@ -795,8 +795,9 @@ lidarrartists () {
 								rm -rf "$fullartistpath/$libalbumfolder"
 								sleep 0.5s
 							fi
+							
 							mkdir "$fullartistpath/$libalbumfolder"
-							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
+							
 							for file in "$downloaddir"/*; do
 								mv "$file" "$fullartistpath/$libalbumfolder"/
 							done
@@ -816,7 +817,9 @@ lidarrartists () {
 								fi
 							fi
 							echo "Archiving Album: $albumname (Format: $archivequality) complete!"
-
+							
+							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
+							
 							if [ -f "$tempalbumfile" ]; then
 								rm "$tempalbumfile"
 							fi
