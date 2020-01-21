@@ -577,13 +577,7 @@ lidarrartists () {
 						albumname=$(cat "$tempalbumlistjson" | jq -r ".data | .[]| select(.id=="${albumlist[$album]}") | .title")
 						albumnamesanatized="$(echo "$albumname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
 						sanatizedfuncalbumname="${albumnamesanatized,,}"
-
-						if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
-							if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
-								echo "Previously Downloaded \"$albumname\", skipping..."
-								continue
-							fi
-						fi
+						
 						if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "$tempalbumjson"; then
 							tracktotal=$(cat "$tempalbumjson" | jq -r ".nb_tracks")
 							albumdartistid=$(cat "$tempalbumjson" | jq -r ".artist | .id")
@@ -598,15 +592,26 @@ lidarrartists () {
 							albumtimeout=$(($albumduration*$albumtimeoutpercentage/100))
 							albumtimeoutdisplay=$(DurationCalc $albumtimeout)
 							albumfallbacktimout=$(($albumduration*2))
+							
 							if [ "$albumlyrictype" = true ]; then
 								albumlyrictype="Explicit"
 							elif [ "$albumlyrictype" = false ]; then
 								albumlyrictype="Clean"
 							fi
+							
 							libalbumfolder="$sanatizedartistname - $albumtypecap - $albumyear - $albumnamesanatized ($albumlyrictype)"
+							
 							if [ "$albumdartistid" -ne "$artistid" ]; then
 								continue
 							fi
+							
+							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
+									echo "Previously Downloaded \"$albumname\", skipping..."									
+									continue
+								fi
+							fi
+							
 
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 								if [ "$debug" = "true" ]; then
