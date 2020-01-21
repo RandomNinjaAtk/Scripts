@@ -833,21 +833,27 @@ lidarrartists () {
 
 							if find "$fullartistpath/$libalbumfolder" -iname "*.flac" | read; then
 								archivequality="FLAC"
+								archivebitrate="lossless"
 							elif find "$fullartistpath/$libalbumfolder" -iname "*.mp3" | read; then
 								archivequality="MP3"
+								archivebitrate="320k"
 							elif find "$fullartistpath/$libalbumfolder" -iname "*.opus" | read; then
 								archivequality="OPUS"
+								archivebitrate="${bitrate}k"
 							elif find "$fullartistpath/$libalbumfolder" -iname "*.m4a" | read; then
 								if [ "$quality" = alac ]; then
 									archivequality="ALAC"
+									archivebitrate="lossless"
 								fi
 								if [ "$quality" = aac ]; then
 									archivequality="AAC"
+									archivebitrate="${bitrate}k"
+									
 								fi
 							fi
 							echo "Archiving Album: $albumname (Format: $archivequality) complete!"
 							
-							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
+							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"} + {\"bitrate\": \"$archivebitrate\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
 							
 							if [ -f "$tempalbumfile" ]; then
 								rm "$tempalbumfile"
