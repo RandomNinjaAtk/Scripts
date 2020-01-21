@@ -265,12 +265,15 @@ DownloadURL () {
 
 Convert () {
 	if [ "${quality}" = opus ]; then
+		if [ -z "$bitrate" ]; then
+			bitrate=128
+		fi
 		if [ -x "$(command -v opusenc)" ]; then
 			if find "${downloaddir}/" -name "*.flac" | read; then
 				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat)"
 				for fname in "${downloaddir}"/*.flac; do
 					filename="$(basename "${fname%.flac}")"
-					if opusenc --bitrate 128 --vbr --music "$fname" "${fname%.flac}.opus" 2> /dev/null; then
+					if opusenc --bitrate $bitrate --vbr --music "$fname" "${fname%.flac}.opus" 2> /dev/null; then
 						echo "Converted: $filename"
 						if [ -f "${fname%.flac}.opus" ]; then
 							rm "$fname"
@@ -294,12 +297,15 @@ Convert () {
 		fi
 	fi
 	if [ "${quality}" = aac ]; then
+		if [ -z "$bitrate" ]; then
+			bitrate=320
+		fi
 		if [ -x "$(command -v ffmpeg)" ]; then
 			if find "${downloaddir}/" -name "*.flac" | read; then
 				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat)"
 				for fname in "${downloaddir}"/*.flac; do
 					filename="$(basename "${fname%.flac}")"
-					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec aac -ab 320k -movflags faststart "${fname%.flac}.m4a"; then
+					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec aac -ab ${bitrate}k -movflags faststart "${fname%.flac}.m4a"; then
 						echo "Converted: $filename"
 						if [ -f "${fname%.flac}.m4a" ]; then
 							rm "$fname"
