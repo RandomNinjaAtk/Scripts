@@ -626,7 +626,7 @@ lidarrartists () {
 				else
 					echo ""
 					echo ""
-					echo "Archiving: $artistname (ID $artistid) ($artistnumber of $TotalLidArtistNames)"
+					echo "Archiving: $artistname (ID: $artistid) ($artistnumber of $TotalLidArtistNames)"
 					echo "Searching for albums... $totalnumberalbumlist Albums found"
 					for album in ${!albumlist[@]}; do
 						trackdlfallback=0
