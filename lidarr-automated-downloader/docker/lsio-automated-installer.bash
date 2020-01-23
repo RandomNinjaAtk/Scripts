@@ -132,6 +132,10 @@ if [ -d /config/scripts/00-lidarr-automated-downloader.exclusivelock ]; then
 	rmdir /config/scripts/00-lidarr-automated-downloader.exclusivelock
 fi
 
+if [ -d "/config/scripts/lidarr-automated-downloader" ]; then
+	rm /config/scripts/lidarr-automated-downloader/*.json
+fi
+
 echo "INSTALLING DEEZLOADER-REMIX"
 
 rm -rf /deezloaderremix && \
