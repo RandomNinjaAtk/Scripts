@@ -28,7 +28,7 @@ ArtistsLidarrReq(){
 	ConfigSettings
 	
 	MBArtistID="$(echo "${wantit}" | jq -r ".[$i].foreignArtistId")"
-	for url in $!MBArtistID[@]; do
+	for url in ${$!MBArtistID[@]}; do
 		artistnumber=$(( $url + 1 ))
 		mbid="${MBArtistID[$url]}"
 		source ./config
