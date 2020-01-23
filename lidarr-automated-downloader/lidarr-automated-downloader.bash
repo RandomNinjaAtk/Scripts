@@ -35,6 +35,7 @@ ArtistsLidarrReq(){
 	for id in ${!MBArtistID[@]}; do
 		artistnumber=$(( $id + 1 ))
 		mbid="${MBArtistID[$id]}"
+		
 		source ./config
 		
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
@@ -62,7 +63,7 @@ ArtistsLidarrReq(){
 			fi
 		else
 			if cat "daily.log" | grep "$LidArtistID" | read; then
-				echo "Already Checked Lidarr Artrist: \"$LidArtistNameCap\" (ID: $LidArtistID) for the day, skipping..."
+				echo "Already Checked Lidarr Artrist  ($artistnumber of $TotalLidArtistNames): \"$LidArtistNameCap\" (ID: $LidArtistID) for the day, skipping..."
 			else			
 				lidarrartists
 				
