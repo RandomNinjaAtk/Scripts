@@ -56,6 +56,9 @@ ArtistsLidarrReq(){
 				fi
 			fi
 		else
+			if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
+				rm "$LidArtistPath/musicbrainzerror.log"
+			fi
 			lidarrartists
 			
 			LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RefreshArtist\", \"artistID\": \"${LidArtistID}\"}" --header "X-Api-Key:${LidarrApiKey}" );
