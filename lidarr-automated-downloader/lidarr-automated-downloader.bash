@@ -263,6 +263,33 @@ DownloadURL () {
 	fi
 }
 
+TrackMethod () {
+	rm -rf "$downloaddir"/*
+	sleep 0.5
+	echo "Donwloading $tracktotal Tracks..."
+	trackid=($(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | .id"))
+	for track in ${!trackid[@]}; do
+		tracknumber=$(( $track + 1 ))
+		trackname=$(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | select(.id=="${trackid[$track]}") | .title")
+		trackduration=$(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | select(.id=="${trackid[$track]}") | .duration")
+		trackdurationdisplay=$(DurationCalc $trackduration)
+		trackurl="https://www.deezer.com/track/${trackid[$track]}"
+		tracktimeout=$(($trackduration*$tracktimeoutpercentage/100))
+		trackfallbacktimout=$(($tracktimeout*2))
+		if [[ "$tracktimeout" -le 60 ]]; then
+			tracktimeout="60"
+			trackfallbacktimout=$(($tracktimeout*2))
+		fi
+		if [ ! -f "$temptrackfile" ]; then
+			touch "$temptrackfile"
+		fi
+			DownloadURL
+		if [ -f "$temptrackfile" ]; then
+			rm "$temptrackfile"
+		fi
+	done
+}
+
 Convert () {
 	if [ "${quality}" = opus ]; then
 		if [ -z "$bitrate" ]; then
@@ -839,34 +866,13 @@ lidarrartists () {
 							echo "Album Lyric Type: $albumlyrictype"
 							echo "Album Duration: $albumdurationdisplay"
 							echo "Album Track Count: $tracktotal"
+							
 							AlbumDL
+							
 							if [ $trackdlfallback = 1 ]; then
-								rm -rf "$downloaddir"/*
-								sleep 0.5
-								echo "Donwloading $tracktotal Tracks..."
-								trackid=($(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | .id"))
-								for track in ${!trackid[@]}; do
-									tracknumber=$(( $track + 1 ))
-									trackname=$(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | select(.id=="${trackid[$track]}") | .title")
-									trackduration=$(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | select(.id=="${trackid[$track]}") | .duration")
-									trackdurationdisplay=$(DurationCalc $trackduration)
-									trackurl="https://www.deezer.com/track/${trackid[$track]}"
-									tracktimeout=$(($trackduration*$tracktimeoutpercentage/100))
-									trackfallbacktimout=$(($tracktimeout*2))
-									if [[ "$tracktimeout" -le 60 ]]; then
-										tracktimeout="60"
-										trackfallbacktimout=$(($tracktimeout*2))
-									fi
-									if [ ! -f "$temptrackfile" ]; then
-										touch "$temptrackfile"
-									fi
-									DownloadURL
-									if [ -f "$temptrackfile" ]; then
-										rm "$temptrackfile"
-									fi
-								done
-							fi
-							DLAlbumArtwork
+								TrackMethod
+							fi							
+										
 							downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
 							downloadedlyriccount=$(find "$downloaddir" -type f -iname "*.lrc" | wc -l)
 							downloadedalbumartcount=$(find "$downloaddir" -type f -iname "folder.*" | wc -l)
@@ -875,14 +881,27 @@ lidarrartists () {
 							echo "Downloaded: $downloadedtrackcount Tracks"
 							echo "Downloaded: $downloadedlyriccount Synced Lyrics"
 							echo "Downloaded: $downloadedalbumartcount Album Cover"
+							
 							if [ "$VerifyTrackCount" = true ]; then
-								if [ "$tracktotal" = "$downloadedtrackcount" ]; then
-									sleep 0.1
-								else
-									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
+								if [ "$tracktotal" != "$downloadedtrackcount" ]; then
+									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... re-attempt download as individual tracks..."
 									rm -rf "$downloaddir"/*
 									sleep 0.5
-									continue
+									TrackMethod
+									downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
+									downloadedlyriccount=$(find "$downloaddir" -type f -iname "*.lrc" | wc -l)
+									downloadedalbumartcount=$(find "$downloaddir" -type f -iname "folder.*" | wc -l)
+									replaygaintrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
+									converttrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
+									echo "Downloaded: $downloadedtrackcount Tracks"
+									echo "Downloaded: $downloadedlyriccount Synced Lyrics"
+									echo "Downloaded: $downloadedalbumartcount Album Cover"
+									if [ "$tracktotal" != "$downloadedtrackcount" ]; then
+										echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
+										rm -rf "$downloaddir"/*
+										sleep 0.5
+										continue
+									fi
 								fi
 							fi
 									
