@@ -338,7 +338,7 @@ Convert () {
 			fi
 		else
 			echo "ERROR: opus-tools not installed, please install opus-tools to use this conversion feature"
-			sleep 5s
+			sleep 5
 		fi
 	fi
 	if [ "${quality}" = aac ]; then
@@ -370,7 +370,7 @@ Convert () {
 			fi
 		else
 			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
-			sleep 5s
+			sleep 5
 		fi
 	fi
 	if [ "${quality}" = alac ]; then
@@ -399,7 +399,7 @@ Convert () {
 			fi
 		else
 			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
-			sleep 5s
+			sleep 5
 		fi
 	fi
 }
@@ -618,13 +618,13 @@ lidarrartists () {
 			if find "$fullartistpath" -iname "$tempalbumjson" | read; then
 				if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 					rm "$fullartistpath/$artistalbumlistjson"
-					sleep 0.5
+					sleep 0.1
 				fi
 				jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 			else
 				if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 					rm "$fullartistpath/$artistalbumlistjson"
-					sleep 0.5
+					sleep 0.1
 				fi
 			fi
 		fi
@@ -666,7 +666,7 @@ lidarrartists () {
 						sanatizedfuncalbumname="${albumnamesanatized,,}"
 						
 						rm -rf "$downloaddir"/*
-						sleep 0.5
+						sleep 0.1
 						
 						if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "$tempalbumjson"; then
 							tracktotal=$(cat "$tempalbumjson" | jq -r ".nb_tracks")
@@ -714,11 +714,11 @@ lidarrartists () {
 														echo ""
 														if [ -d "$fullartistpath/$archivefoldername" ]; then
 															rm -rf "$fullartistpath/$archivefoldername"
-															sleep 0.5
+															sleep 0.1
 														fi
 														if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 															rm "$fullartistpath/$artistalbumlistjson"
-															sleep 0.5
+															sleep 0.1
 														fi
 														jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 													fi
@@ -737,11 +737,11 @@ lidarrartists () {
 														echo ""
 														if [ -d "$fullartistpath/$archivefoldername" ]; then
 															rm -rf "$fullartistpath/$archivefoldername"
-															sleep 0.5
+															sleep 0.1
 														fi
 														if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 															rm "$fullartistpath/$artistalbumlistjson"
-															sleep 0.5
+															sleep 0.1
 														fi
 														jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 													fi
@@ -755,11 +755,11 @@ lidarrartists () {
 												echo ""
 												if [ -d "$fullartistpath/$archivefoldername" ]; then
 													rm -rf "$fullartistpath/$archivefoldername"
-													sleep 0.5
+													sleep 0.1
 												fi
 												if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 													rm "$fullartistpath/$artistalbumlistjson"
-													sleep 0.5
+													sleep 0.1
 												fi
 												jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 											fi
@@ -769,11 +769,11 @@ lidarrartists () {
 											echo ""
 											if [ -d "$fullartistpath/$archivefoldername" ]; then
 												rm -rf "$fullartistpath/$archivefoldername"
-												sleep 1
+												sleep 0.1
 											fi
 											if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 												rm "$fullartistpath/$artistalbumlistjson"
-												sleep 0.5
+												sleep 0.1
 											fi
 											jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 										fi
@@ -787,11 +787,11 @@ lidarrartists () {
 											echo ""
 											if [ -d "$fullartistpath/$archivefoldername" ]; then
 												rm -rf "$fullartistpath/$archivefoldername"
-												sleep 0.5
+												sleep 0.1
 											fi
 											if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 												rm "$fullartistpath/$artistalbumlistjson"
-												sleep 0.5
+												sleep 0.1
 											fi
 											jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 										fi
@@ -853,7 +853,7 @@ lidarrartists () {
 													echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 14"
 												fi
 												rm -rf "$fullartistpath/$archivealbumfoldername"
-												sleep 0.5s
+												sleep 0.1
 											else
 												if [ "$debug" = "true" ]; then
 													echo "Incoming album: $albumname, same/less total tracks: $tracktotal vs $archivealbumtracktotal :: check 15"
@@ -906,7 +906,7 @@ lidarrartists () {
 														echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 14"
 													fi
 													rm -rf "$fullartistpath/$archivealbumfoldername"
-													sleep 0.5s
+													sleep 0.1
 												else
 													if [ "$debug" = "true" ]; then
 														echo "Incoming album: $albumname, same/less total tracks: $tracktotal vs $archivealbumtracktotal :: check 15"
@@ -960,7 +960,7 @@ lidarrartists () {
 								if [ "$tracktotal" != "$downloadedtrackcount" ]; then
 									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... re-attempt download as individual tracks..."
 									rm -rf "$downloaddir"/*
-									sleep 0.5
+									sleep 0.1
 									trackdlfallback=1
 									TrackMethod
 									DLAlbumArtwork
@@ -975,7 +975,7 @@ lidarrartists () {
 									if [ "$tracktotal" != "$downloadedtrackcount" ]; then
 										echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
 										rm -rf "$downloaddir"/*
-										sleep 0.5
+										sleep 0.1
 										continue
 									fi
 								fi
@@ -1033,7 +1033,7 @@ lidarrartists () {
 								rm "$tempalbumfile"
 							fi
 							rm -rf "$downloaddir"/*
-							sleep 0.5
+							sleep 0.1
 						else
 							echo "Error contacting Deezer for album information"
 						fi
@@ -1068,6 +1068,10 @@ lidarrartists () {
 		echo "Error contacting Deezer for artist information"
 	fi
 	if [ -d "$fullartistpath" ]; then
+		if [ -f "$fullartistpath/$tempartistjson" ]; then
+			rm "$fullartistpath/$tempartistjson"
+			sleep 0.1
+		fi
 		if [ -f "$tempartistjson"  ]; then
 			mv "$tempartistjson" "$fullartistpath"/
 		fi
@@ -1075,9 +1079,12 @@ lidarrartists () {
 			jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 		fi
 	fi
-	sleep 0.5
-
-
+	sleep 0.1
 }
 
 ArtistsLidarrReq
+
+#####################################################################################################
+#                                              Script End                                           #
+#####################################################################################################
+exit 0
