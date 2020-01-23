@@ -872,7 +872,7 @@ lidarrartists () {
 							if [ $trackdlfallback = 1 ]; then
 								TrackMethod
 							fi							
-										
+							DLAlbumArtwork		
 							downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
 							downloadedlyriccount=$(find "$downloaddir" -type f -iname "*.lrc" | wc -l)
 							downloadedalbumartcount=$(find "$downloaddir" -type f -iname "folder.*" | wc -l)
@@ -888,6 +888,7 @@ lidarrartists () {
 									rm -rf "$downloaddir"/*
 									sleep 0.5
 									TrackMethod
+									DLAlbumArtwork
 									downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
 									downloadedlyriccount=$(find "$downloaddir" -type f -iname "*.lrc" | wc -l)
 									downloadedalbumartcount=$(find "$downloaddir" -type f -iname "folder.*" | wc -l)
