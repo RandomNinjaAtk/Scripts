@@ -887,6 +887,7 @@ lidarrartists () {
 									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... re-attempt download as individual tracks..."
 									rm -rf "$downloaddir"/*
 									sleep 0.5
+									trackdlfallback=1
 									TrackMethod
 									DLAlbumArtwork
 									downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
