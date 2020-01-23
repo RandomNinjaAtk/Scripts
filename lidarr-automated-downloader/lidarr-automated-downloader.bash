@@ -47,13 +47,13 @@ ArtistsLidarrReq(){
 		artistdir="$(basename "$LidArtistPath")"
 		if [ "${DeezerArtistID}" = "" ]; then			
 			if [ -d "$LidArtistPath" ]; then
-				echo "Skip...\"$LidArtistNameCap\"... musicbrainz id: $url is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
+				echo "${artistnumber} of ${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
 				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
 					rm "$LidArtistPath/musicbrainzerror.log"
 				fi
 				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
 			fi
-			echo "Skip...\"$LidArtistNameCap\"... musicbrainz id: $url is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
+			echo "${artistnumber} of ${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
 			if [ -f "musicbrainzerror.log" ]; then
 				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
 					sleep 0.1
@@ -63,7 +63,7 @@ ArtistsLidarrReq(){
 			fi
 		else
 			if cat "daily.log" | grep "$LidArtistID" | read; then
-				echo "Already Checked Lidarr Artrist  ($artistnumber of $TotalLidArtistNames): \"$LidArtistNameCap\" (ID: $LidArtistID) for the day, skipping..."
+				echo "${artistnumber} of ${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
 			else			
 				lidarrartists
 				
