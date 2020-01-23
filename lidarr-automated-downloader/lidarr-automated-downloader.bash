@@ -621,7 +621,7 @@ lidarrartists () {
 									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .dlquality")"
 									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .foldername")"
 									archivebitrate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .bitrate")"
-									archivetrackcount=$(find "$archivefoldername" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
+									archivetrackcount=$(find "$fullartistpath/$archivefoldername" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
 									if [ "$targetformat" = "$archivequality" ]; then
 										if [ "$archivebitrate" = "lossless" ]; then											
 											if [ "$VerifyTrackCount" = true ]; then												
