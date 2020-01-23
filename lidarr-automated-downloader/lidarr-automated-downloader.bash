@@ -65,9 +65,6 @@ ArtistsLidarrReq(){
 				echo "Already Checked Lidarr Artrist: \"$LidArtistNameCap\" (ID: $LidArtistID) for the day, skipping..."
 			else			
 				lidarrartists
-
-				LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RefreshArtist\", \"artistID\": \"${LidArtistID}\"}" --header "X-Api-Key:${LidarrApiKey}" );
-				echo "Notified Lidarr to scan ${LidArtistNameCap}"
 				
 				if cat "daily.log" | grep "$LidArtistID" | read; then
 					sleep 0.1
@@ -1078,6 +1075,10 @@ lidarrartists () {
 		if [ -d "$fullartistpath" ]; then
 			jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 		fi
+		
+		LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RefreshArtist\", \"artistID\": \"${LidArtistID}\"}" --header "X-Api-Key:${LidarrApiKey}" );
+		echo "Notified Lidarr to scan ${LidArtistNameCap}"
+		
 	fi
 	sleep 0.1
 }
