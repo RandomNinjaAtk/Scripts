@@ -586,6 +586,9 @@ lidarrartists () {
 						albumnamesanatized="$(echo "$albumname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
 						sanatizedfuncalbumname="${albumnamesanatized,,}"
 						
+						rm -rf "$downloaddir"/*
+						sleep 0.5
+						
 						if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "$tempalbumjson"; then
 							tracktotal=$(cat "$tempalbumjson" | jq -r ".nb_tracks")
 							albumdartistid=$(cat "$tempalbumjson" | jq -r ".artist | .id")
@@ -827,6 +830,17 @@ lidarrartists () {
 							echo "Downloaded: $downloadedtrackcount Tracks"
 							echo "Downloaded: $downloadedlyriccount Synced Lyrics"
 							echo "Downloaded: $downloadedalbumartcount Album Cover"
+							if [ "$VerifyTrackCount" = true ]; then
+								if [ "$tracktotal" = "$downloadedtrackcount" ]; then
+									sleep 0.1
+								else
+									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
+									rm -rf "$downloaddir"/*
+									sleep 0.5
+									continue
+								fi
+							fi
+									
 							if [ "$replaygaintaggingflac" = true ]; then
 								if [ "$quality" = flac ]; then
 									Replaygain
