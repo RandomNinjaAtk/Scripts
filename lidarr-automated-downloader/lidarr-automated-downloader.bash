@@ -17,14 +17,6 @@ tempalbumjson="albuminfo.json"
 artistalbumlistjson="discography.json"
 
 ArtistsLidarrReq(){
-		
-	if ! [ -f "musicbrainzerror.log" ]; then
-		touch "musicbrainzerror.log"
-	fi
-	
-	if ! [ -f "daily.log" ]; then
-		touch "daily.log"
-	fi
 	
 	wantit=$(curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET  "$LidarrUrl/api/v1/Artist/")
 	TotalLidArtistNames=$(echo "${wantit}"|jq -r '.[].sortName' | wc -l)
@@ -37,6 +29,10 @@ ArtistsLidarrReq(){
 		mbid="${MBArtistID[$id]}"
 		
 		source ./config
+		
+		if ! [ -f "musicbrainzerror.log" ]; then
+			touch "musicbrainzerror.log"
+		fi
 		
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
 		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .id")"
@@ -67,6 +63,10 @@ ArtistsLidarrReq(){
 			else			
 				lidarrartists
 				
+				if ! [ -f "daily.log" ]; then
+					touch "daily.log"
+				fi
+		
 				if cat "daily.log" | grep "$LidArtistID" | read; then
 					sleep 0.1
 				else
