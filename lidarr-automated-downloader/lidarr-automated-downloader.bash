@@ -523,6 +523,18 @@ else
 	LyricDLType="Explicit Preferred"
 fi
 
+if [ "$VerifyTrackCount" = "true" ]; then
+	vtc="Enabled"
+else
+	vtc="Disabled"
+fi
+
+if [ "$upgrade" = "true" ]; then
+	dlupgrade="Enabled"
+else
+	dlupgrade="Disabled"
+fi
+
 ConfigSettings () {
 	echo "START DEEZER ARCHIVING"
 	echo ""
@@ -530,6 +542,13 @@ ConfigSettings () {
 	echo "Download Client: $deezloaderurl"
 	echo "Download Directory: $downloaddir"
 	echo "Download Quality: $quality"
+	if [ "$quality" = "opus" ]; then
+		echo "Download Bitrate: ${bitrate}k"
+	elif [ "$quality" = "mp3" ]; then
+		echo "Download Bitrate: ${bitrate}k"
+	fi
+	echo "Download Track Count Verification: $vtc"
+	echo "Download Quality Upgrade: $dlupgrade"
 	echo "Download Lyric Type: $LyricDLType"
 	echo "Total Artists To Process: $TotalLidArtistNames"
 	echo ""
