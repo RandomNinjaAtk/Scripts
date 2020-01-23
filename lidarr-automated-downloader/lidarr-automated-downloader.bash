@@ -27,10 +27,10 @@ ArtistsLidarrReq(){
 	
 	ConfigSettings
 	
-	MBArtistID="$(echo "${wantit}" | jq -r ".[$i].foreignArtistId")"
-	for url in ${$!MBArtistID[@]}; do
-		artistnumber=$(( $url + 1 ))
-		mbid="${MBArtistID[$url]}"
+	MBArtistID=($(echo "${wantit}" | jq -r ".[$i].foreignArtistId"))
+	for id in ${!MBArtistID[@]}; do
+		artistnumber=$(( $id + 1 ))
+		mbid="${MBArtistID[$id]}"
 		source ./config
 		
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
