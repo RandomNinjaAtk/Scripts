@@ -401,7 +401,9 @@ Verify () {
 					if flac -t --totally-silent "$fname"; then
 						echo "Verified Track: $filename"
 					else
+						echo "Track Verification Error: \"$filename\" deleted...retrying download via track method"
 						rm -rf "$downloaddir"/*
+						sleep 0.5
 						trackdlfallback=1
 					fi
 				done
