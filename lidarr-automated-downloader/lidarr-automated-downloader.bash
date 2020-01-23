@@ -598,11 +598,23 @@ lidarrartists () {
 		artistartwork=($(cat "$tempartistjson" | jq -r '.picture_xl'))
 		artistname="$(cat "$tempartistjson" | jq -r '.name')"
 		artistid="$(cat "$tempartistjson" | jq -r '.id')"
+		artistalbumtotal="$(cat "$tempartistjson" | jq -r '.nb_album')"
 		sanatizedartistname="$(echo "$artistname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
 		shortartistpath="$artistname ($artistid)"
-		fullartistpath="$LidArtistPath"
+		fullartistpath="$LidArtistPath"				
 		
 		if [ -d "$fullartistpath" ]; then
+			if [ -f "$fullartistpath/$tempartistjson" ]; then
+				if [ "$upgrade" = true ]; then
+					sleep 0.1
+				else
+					archivealbumtotal="$(cat "$fullartistpath/$tempartistjson" | jq -r '.nb_album')"
+					if [ "$artistalbumtotal" = "$archivealbumtotal" ]; then
+						echo "Skipping \"$artistname\"..."
+						return
+					fi
+				fi
+			fi
 			if find "$fullartistpath" -iname "$tempalbumjson" | read; then
 				if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 					rm "$fullartistpath/$artistalbumlistjson"
