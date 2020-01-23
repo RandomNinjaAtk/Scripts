@@ -581,6 +581,7 @@ lidarrartists () {
 					for album in ${!albumlist[@]}; do
 						trackdlfallback=0
 						albumnumber=$(( $album + 1 ))
+						albumid="${albumlist[$album]}"
 						albumurl="https://www.deezer.com/album/${albumlist[$album]}"
 						albumname=$(cat "$tempalbumlistjson" | jq -r ".data | .[]| select(.id=="${albumlist[$album]}") | .title")
 						albumnamesanatized="$(echo "$albumname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
@@ -602,7 +603,7 @@ lidarrartists () {
 							albumdurationdisplay=$(DurationCalc $albumduration)
 							albumtimeout=$(($albumduration*$albumtimeoutpercentage/100))
 							albumtimeoutdisplay=$(DurationCalc $albumtimeout)
-							albumfallbacktimout=$(($albumduration*2))
+							albumfallbacktimout=$(($albumduration*2))							
 							
 							if [ "$albumlyrictype" = true ]; then
 								albumlyrictype="Explicit"
@@ -830,8 +831,9 @@ lidarrartists () {
 								touch "$tempalbumfile"
 							fi
 							echo ""
-							echo "Archiving \"$artistname\" ($artistid) in progress..."
-							echo "Archiving Album: $albumname"
+							echo "Archiving \"$artistname\" (ID: $artistid) in progress..."
+							echo "Archiving Album: $albumname (ID: $albumid)"
+							echo "Album Link: $albumurl"
 							echo "Album Release Year: $albumyear"
 							echo "Album Release Type: $albumtype"
 							echo "Album Lyric Type: $albumlyrictype"
