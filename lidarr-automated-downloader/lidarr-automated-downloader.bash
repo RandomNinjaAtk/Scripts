@@ -22,6 +22,10 @@ ArtistsLidarrReq(){
 		touch "musicbrainzerror.log"
 	fi
 	
+	if ! [ -f "daily.log" ]; then
+		touch "daily.log"
+	fi
+	
 	wantit=$(curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET  "$LidarrUrl/api/v1/Artist/")
 	TotalLidArtistNames=$(echo "${wantit}"|jq -r '.[].sortName' | wc -l)
 	
@@ -51,19 +55,26 @@ ArtistsLidarrReq(){
 			echo "Skip...\"$LidArtistNameCap\"... musicbrainz id: $url is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
 			if [ -f "musicbrainzerror.log" ]; then
 				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
-					sleep 0.5
+					sleep 0.1
 				else
 					echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
 				fi
 			fi
 		else
-			if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
-				rm "$LidArtistPath/musicbrainzerror.log"
+			if cat "daily.log" | grep "$LidArtistID" | read; then
+				echo "Already Checked Lidarr Artrist: \"$LidArtistNameCap\" (ID: $LidArtistID) for the day, skipping..."
+			else			
+				lidarrartists
+
+				LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RefreshArtist\", \"artistID\": \"${LidArtistID}\"}" --header "X-Api-Key:${LidarrApiKey}" );
+				echo "Notified Lidarr to scan ${LidArtistNameCap}"
+				
+				if cat "daily.log" | grep "$LidArtistID" | read; then
+					sleep 0.1
+				else
+					echo "${LidArtistNameCap} :: $LidArtistID :: Daily Check Completed" >> "daily.log"
+				fi
 			fi
-			lidarrartists
-			
-			LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RefreshArtist\", \"artistID\": \"${LidArtistID}\"}" --header "X-Api-Key:${LidarrApiKey}" );
-			echo "Notified Lidarr to scan ${LidArtistNameCap}"
 		fi
 	done
 }
