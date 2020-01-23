@@ -18,8 +18,6 @@ artistalbumlistjson="discography.json"
 
 ArtistsLidarrReq(){
 		
-	ConfigSettings
-	
 	if ! [ -f "musicbrainzerror.log" ]; then
 		touch "musicbrainzerror.log"
 	fi
@@ -27,15 +25,18 @@ ArtistsLidarrReq(){
 	wantit=$(curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET  "$LidarrUrl/api/v1/Artist/")
 	TotalLidArtistNames=$(echo "${wantit}"|jq -r '.[].sortName' | wc -l)
 	
+	ConfigSettings
+	
 	MBArtistID="$(echo "${wantit}" | jq -r ".[$i].foreignArtistId")"
-	for url in $MBArtistID[@]; do
-		
+	for url in $!MBArtistID[@]; do
+		artistnumber=$(( $url + 1 ))
+		mbid="${MBArtistID[$url]}"
 		source ./config
 		
-		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .path")"
-		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .id")"
-		LidArtistNameCap="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${url}\") | .artistName")"
-		mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${url}?inc=url-rels&fmt=json")
+		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
+		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .id")"
+		LidArtistNameCap="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .artistName")"
+		mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
 		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
 		DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")
 		artistdir="$(basename "$LidArtistPath")"
@@ -45,14 +46,14 @@ ArtistsLidarrReq(){
 				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
 					rm "$LidArtistPath/musicbrainzerror.log"
 				fi
-				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$url/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
+				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
 			fi
 			echo "Skip... musicbrainz id: $url is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
 			if [ -f "musicbrainzerror.log" ]; then
-				if cat "musicbrainzerror.log" | grep "$url" | read; then
+				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
 					sleep 0.5
 				else
-					echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$url/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
+					echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
 				fi
 			fi
 		else
@@ -620,12 +621,12 @@ lidarrartists () {
 				fi
 				if [ "$totalnumberalbumlist" = 0 ]; then
 					echo ""
-					echo "Archiving: $artistname ($artistid)"
+					echo "Archiving: $artistname (ID: $artistid) ($artistnumber of $TotalLidArtistNames)"
 					echo "ERROR: No albums found"
 				else
 					echo ""
 					echo ""
-					echo "Archiving: $artistname ($artistid)"
+					echo "Archiving: $artistname (ID $artistid) ($artistnumber of $TotalLidArtistNames)"
 					echo "Searching for albums... $totalnumberalbumlist Albums found"
 					for album in ${!albumlist[@]}; do
 						trackdlfallback=0
@@ -903,7 +904,7 @@ lidarrartists () {
 								touch "$tempalbumfile"
 							fi
 							echo ""
-							echo "Archiving \"$artistname\" (ID: $artistid) in progress..."
+							echo "Archiving \"$artistname\" (ID: $artistid) ($artistnumber of $TotalLidArtistNames) in progress..."
 							echo "Archiving Album: $albumname (ID: $albumid)"
 							echo "Album Link: $albumurl"
 							echo "Album Release Year: $albumyear"
