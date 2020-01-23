@@ -642,7 +642,10 @@ lidarrartists () {
 													fi
 													jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 												fi
-											fi											
+											else
+												echo "Previously Downloaded \"$albumname\", skipping..."
+												continue
+											fi
 										elif [ "${bitrate}k" = "$archivebitrate" ]; then
 											if [ "$VerifyTrackCount" = true ]; then
 												if [ "$tracktotal" = "$archivetrackcount" ]; then
@@ -662,6 +665,9 @@ lidarrartists () {
 													fi
 													jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 												fi
+											else
+												echo "Previously Downloaded \"$albumname\", skipping..."
+												continue
 											fi
 										else
 											echo ""
