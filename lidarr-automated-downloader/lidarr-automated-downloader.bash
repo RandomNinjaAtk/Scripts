@@ -261,9 +261,12 @@ DownloadURL () {
 	fi
 	if [ $error = 1 ]; then
 		echo "$artistname :: $albumname :: $fallbackqualitytext :: $trackname (${trackid[$track]})" >> "download-track-error.log"
-	else
+	elif find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|mp3\)" -newer "$temptrackfile" | read; then
 		echo "Download Track $tracknumber of $tracktotal: $trackname (Format: $fallbackqualitytext; Length: $trackdurationdisplay)"
 		Verify
+	else
+		error=1
+		echo "$artistname :: $albumname :: $fallbackqualitytext :: $trackname (${trackid[$track]})" >> "download-track-error.log"
 	fi
 }
 
