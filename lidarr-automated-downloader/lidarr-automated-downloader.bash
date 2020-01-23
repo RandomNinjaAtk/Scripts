@@ -653,56 +653,89 @@ lidarrartists () {
 									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .foldername")"
 									archivebitrate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .bitrate")"
 									archivetrackcount=$(find "$fullartistpath/$archivefoldername" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
-									if [ "$targetformat" = "$archivequality" ]; then
-										if [ "$archivebitrate" = "lossless" ]; then											
-											if [ "$VerifyTrackCount" = true ]; then												
-												if [ "$tracktotal" = "$archivetrackcount" ]; then
+									if [ "$upgrade" = true ]; then
+										if [ "$targetformat" = "$archivequality" ]; then
+											if [ "$archivebitrate" = "lossless" ]; then											
+												if [ "$VerifyTrackCount" = true ]; then												
+													if [ "$tracktotal" = "$archivetrackcount" ]; then
+														echo "Previously Downloaded \"$albumname\", skipping..."
+														continue
+													else
+														echo ""
+														echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
+														echo ""
+														if [ -d "$fullartistpath/$archivefoldername" ]; then
+															rm -rf "$fullartistpath/$archivefoldername"
+															sleep 0.5
+														fi
+														if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+															rm "$fullartistpath/$artistalbumlistjson"
+															sleep 0.5
+														fi
+														jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+													fi
+												else
 													echo "Previously Downloaded \"$albumname\", skipping..."
 													continue
-												else
-													echo ""
-													echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
-													echo ""
-													if [ -d "$fullartistpath/$archivefoldername" ]; then
-														rm -rf "$fullartistpath/$archivefoldername"
-														sleep 0.5
-													fi
-													if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
-														rm "$fullartistpath/$artistalbumlistjson"
-														sleep 0.5
-													fi
-													jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 												fi
-											else
-												echo "Previously Downloaded \"$albumname\", skipping..."
-												continue
-											fi
-										elif [ "${bitrate}k" = "$archivebitrate" ]; then
-											if [ "$VerifyTrackCount" = true ]; then
-												if [ "$tracktotal" = "$archivetrackcount" ]; then
+											elif [ "${bitrate}k" = "$archivebitrate" ]; then
+												if [ "$VerifyTrackCount" = true ]; then
+													if [ "$tracktotal" = "$archivetrackcount" ]; then
+														echo "Previously Downloaded \"$albumname\", skipping..."
+														continue
+													else
+														echo ""
+														echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
+														echo ""
+														if [ -d "$fullartistpath/$archivefoldername" ]; then
+															rm -rf "$fullartistpath/$archivefoldername"
+															sleep 0.5
+														fi
+														if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+															rm "$fullartistpath/$artistalbumlistjson"
+															sleep 0.5
+														fi
+														jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+													fi
+												else
 													echo "Previously Downloaded \"$albumname\", skipping..."
 													continue
-												else
-													echo ""
-													echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
-													echo ""
-													if [ -d "$fullartistpath/$archivefoldername" ]; then
-														rm -rf "$fullartistpath/$archivefoldername"
-														sleep 0.5
-													fi
-													if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
-														rm "$fullartistpath/$artistalbumlistjson"
-														sleep 0.5
-													fi
-													jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 												fi
 											else
-												echo "Previously Downloaded \"$albumname\", skipping..."
-												continue
+												echo ""
+												echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
+												echo ""
+												if [ -d "$fullartistpath/$archivefoldername" ]; then
+													rm -rf "$fullartistpath/$archivefoldername"
+													sleep 0.5
+												fi
+												if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+													rm "$fullartistpath/$artistalbumlistjson"
+													sleep 0.5
+												fi
+												jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 											fi
 										else
 											echo ""
 											echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
+											echo ""
+											if [ -d "$fullartistpath/$archivefoldername" ]; then
+												rm -rf "$fullartistpath/$archivefoldername"
+												sleep 1
+											fi
+											if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+												rm "$fullartistpath/$artistalbumlistjson"
+												sleep 0.5
+											fi
+											jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+										fi
+									elif [ "$VerifyTrackCount" = true ]; then												
+										if [ "$tracktotal" = "$archivetrackcount" ]; then
+											echo "Previously Downloaded \"$albumname\", skipping..."
+											continue
+										else
+											echo ""
+											echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
 											echo ""
 											if [ -d "$fullartistpath/$archivefoldername" ]; then
 												rm -rf "$fullartistpath/$archivefoldername"
@@ -715,18 +748,8 @@ lidarrartists () {
 											jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 										fi
 									else
-										echo ""
-										echo "Previously Downloaded \"$albumname\", does not match requested quality... attempting upgrade..."
-										echo ""
-										if [ -d "$fullartistpath/$archivefoldername" ]; then
-											rm -rf "$fullartistpath/$archivefoldername"
-											sleep 1
-										fi
-										if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
-											rm "$fullartistpath/$artistalbumlistjson"
-											sleep 0.5
-										fi
-										jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+										echo "Previously Downloaded \"$albumname\", skipping..."
+										continue
 									fi
 								fi
 							fi
