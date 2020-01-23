@@ -630,7 +630,7 @@ lidarrartists () {
 													continue
 												else
 													echo ""
-													echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
+													echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
 													echo ""
 													if [ -d "$fullartistpath/$archivefoldername" ]; then
 														rm -rf "$fullartistpath/$archivefoldername"
@@ -653,7 +653,7 @@ lidarrartists () {
 													continue
 												else
 													echo ""
-													echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
+													echo "ERROR: Archived Track Count ($archivetrackcount) and Album Track Count ($tracktotal) do not match, missing files... attempting re-download..."
 													echo ""
 													if [ -d "$fullartistpath/$archivefoldername" ]; then
 														rm -rf "$fullartistpath/$archivefoldername"
