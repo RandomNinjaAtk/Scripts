@@ -30,6 +30,7 @@ tracktimeoutpercentage=25 # Set the number between 1 and 100 :: This number is u
 
 ############ File Options
 quality="flac" # flac or mp3 or opus or aac or alac :: Downloads flac or mp3 and then converts to requested format
+upgrade="false" # true = enabled :: Enables or Disables upgrading dl quality based on quality type and bitrate changes.
 bitrate="192" # bitrate quality for OPUS and AAC formats only
 replaygaintaggingflac="true" # true = enabled :: Adds replaygain audio normalization tags to flac files
 replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normalization tags to opus files
