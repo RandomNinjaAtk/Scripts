@@ -205,7 +205,7 @@ if [ -x "$(command -v crontab)" ]; then
 		echo "adding cron job to crontab..."
 		echo "0 */12 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\""  >> "/etc/crontab"
 	fi
-	if grep "musicbrainzerror.log" /etc/crontab; then
+	if grep "daily.log" /etc/crontab; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
