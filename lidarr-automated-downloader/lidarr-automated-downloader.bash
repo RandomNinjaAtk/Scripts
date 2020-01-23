@@ -270,7 +270,7 @@ DownloadURL () {
 TrackMethod () {
 	rm -rf "$downloaddir"/*
 	sleep 0.5
-	echo "Donwloading $tracktotal Tracks..."
+	echo "Downloading $tracktotal Tracks..."
 	trackid=($(cat "$tempalbumjson" | jq -r ".tracks | .data | .[] | .id"))
 	for track in ${!trackid[@]}; do
 		tracknumber=$(( $track + 1 ))
