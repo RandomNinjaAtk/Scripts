@@ -59,6 +59,10 @@ ArtistsLidarrReq(){
 				fi
 			fi
 		else
+			if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
+				rm "$LidArtistPath/musicbrainzerror.log"
+			fi
+			
 			if cat "daily.log" | grep "$LidArtistID" | read; then
 				echo "${artistnumber} of ${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
 			else			
