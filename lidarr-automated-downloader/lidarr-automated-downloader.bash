@@ -631,6 +631,11 @@ lidarrartists () {
 			echo ""
 			echo "Error no artist returned with Deezer Artist ID \"$artistid\""
 		else
+			if [ -f "$tempalbumlistjson" ]; then
+				rm "$tempalbumlistjson"
+				sleep 0.1
+			fi
+						
 			if curl -sL --fail "https://api.deezer.com/artist/$artistid/albums&limit=1000" -o "$tempalbumlistjson"; then
 				if [ "$LyricType" = explicit ]; then
 					LyricDLType=" Explicit"
@@ -664,10 +669,16 @@ lidarrartists () {
 						sanatizedfuncalbumname="${albumnamesanatized,,}"
 						
 						rm -rf "$downloaddir"/*
+						
+						if [ -f "$tempalbumjson" ]; then
+							rm "$tempalbumjson"
+						fi
+						
 						sleep 0.1
 						
 						if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "$tempalbumjson"; then
 							tracktotal=$(cat "$tempalbumjson" | jq -r ".nb_tracks")
+							actualtracktotal=$(cat "$tempalbumjson" | jq -r ".tracks.data | .[] | .id" | wc -l)
 							albumdartistid=$(cat "$tempalbumjson" | jq -r ".artist | .id")
 							albumlyrictype="$(cat "$tempalbumjson" | jq -r ".explicit_lyrics")"
 							albumartworkurl="$(cat "$tempalbumjson" | jq -r ".cover_xl")"
@@ -691,7 +702,7 @@ lidarrartists () {
 							
 							if [ "$albumdartistid" -ne "$artistid" ]; then
 								continue
-							fi
+							fi														
 							
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
@@ -800,6 +811,11 @@ lidarrartists () {
 								fi
 							fi
 							
+							if [ "$VerifyTrackCount" = true ]; then
+								if [ "$tracktotal" -ne "$actualtracktotal" ]; then
+									continue
+								fi
+							fi
 
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
 								if [ "$debug" = "true" ]; then
@@ -952,32 +968,7 @@ lidarrartists () {
 							converttrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
 							echo "Downloaded: $downloadedtrackcount Tracks"
 							echo "Downloaded: $downloadedlyriccount Synced Lyrics"
-							echo "Downloaded: $downloadedalbumartcount Album Cover"
-							
-							if [ "$VerifyTrackCount" = true ]; then
-								if [ "$tracktotal" != "$downloadedtrackcount" ]; then
-									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... re-attempt download as individual tracks..."
-									rm -rf "$downloaddir"/*
-									sleep 0.1
-									trackdlfallback=1
-									TrackMethod
-									DLAlbumArtwork
-									downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
-									downloadedlyriccount=$(find "$downloaddir" -type f -iname "*.lrc" | wc -l)
-									downloadedalbumartcount=$(find "$downloaddir" -type f -iname "folder.*" | wc -l)
-									replaygaintrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
-									converttrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
-									echo "Downloaded: $downloadedtrackcount Tracks"
-									echo "Downloaded: $downloadedlyriccount Synced Lyrics"
-									echo "Downloaded: $downloadedalbumartcount Album Cover"
-									if [ "$tracktotal" != "$downloadedtrackcount" ]; then
-										echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
-										rm -rf "$downloaddir"/*
-										sleep 0.1
-										continue
-									fi
-								fi
-							fi
+							echo "Downloaded: $downloadedalbumartcount Album Cover"										
 									
 							if [ "$replaygaintaggingflac" = true ]; then
 								if [ "$quality" = flac ]; then
