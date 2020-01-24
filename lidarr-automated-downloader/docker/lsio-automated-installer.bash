@@ -207,13 +207,13 @@ if [ -x "$(command -v crontab)" ]; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
-		echo "0 18 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\""  >> "/etc/crontab"
+		echo "0 18 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\" && touch \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\""  >> "/etc/crontab"
 	fi
 	if grep "daily.log" /etc/crontab; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
-		echo "5 18 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/daily.log\""  >> "/etc/crontab"
+		echo "5 18 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/daily.log\" && touch \"/config/scripts/lidarr-automated-downloader/daily.log\""  >> "/etc/crontab"
 	fi
 	service cron restart
 else
