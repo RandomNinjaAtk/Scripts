@@ -969,7 +969,32 @@ lidarrartists () {
 							echo "Downloaded: $downloadedtrackcount Tracks"
 							echo "Downloaded: $downloadedlyriccount Synced Lyrics"
 							echo "Downloaded: $downloadedalbumartcount Album Cover"										
-									
+								
+							if [ "$VerifyTrackCount" = true ]; then
+								if [ "$tracktotal" != "$downloadedtrackcount" ]; then
+									echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... re-attempt download as individual tracks..."
+									rm -rf "$downloaddir"/*
+									sleep 0.1
+									trackdlfallback=1
+									TrackMethod
+									DLAlbumArtwork
+									downloadedtrackcount=$(find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
+									downloadedlyriccount=$(find "$downloaddir" -type f -iname "*.lrc" | wc -l)
+									downloadedalbumartcount=$(find "$downloaddir" -type f -iname "folder.*" | wc -l)
+									replaygaintrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
+									converttrackcount=$(find "$downloaddir" -type f -iname "*.flac" | wc -l)
+									echo "Downloaded: $downloadedtrackcount Tracks"
+									echo "Downloaded: $downloadedlyriccount Synced Lyrics"
+									echo "Downloaded: $downloadedalbumartcount Album Cover"
+									if [ "$tracktotal" != "$downloadedtrackcount" ]; then
+										echo "ERROR: Downloaded Track Count ($downloadedtrackcount) and Album Track Count ($tracktotal) do not match, missing files... skipping import..."
+										rm -rf "$downloaddir"/*
+										sleep 0.1
+										continue
+									fi
+								fi
+							fi
+								
 							if [ "$replaygaintaggingflac" = true ]; then
 								if [ "$quality" = flac ]; then
 									Replaygain
