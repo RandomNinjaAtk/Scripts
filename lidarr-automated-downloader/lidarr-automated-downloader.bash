@@ -296,12 +296,15 @@ TrackMethod () {
 			tracktimeout="60"
 			trackfallbacktimout=$(($tracktimeout*2))
 		fi
-		if [ ! -f "$temptrackfile" ]; then
-			touch "$temptrackfile"
-		fi
-			DownloadURL
 		if [ -f "$temptrackfile" ]; then
 			rm "$temptrackfile"
+			sleep 0.1
+		fi
+		touch "$temptrackfile"
+		DownloadURL
+		if [ -f "$temptrackfile" ]; then
+			rm "$temptrackfile"
+			sleep 0.1
 		fi
 	done
 }
