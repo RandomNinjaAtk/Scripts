@@ -41,8 +41,7 @@ ArtistsLidarrReq(){
 		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
 		DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")
 		artistdir="$(basename "$LidArtistPath")"
-		if [ "${DeezerArtistID}" = "" ]; then
-			echo "${DeezerArtistID}"
+		if [ -z "${DeezerArtistID}" ]; then
 			if [ -d "$LidArtistPath" ]; then
 				echo "${artistnumber} of ${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
 				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
