@@ -62,15 +62,30 @@ ArtistsLidarrReq(){
 				rm "$LidArtistPath/musicbrainzerror.log"
 			fi
 			
-			if cat "daily.log" | grep "$LidArtistID" | read; then
-				echo "${artistnumber} of ${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
-			else			
+			if [ "$dailycheck" = true ]; then
+
+				if cat "daily.log" | grep "$LidArtistID" | read; then
+					echo "${artistnumber} of ${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
+				else			
+					lidarrartists
+
+					if ! [ -f "daily.log" ]; then
+						touch "daily.log"
+					fi
+
+					if cat "daily.log" | grep "$LidArtistID" | read; then
+						sleep 0.1
+					else
+						echo "${LidArtistNameCap} :: $LidArtistID :: Daily Check Completed" >> "daily.log"
+					fi
+				fi
+			else
 				lidarrartists
-				
+
 				if ! [ -f "daily.log" ]; then
 					touch "daily.log"
 				fi
-		
+				
 				if cat "daily.log" | grep "$LidArtistID" | read; then
 					sleep 0.1
 				else
