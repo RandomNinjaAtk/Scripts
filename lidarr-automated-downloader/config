@@ -37,4 +37,5 @@ replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normaliz
 
 ############ Other Options
 debug="false" # true = enabled :: Increases cli output for diagnosing
+dailycheck="false" # true = enabled :: Enabling this will prevent checking artitsts that are found in the "daily.log" file, best used with a cron job to clear this file once per day
 
