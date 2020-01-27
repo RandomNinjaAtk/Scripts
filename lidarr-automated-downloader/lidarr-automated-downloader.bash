@@ -43,13 +43,13 @@ ArtistsLidarrReq(){
 		artistdir="$(basename "$LidArtistPath")"
 		if [ -z "${DeezerArtistID}" ]; then
 			if [ -d "$LidArtistPath" ]; then
-				echo "${artistnumber} of ${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
+				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
 				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
 					rm "$LidArtistPath/musicbrainzerror.log"
 				fi
 				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
 			fi
-			echo "${artistnumber} of ${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
+			echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
 			if [ -f "musicbrainzerror.log" ]; then
 				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
 					sleep 0.1
@@ -65,7 +65,7 @@ ArtistsLidarrReq(){
 			if [ "$dailycheck" = true ]; then
 
 				if cat "daily.log" | grep "$LidArtistID" | read; then
-					echo "${artistnumber} of ${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
+					echo "${artistnumber}/${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
 				else			
 					lidarrartists
 
@@ -630,7 +630,7 @@ lidarrartists () {
 				else
 					archivealbumtotal="$(cat "$fullartistpath/$tempartistjson" | jq -r '.nb_album')"
 					if [ "$artistalbumtotal" = "$archivealbumtotal" ]; then
-						echo "${artistnumber} of ${TotalLidArtistNames}: Skipping \"$artistname\"... no new albums albums to process..."
+						echo "${artistnumber}/${TotalLidArtistNames}: Skipping \"$artistname\"... no new albums albums to process..."
 						return
 					fi
 				fi
