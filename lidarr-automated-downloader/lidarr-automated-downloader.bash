@@ -920,11 +920,13 @@ lidarrartists () {
 										if [ "$debug" = "true" ]; then
 											echo "Dupe found $albumname :: check 10"
 										fi
-										if [ "$archivealbumlyrictype" = "Explicit" ]; then
-											if [ "$debug" = "true" ]; then
-												echo "Archived album: $albumname is Explicit, Skipping... :: check 11"
+										if [ "$archivealbumlyrictype" = "Explicit" ]; then											
+											if [ "albumtype" = "archivealbumreleasetype" ]; then
+												if [ "$debug" = "true" ]; then
+													echo "Archived album: $albumname is Explicit, Skipping... :: check 11"
+												fi
+												continue											
 											fi
-											continue
 										fi
 
 										if [ "$archivealbumlyrictype" = "Clean" ]; then
