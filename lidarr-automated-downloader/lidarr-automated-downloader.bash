@@ -630,7 +630,7 @@ lidarrartists () {
 				else
 					archivealbumtotal="$(cat "$fullartistpath/$tempartistjson" | jq -r '.nb_album')"
 					if [ "$artistalbumtotal" = "$archivealbumtotal" ]; then
-						echo "Skipping \"$artistname\"..."
+						echo "${artistnumber} of ${TotalLidArtistNames}: Skipping \"$artistname\"... no new albums albums to process..."
 						return
 					fi
 				fi
