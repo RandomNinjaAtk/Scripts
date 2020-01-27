@@ -843,20 +843,23 @@ lidarrartists () {
 								if [ "$debug" = "true" ]; then
 									echo ""
 								fi
-								arcsantitle="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .sanatized_album_name")"
-								if [ "$arcsantitle" = "$sanatizedfuncalbumname" ]; then
-									archivealbumname="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .title")"
-									archivealbumlyrictype="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .explicit_lyrics")"
-									archivealbumtracktotal="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .nb_tracks")"
-									archivealbumreleasetype="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .record_type")"
-									archivealbumdate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .release_date")"
-									archivealbumfoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .foldername")"
-									arhcivealbumyear="$(echo ${archivealbumdate::4})"
+								
+								archivealbumid="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.record_type==\"$albumtype\") | select(.sanatized_album_name==\"$sanatizedfuncalbumname\") | .id")"
+								if [ ! -z "$archivealbumid" ]; then
+									archivealbumname="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$archivealbumid) | .title")"
+									archivealbumlyrictype="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$archivealbumid) | .explicit_lyrics")"
+									archivealbumtracktotal="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$archivealbumid) | .nb_tracks")"
+									archivealbumreleasetype="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$archivealbumid) | .record_type")"
+									archivealbumdate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$archivealbumid) | .release_date")"
+									archivealbumfoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$archivealbumid) | .foldername")"
+									archivealbumyear="$(echo ${archivealbumdate::4})"
+									
 									if [ "$archivealbumlyrictype" = true ]; then
 										archivealbumlyrictype="Explicit"
 									elif [ "$archivealbumlyrictype" = false ]; then
 										archivealbumlyrictype="Clean"
 									fi
+									
 									if [ "$debug" = "true" ]; then
 										echo ""
 										echo "Archive Match: $arcsantitle (Archive) | grep -x $sanatizedfuncalbumname (Incoming)"
@@ -875,91 +878,69 @@ lidarrartists () {
 										echo "Archive: $archivealbumtracktotal Tracks"
 										echo "Archive: $archivealbumreleasetype"
 										echo "Archive: $archivealbumlyrictype"
-										echo "Archive: $arhcivealbumyear"
+										echo "Archive: $archivealbumyear"
 										echo "Archive: $archivealbumfoldername"
 										echo ""
 									fi
+									
 									if [ "$albumlyrictype" = "Explicit" ]; then
 										if [ "$debug" = "true" ]; then
 											echo "Dupe found $albumname :: check 1"
 										fi
-										if [ "albumtype" = "archivealbumreleasetype" ]; then											
+										
+										if [ "$albumyear" -eq "$archivealbumyear" ]; then
+											if [ "$debug" = "true" ]; then
+												echo "Incoming album: $albumname has same year as existing :: check 2"
+											fi
 											if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
 												if [ "$debug" = "true" ]; then
-													echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 14"
+													echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 3"
 												fi
 												rm -rf "$fullartistpath/$archivealbumfoldername"
 												sleep 0.1
 											else
-												if [ "$debug" = "true" ]; then
-													echo "Incoming album: $albumname, same/less total tracks: $tracktotal vs $archivealbumtracktotal :: check 15"
-												fi
-												
-												if [ "$albumyear" = "$arhcivealbumyear" ]; then
-													if [ "$debug" = "true" ]; then
-														echo "Incoming album: $albumname has same year as existing :: check 2"
-													fi
-													continue
-												else
-													if [ "$debug" = "true" ]; then
-														echo "Year does not match new: $albumyear; archive: $arhcivealbumyear :: check 3"
-													fi
-												fi
-											fi
-										
-										else
-											if [ "$archivealbumfoldername" = "$libalbumfolder" ]; then
-												if [ "$debug" = "true" ]; then
-													echo "Incoming album is different, new: $libalbumfolder vs archive: $archivealbumfoldername :: check 3"
-												fi
 												continue
 											fi
-										fi										
+										else
+											if [ "$debug" = "true" ]; then
+												echo "Year does not match new: $albumyear; archive: $arhcivealbumyear :: check 4"
+											fi
+										fi
 									fi
+									
 									if [ "$albumlyrictype" = "Clean" ]; then
 										if [ "$debug" = "true" ]; then
 											echo "Dupe found $albumname :: check 10"
 										fi
-										if [ "$archivealbumlyrictype" = "Explicit" ]; then											
-											if [ "albumtype" = "archivealbumreleasetype" ]; then
-												if [ "$debug" = "true" ]; then
-													echo "Archived album: $albumname is Explicit, Skipping... :: check 11"
-												fi
-												continue											
-											fi
-										fi
-
-										if [ "$archivealbumlyrictype" = "Clean" ]; then
+										if [ "$archivealbumlyrictype" = "Explicit" ]; then
 											if [ "$debug" = "true" ]; then
-												echo "Archive album is also clean :: check 12"
+												echo "Archived album: $archivealbumname is Explicit, Skipping... :: check 11"
 											fi
-											if [ "$albumtype" = "$archivealbumreleasetype" ]; then
+											continue											
+										fi
+										
+										if [ "$albumyear" -eq "$archivealbumyear" ]; then
+											if [ "$debug" = "true" ]; then
+												echo "Incoming album: $albumname has same year as existing :: check 12"
+											fi
+											if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
 												if [ "$debug" = "true" ]; then
-													echo "Incoming and Archive album: $albumname are both $albumtype :: check 13"
+													echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 13"
 												fi
-												if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
-													if [ "$debug" = "true" ]; then
-														echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 14"
-													fi
-													rm -rf "$fullartistpath/$archivealbumfoldername"
-													sleep 0.1
-												else
-													if [ "$debug" = "true" ]; then
-														echo "Incoming album: $albumname, same/less total tracks: $tracktotal vs $archivealbumtracktotal :: check 15"
-													fi
-													continue
-												fi											
+												rm -rf "$fullartistpath/$archivealbumfoldername"
+												sleep 0.1
 											else
-												if [ "$archivealbumfoldername" = "$libalbumfolder" ]; then
-													if [ "$debug" = "true" ]; then
-														echo "Incoming album is different, new: $libalbumfolder vs archive: $archivealbumfoldername :: check 18"														
-													fi
-													continue
-												fi
+												continue
+											fi
+										else
+											if [ "$debug" = "true" ]; then
+												echo "Year does not match new: $albumyear; archive: $arhcivealbumyear :: check 14"
 											fi
 										fi
+										
 									fi
 								fi
+								
 								if [ "$debug" = "true" ]; then
 									echo ""
 									sleep 3
