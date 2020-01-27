@@ -911,9 +911,8 @@ lidarrartists () {
 											if [ "$archivealbumfoldername" = "$libalbumfolder" ]; then
 												if [ "$debug" = "true" ]; then
 													echo "Incoming album is different, new: $libalbumfolder vs archive: $archivealbumfoldername :: check 3"
-												else
-													continue
 												fi
+												continue
 											fi
 										fi										
 									fi
@@ -967,10 +966,9 @@ lidarrartists () {
 											else
 												if [ "$archivealbumfoldername" = "$libalbumfolder" ]; then
 													if [ "$debug" = "true" ]; then
-														echo "Incoming album is different, new: $libalbumfolder vs archive: $archivealbumfoldername :: check 18"
-													else
-														continue
+														echo "Incoming album is different, new: $libalbumfolder vs archive: $archivealbumfoldername :: check 18"														
 													fi
+													continue
 												fi
 											fi
 										fi
