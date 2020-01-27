@@ -932,11 +932,10 @@ lidarrartists () {
 											if [ "$debug" = "true" ]; then
 												echo "Archive album is also clean :: check 12"
 											fi
-											if [ "$albumtype" = "single" ] && [ "$archivealbumreleasetype" = "single" ] && [ "$archivealbumname" != "$albumname" ]; then
+											if [ "$albumtype" = "single" ] && [ "$archivealbumreleasetype" = "single" ]; then
 												if [ "$debug" = "true" ]; then
-													echo "Incoming and Archive album: $albumname are both $albumlyrictype and $archivealbumname != $albumname :: check 13"
+													echo "Incoming and Archive album: $albumname are both $albumtype :: check 13"
 												fi
-											else
 												if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
 													if [ "$debug" = "true" ]; then
 														echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 14"
@@ -948,6 +947,30 @@ lidarrartists () {
 														echo "Incoming album: $albumname, same/less total tracks: $tracktotal vs $archivealbumtracktotal :: check 15"
 													fi
 													continue
+												fi
+											elif [ "$albumtype" = "album" ] && [ "$archivealbumreleasetype" = "album" ]; then
+												if [ "$debug" = "true" ]; then
+													echo "Incoming and Archive album: $albumname are both $albumtype :: check 13"
+												fi
+												if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
+													if [ "$debug" = "true" ]; then
+														echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 16"
+													fi
+													rm -rf "$fullartistpath/$archivealbumfoldername"
+													sleep 0.1
+												else
+													if [ "$debug" = "true" ]; then
+														echo "Incoming album: $albumname, same/less total tracks: $tracktotal vs $archivealbumtracktotal :: check 17"
+													fi
+													continue
+												fi
+											else
+												if [ "$archivealbumfoldername" = "$libalbumfolder" ]; then
+													if [ "$debug" = "true" ]; then
+														echo "Incoming album is different, new: $libalbumfolder vs archive: $archivealbumfoldername :: check 18"
+													else
+														continue
+													fi
 												fi
 											fi
 										fi
