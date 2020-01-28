@@ -887,23 +887,30 @@ lidarrartists () {
 										if [ "$debug" = "true" ]; then
 											echo "Dupe found $albumname :: check 1"
 										fi
-										
-										if [ "$albumyear" -eq "$archivealbumyear" ]; then
+										if [ "$archivealbumlyrictype" = "Clean" ]; then
 											if [ "$debug" = "true" ]; then
-												echo "Incoming album: $albumname has same year as existing :: check 2"
+												echo "Incoming album is explicit, exixsiting is clean, upgrading... :: check 2"
 											fi
-											if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
+											rm -rf "$fullartistpath/$archivealbumfoldername"
+											sleep 0.1
+										else										
+											if [ "$albumyear" -eq "$archivealbumyear" ]; then
 												if [ "$debug" = "true" ]; then
-													echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 3"
+													echo "Incoming album: $albumname has same year as existing :: check 3"
 												fi
-												rm -rf "$fullartistpath/$archivealbumfoldername"
-												sleep 0.1
+												if [ "$tracktotal" -gt "$archivealbumtracktotal" ]; then
+													if [ "$debug" = "true" ]; then
+														echo "Incoming album: $albumname, has more total tracks: $tracktotal vs $archivealbumtracktotal :: check 4"
+													fi
+													rm -rf "$fullartistpath/$archivealbumfoldername"
+													sleep 0.1
+												else
+													continue
+												fi
 											else
-												continue
-											fi
-										else
-											if [ "$debug" = "true" ]; then
-												echo "Year does not match new: $albumyear; archive: $arhcivealbumyear :: check 4"
+												if [ "$debug" = "true" ]; then
+													echo "Year does not match new: $albumyear; archive: $arhcivealbumyear :: check 5"
+												fi
 											fi
 										fi
 									fi
