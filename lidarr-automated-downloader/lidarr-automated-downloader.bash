@@ -41,16 +41,9 @@ ArtistsLidarrReq(){
 		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
 		DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")
 		artistdir="$(basename "$LidArtistPath")"
-		if [ -z "${DeezerArtistID}" ]; then
-			if [ -d "$LidArtistPath" ]; then
-				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$LidArtistPath/musicbrainzerror.log\" for more detail..."
-				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
-					rm "$LidArtistPath/musicbrainzerror.log"
-				fi
-				echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "$LidArtistPath/musicbrainzerror.log"
-			fi
-			echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"musicbrainzerror.log\" for more detail..."
+		if [ -z "${DeezerArtistID}" ]; then			
 			if [ -f "musicbrainzerror.log" ]; then
+				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
 				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
 					sleep 0.1
 				else
