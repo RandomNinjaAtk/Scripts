@@ -862,8 +862,6 @@ lidarrartists () {
 									
 									if [ "$debug" = "true" ]; then
 										echo ""
-										echo "Archive Match: $arcsantitle (Archive) | grep -x $sanatizedfuncalbumname (Incoming)"
-										echo ""
 										echo "Dedupe info:"
 										echo "Incoming Album: $albumname"
 										echo "Incoming Album: $sanatizedfuncalbumname"
@@ -874,7 +872,6 @@ lidarrartists () {
 										echo "Incoming Album: $libalbumfolder"
 										echo ""
 										echo "Archive: $archivealbumname"
-										echo "Archive: $arcsantitle"
 										echo "Archive: $archivealbumtracktotal Tracks"
 										echo "Archive: $archivealbumreleasetype"
 										echo "Archive: $archivealbumlyrictype"
