@@ -19,6 +19,8 @@ UnkownAudioLanguage="eng" # Sets unknown language tracks to the language specifi
 MatchVideoLanguage="true" # Sets video language to match perferred language
 #===============FUNCTIONS==============
 
+set -e
+
 echo ""
 echo "=========================="
 if find "$1" -type f  -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | read; then
