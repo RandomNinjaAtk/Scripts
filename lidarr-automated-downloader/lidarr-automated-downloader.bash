@@ -21,6 +21,32 @@ ArtistsLidarrReq(){
 	wantit=$(curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET  "$LidarrUrl/api/v1/Artist/")
 	TotalLidArtistNames=$(echo "${wantit}"|jq -r '.[].sortName' | wc -l)
 	
+	if [ "$quality" = flac ]; then
+		dlquality="flac"
+		bitrate="lossless"
+		targetformat="FLAC"
+	elif [ "$quality" = mp3 ]; then
+		dlquality="320"
+		bitrate="320"
+		targetformat="MP3"
+	elif [ "$quality" = alac ]; then
+		dlquality="flac"
+		targetformat="ALAC"
+		bitrate="lossless"
+	elif [ "$quality" = opus ]; then
+		dlquality="flac"
+		targetformat="OPUS"
+		if [ -z "$bitrate" ]; then
+			bitrate="128"
+		fi
+	elif [ "$quality" = aac ]; then
+		dlquality="flac"
+		targetformat="AAC"
+		if [ -z "$bitrate" ]; then
+			bitrate="320"
+		fi
+	fi
+	
 	ConfigSettings
 	
 	MBArtistID=($(echo "${wantit}" | jq -r ".[$i].foreignArtistId"))
@@ -197,8 +223,10 @@ DownloadURL () {
 		if [ $fallback = 1 ]; then
 			if [ "$dlquality" = flac ]; then
 				fallbackquality="320"
+				bitrate="320"
 			elif [ "$dlquality" = 320 ]; then
 				fallbackquality="128"
+				bitrate="128"
 			fi
 			if curl -s --request GET "$deezloaderurl/api/download/?url=$trackurl&quality=$fallbackquality" >/dev/null; then
 				sleep $dlcheck
@@ -230,6 +258,7 @@ DownloadURL () {
 		fi
 		if [ $fallbackbackup = 1 ]; then
 			fallbackquality="128"
+			bitrate="128"
 			if curl -s --request GET "$deezloaderurl/api/download/?url=$trackurl&quality=$fallbackquality" >/dev/null; then
 				sleep $dlcheck
 				let l=0
@@ -306,9 +335,6 @@ TrackMethod () {
 
 Convert () {
 	if [ "${quality}" = opus ]; then
-		if [ -z "$bitrate" ]; then
-			bitrate="128"
-		fi
 		if [ -x "$(command -v opusenc)" ]; then
 			if find "${downloaddir}/" -name "*.flac" | read; then
 				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
@@ -338,9 +364,6 @@ Convert () {
 		fi
 	fi
 	if [ "${quality}" = aac ]; then
-		if [ -z "$bitrate" ]; then
-			bitrate="320"
-		fi
 		if [ -x "$(command -v ffmpeg)" ]; then
 			if find "${downloaddir}/" -name "*.flac" | read; then
 				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
@@ -554,11 +577,15 @@ ConfigSettings () {
 	echo "Global Settings"
 	echo "Download Client: $deezloaderurl"
 	echo "Download Directory: $downloaddir"
-	echo "Download Quality: $quality"
+	echo "Download Quality: $targetformat"
 	if [ "$quality" = "opus" ]; then
+		echo "Download Bitrate: ${bitrate}k"
+	elif [ "$quality" = "aac" ]; then
 		echo "Download Bitrate: ${bitrate}k"
 	elif [ "$quality" = "mp3" ]; then
 		echo "Download Bitrate: ${bitrate}k"
+	else
+		echo "Download Bitrate: ${bitrate}"
 	fi
 	echo "Download Track Count Verification: $vtc"
 	echo "Download Quality Upgrade: $dlupgrade"
@@ -681,15 +708,21 @@ lidarrartists () {
 							bitrate="320"
 							targetformat="MP3"
 						elif [ "$quality" = alac ]; then
-							dlquality="flac"
+							dlquality="flac"							
+							bitrate="lossless"
 							targetformat="ALAC"
 						elif [ "$quality" = opus ]; then
 							dlquality="flac"
-							bitrate="lossless"
 							targetformat="OPUS"
+							if [ -z "$bitrate" ]; then
+								bitrate="128"
+							fi
 						elif [ "$quality" = aac ]; then
 							dlquality="flac"
 							targetformat="AAC"
+							if [ -z "$bitrate" ]; then
+								bitrate="320"
+							fi
 						fi
 						
 						sleep 0.1
