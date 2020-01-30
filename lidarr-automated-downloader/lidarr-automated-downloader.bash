@@ -34,6 +34,26 @@ ArtistsLidarrReq(){
 			touch "musicbrainzerror.log"
 		fi
 		
+		if [ "$quality" = flac ]; then
+			dlquality="flac"
+			bitrate="lossless"
+			targetformat="FLAC"
+		elif [ "$quality" = mp3 ]; then
+			dlquality="320"
+			bitrate="320"
+			targetformat="MP3"
+		elif [ "$quality" = alac ]; then
+			dlquality="flac"
+			targetformat="ALAC"
+		elif [ "$quality" = opus ]; then
+			dlquality="flac"
+			bitrate="lossless"
+			targetformat="OPUS"
+		elif [ "$quality" = aac ]; then
+			dlquality="flac"
+			targetformat="AAC"
+		fi		
+		
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
 		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .id")"
 		LidArtistNameCap="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .artistName")"
@@ -88,24 +108,6 @@ ArtistsLidarrReq(){
 		fi
 	done
 }
-
-if [ "$quality" = flac ]; then
-	dlquality="flac"
-	targetformat="FLAC"
-elif [ "$quality" = mp3 ]; then
-	dlquality="320"
-	bitrate="320"
-	targetformat="MP3"
-elif [ "$quality" = alac ]; then
-	dlquality="flac"
-	targetformat="ALAC"
-elif [ "$quality" = opus ]; then
-	dlquality="flac"
-	targetformat="OPUS"
-elif [ "$quality" = aac ]; then
-	dlquality="flac"
-	targetformat="AAC"
-fi
 
 AlbumDL () {
 	check=1
