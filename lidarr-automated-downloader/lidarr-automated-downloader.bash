@@ -94,6 +94,7 @@ if [ "$quality" = flac ]; then
 	targetformat="FLAC"
 elif [ "$quality" = mp3 ]; then
 	dlquality="320"
+	bitrate="320"
 	targetformat="MP3"
 elif [ "$quality" = alac ]; then
 	dlquality="flac"
