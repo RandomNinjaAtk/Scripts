@@ -32,26 +32,6 @@ ArtistsLidarrReq(){
 		
 		if ! [ -f "musicbrainzerror.log" ]; then
 			touch "musicbrainzerror.log"
-		fi
-		
-		if [ "$quality" = flac ]; then
-			dlquality="flac"
-			bitrate="lossless"
-			targetformat="FLAC"
-		elif [ "$quality" = mp3 ]; then
-			dlquality="320"
-			bitrate="320"
-			targetformat="MP3"
-		elif [ "$quality" = alac ]; then
-			dlquality="flac"
-			targetformat="ALAC"
-		elif [ "$quality" = opus ]; then
-			dlquality="flac"
-			bitrate="lossless"
-			targetformat="OPUS"
-		elif [ "$quality" = aac ]; then
-			dlquality="flac"
-			targetformat="AAC"
 		fi		
 		
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
@@ -692,6 +672,26 @@ lidarrartists () {
 							rm "$tempalbumjson"
 						fi
 						
+						if [ "$quality" = flac ]; then
+							dlquality="flac"
+							bitrate="lossless"
+							targetformat="FLAC"
+						elif [ "$quality" = mp3 ]; then
+							dlquality="320"
+							bitrate="320"
+							targetformat="MP3"
+						elif [ "$quality" = alac ]; then
+							dlquality="flac"
+							targetformat="ALAC"
+						elif [ "$quality" = opus ]; then
+							dlquality="flac"
+							bitrate="lossless"
+							targetformat="OPUS"
+						elif [ "$quality" = aac ]; then
+							dlquality="flac"
+							targetformat="AAC"
+						fi
+						
 						sleep 0.1
 						
 						if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "$tempalbumjson"; then
@@ -1028,20 +1028,20 @@ lidarrartists () {
 							for file in "$downloaddir"/*; do
 								mv "$file" "$fullartistpath/$libalbumfolder"/
 							done
-
-							if find "$fullartistpath/$libalbumfolder" -iname "*.flac" | read; then
-								archivequality="FLAC"
-								archivebitrate="lossless"
-							elif find "$fullartistpath/$libalbumfolder" -iname "*.mp3" | read; then
+							
+							if find "$fullartistpath/$libalbumfolder" -iname "*.mp3" | read; then
 								archivequality="MP3"
-								archivebitrate="320k"
+								archivebitrate="${bitrate}k"
+							elif find "$fullartistpath/$libalbumfolder" -iname "*.flac" | read; then
+								archivequality="FLAC"
+								archivebitrate="${bitrate}"
 							elif find "$fullartistpath/$libalbumfolder" -iname "*.opus" | read; then
 								archivequality="OPUS"
 								archivebitrate="${bitrate}k"
 							elif find "$fullartistpath/$libalbumfolder" -iname "*.m4a" | read; then
 								if [ "$quality" = alac ]; then
 									archivequality="ALAC"
-									archivebitrate="lossless"
+									archivebitrate="${bitrate}"
 								fi
 								if [ "$quality" = aac ]; then
 									archivequality="AAC"
