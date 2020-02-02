@@ -9,6 +9,15 @@ if [ ! -d /config/scripts/lidarr-automated-downloader ]; then
     echo "done"
 fi
 
+if [ ! -d "/config/scripts/beets" ]; then
+    echo "setting up beets directory..."
+    mkdir -p "/config/scripts/beets"
+    # Set Permissions
+    echo "setting permissions..."
+    chmod 0777 "/config/scripts/beets"
+    echo "done"
+fi
+
 if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
 	
 	#hotio compatibility fix
@@ -20,7 +29,7 @@ if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
 	# Download Scripts
 	if [ -f /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash ]; then
 		rm /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash
-		sleep 1s
+		sleep 0.1
 	fi
 
 	if [ ! -f /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash ]; then
@@ -35,6 +44,18 @@ if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
 	    curl -o /config/scripts/lidarr-automated-downloader/config https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/config
 	    echo "done"
 	    chmod 0666 /config/scripts/lidarr-automated-downloader/config
+	fi
+	
+	if [ -f /config/scripts/beets/config.xml ]; then
+		rm /config/scripts/beets/config.xml
+		sleep 0.1s
+	fi
+	
+	if [ ! -f /config/scripts/beets/config.xml ]; then
+		echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lidarr-automated-downloader/config.yaml"
+		curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/config.yaml
+		echo "done"
+		chmod 0666 /config/scripts/beets/config.yaml
 	fi
   
 	rm /config/scripts/script-run.log
