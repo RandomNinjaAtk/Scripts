@@ -23,9 +23,18 @@ apt-get install -qq -y \
 	make \
 	pkg-config \
 	openssl \
+	libchromaprint-tools \
+	python-dev \
+	python-pip \
 	libssl-dev && \
 apt-get purge --auto-remove -y && \
 apt-get clean
+
+if ! [ -x "$(command -v beet)" ]; then
+	pip install --no-cache-dir -U \
+		beets \
+		pyacoustid
+fi
 
 if ! [ -x "$(command -v opusenc)" ]; then
 
