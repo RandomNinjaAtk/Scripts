@@ -1048,7 +1048,31 @@ lidarrartists () {
 									Replaygain
 								fi
 							fi
-
+							
+							if  [ "$TagWithBeets" = true ]; then
+							
+								if [ -f "$beetslibraryfile" ]; then
+									rm "$beetslibraryfile"
+									sleep 0.1
+								fi
+								if [ -f "$beetslog" ]; then 
+									rm "$beetslog"
+									sleep 0.1
+								fi
+								
+								beet -c $beetsconfig import -q "$downloaddir"
+								
+								if [ -f "$beetslibraryfile" ]; then
+									rm "$beetslibraryfile"
+									sleep 0.1
+								fi
+								if [ -f "$beetslog" ]; then 
+									rm "$beetslog"
+									sleep 0.1
+								fi
+							
+							fi
+							
 							Convert
 
 							if [ -d "$fullartistpath/$libalbumfolder" ]; then
