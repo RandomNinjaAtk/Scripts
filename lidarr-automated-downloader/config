@@ -13,6 +13,9 @@
 
 ############ Paths
 downloaddir="/downloads/deezloaderremix" # Deezloader download directory location
+beetsconfig="/config/scripts/beets/config.yaml" # Beets configuration file
+beetslibraryfile="/config/scripts/beets/library.blb" # Beets library file
+beetslog="/config/scripts/beets/beets.log" # Beets log file
 
 ############ Lidarr Settings
 LidarrUrl="http://127.0.0.1:8686" # Set domain or IP to your Lidarr instance including port. If using reverse proxy, do not use a trailing slash. Ensure you specify http/s.
