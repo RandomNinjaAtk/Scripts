@@ -1060,7 +1060,7 @@ lidarrartists () {
 									sleep 0.1
 								fi
 								
-								beet -c $beetsconfig import -q "$downloaddir"
+								beet -c "$beetsconfig" -l "$beetslibraryfile" import -q "$downloaddir"
 								
 								if [ -f "$beetslibraryfile" ]; then
 									rm "$beetslibraryfile"
