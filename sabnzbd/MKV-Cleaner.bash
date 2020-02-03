@@ -331,7 +331,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		
 		if [ "${setundaudio}" = true ]; then
 			if [ "${SetUnknownAudioLanguage}" = true ]; then
-				mkvaudio=" -a $undaudio --language $undaudio:${UnkownAudioLanguage}"
+			
+				for I in $undaudio
+				do
+					OUT=$OUT" -a $I --language $I:${UnkownAudioLanguage}"
+				done				
+				mkvaudio="$OUT"
+				
 			elif [ "${removeaudio}" = true ]; then
 				mkvaudio=" -a und"
 			else
@@ -361,21 +367,14 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\)" -print0 | while IFS= read -r -d '' vi
 		if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv"${mkvvideo}${mkvaudio}${mkvsubs} "$video"; then
 			echo "SUCCESS: mkvmerge complete"
 			echo "INFO: Options used:${mkvvideo}${mkvaudio}${mkvsubs}"
-		elif [ "${SetUnknownAudioLanguage}" = true ]; then
-			echo "ERROR: mkvmerge failed setting \"und\" audio to \"${PerferredLanguage}\", skipping language setting"
-			if mkvmerge --no-global-tags --title "" -o "$video.merged.mkv"${mkvvideo} -a und${mkvsubs} "$video"; then
-				echo "SUCCESS: mkverge complete"
-				echo "INFO: Options used:${mkvvideo} -a und${mkvsubs}"
-			else
-				echo "ERROR: mkvmerge failed"
-				exit 1
-			fi
+		else
+			echo "ERROR: mkvmerge failed"
+			exit 1
 		fi
 		# cleanup temp files and rename
 		mv "$video" "$video.original.mkv" && echo "INFO: Renamed source file"
 		mv "$video.merged.mkv" "$video" && echo "INFO: Renamed temp file"
 		rm "$video.original.mkv" && echo "INFO: Deleted source file"
-
 	fi
 	echo "INFO: Processing complete"
 	echo "=========================="
