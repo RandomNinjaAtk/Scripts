@@ -1069,11 +1069,11 @@ lidarrartists () {
 								
 								touch "$downloaddir/beets-match"
 								
-								sleep 0.2
+								sleep 0.1
 								
 								beet -c "$beetsconfig" -l "$beetslibraryfile" import -q "$downloaddir" > /dev/null
 								
-								if find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" -newer "$downloaddir/beets-match"; then 
+								if find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|mp3\)" -newer "$downloaddir/beets-match" | read; then 
 									beetsmatched="true"
 									echo "Tagged with Beets"
 								else
