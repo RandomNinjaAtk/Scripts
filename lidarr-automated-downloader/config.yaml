@@ -39,7 +39,7 @@ match:
         countries: [] # []
         media: ['CD|Digital Media'] # []
         original_year: no # no
-    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums' 'media'] # []
+    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums', 'media'] # []
     required: ['year', 'album', 'artist'] # []
     ignored_media: [] # []
     ignore_data_tracks: yes # yes
