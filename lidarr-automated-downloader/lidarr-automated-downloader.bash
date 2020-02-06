@@ -1049,6 +1049,8 @@ lidarrartists () {
 								fi
 							fi
 							
+							beetsmatched="false"
+							
 							if  [ "$TagWithBeets" = true ]; then
 							
 								if [ -f "$beetslibraryfile" ]; then
@@ -1060,7 +1062,29 @@ lidarrartists () {
 									sleep 0.1
 								fi
 								
-								beet -c "$beetsconfig" -l "$beetslibraryfile" import -q "$downloaddir"
+								if [ -f "$downloaddir/beets-match" ]; then 
+									rm "$downloaddir/beets-match"
+									sleep 0.1
+								fi
+								
+								touch "$downloaddir/beets-match"
+								
+								sleep 0.2
+								
+								beet -c "$beetsconfig" -l "$beetslibraryfile" import -q "$downloaddir" > /dev/null
+								
+								if find "$downloaddir" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" -newer "$downloaddir/beets-match"; then 
+									beetsmatched="true"
+									echo "Tagged with Beets"
+								else
+									beetsmatched="false"
+									echo "Error: Unable to match with Beets"
+								fi
+								
+								if [ -f "$downloaddir/beets-match" ]; then 
+									rm "$downloaddir/beets-match"
+									sleep 0.1
+								fi
 								
 								if [ -f "$beetslibraryfile" ]; then
 									rm "$beetslibraryfile"
@@ -1108,7 +1132,7 @@ lidarrartists () {
 							fi
 							echo "Archiving Album: $albumname (Format: $archivequality ($archivebitrate)) complete!"
 							
-							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"} + {\"bitrate\": \"$archivebitrate\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
+							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"} + {\"bitrate\": \"$archivebitrate\"} + {\"beetsmatched\": \"$beetsmatched\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
 							
 							if [ -f "$tempalbumfile" ]; then
 								rm "$tempalbumfile"
