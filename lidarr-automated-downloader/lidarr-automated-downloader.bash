@@ -1148,6 +1148,9 @@ lidarrartists () {
 						if [ -f "$tempalbumjson" ]; then
 							rm "$tempalbumjson"
 						fi
+						
+						find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
+						find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
 					done
 				DLArtistArtwork
 				totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" | wc -l)"
