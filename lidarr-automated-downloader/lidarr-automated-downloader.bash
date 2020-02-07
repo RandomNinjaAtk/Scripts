@@ -1208,11 +1208,11 @@ lidarrartists () {
 							echo "Error contacting Deezer for album information"
 						fi
 					if [ -d "$fullartistpath" ]; then
-							jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
-						fi
+						jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
+					fi
 					if [ -f "$tempalbumjson" ]; then
-							rm "$tempalbumjson"
-						fi
+						rm "$tempalbumjson"
+					fi
 						
 					find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
 					find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
@@ -1230,10 +1230,19 @@ lidarrartists () {
 				echo ""
 				find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
 				find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
-					if [ -f "$tempalbumlistjson"  ]; then
-						rm "$tempalbumlistjson"
-					fi
+				if [ -f "$tempalbumlistjson"  ]; then
+					rm "$tempalbumlistjson"
+					sleep 0.1
 				fi
+				if [ -f "$tempalbumfile" ]; then
+					rm "$tempalbumfile"
+					sleep 0.1
+				fi
+				if [ -f "downloadlist.json" ]; then
+					rm "downloadlist.json"
+					sleep 0.1
+				fi
+			fi
 		fi
 	else
 		echo "Error contacting Deezer for artist information"
