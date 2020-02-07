@@ -36,6 +36,7 @@ quality="flac" # flac or mp3 or opus or aac or alac :: Downloads flac or mp3 and
 upgrade="false" # true = enabled :: Enables or Disables upgrading dl quality based on quality type and bitrate changes.
 bitrate="192" # bitrate quality for OPUS and AAC formats only
 TagWithBeets="false" # true = enabled :: tag files with beets for better lidarr matching
+KeepOnlyBeetsMatched="false" # true = enabled :: only keep files that could be successfully matched with beets (keeps really clean library with perfect matches)
 replaygaintaggingflac="true" # true = enabled :: Adds replaygain audio normalization tags to flac files
 replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normalization tags to opus files
 
