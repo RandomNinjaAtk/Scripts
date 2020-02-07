@@ -37,6 +37,7 @@ upgrade="false" # true = enabled :: Enables or Disables upgrading dl quality bas
 bitrate="192" # bitrate quality for OPUS and AAC formats only
 TagWithBeets="false" # true = enabled :: tag files with beets for better lidarr matching
 KeepOnlyBeetsMatched="false" # true = enabled :: only keep files that could be successfully matched with beets (keeps really clean library with perfect matches)
+BeetsDeDupe="false" # true = enabled :: Prevents clearing database to allow beets to filter duplicate matches 
 replaygaintaggingflac="true" # true = enabled :: Adds replaygain audio normalization tags to flac files
 replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normalization tags to opus files
 
