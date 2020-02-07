@@ -14,13 +14,12 @@ match:
         unmatched_tracks: medium # medium
         track_length: medium
         mediums: medium
-        media: medium
         year: medium
     distance_weights:
         source: 0.01 # 2.0
         artist: 3.0 # 3.0
         album: 3.0 # 3.0
-        media: 1.0 # 1.0
+        media: 0.01 # 1.0
         mediums: 1.0 # 1.0
         year: 1.0 # 1.0
         country: 0.01 # 0.5
@@ -40,7 +39,7 @@ match:
         countries: [] # []
         media: [] # []
         original_year: no # no
-    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums', 'media', 'year'] # []
+    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums', 'year'] # []
     required: ['year', 'album', 'artist'] # []
     ignored_media: [] # []
     ignore_data_tracks: yes # yes
