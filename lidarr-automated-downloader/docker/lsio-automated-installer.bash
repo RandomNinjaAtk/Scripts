@@ -203,8 +203,11 @@ cd / && \
 
 echo "Starting Deezloader Remix"
 nohup node /deezloaderremix/app/app.js &>/dev/null &
-sleep 20s && \
-chmod 0777 -R /config/xdg
+sleep 20s
+
+if [ -d "/config/xdg" ]; then
+	chmod 0777 -R /config/xdg
+fi
 
 if [ -x "$(command -v crontab)" ]; then	
 	if grep "lidarr-automated-downloader-start.bash" /etc/crontab; then
