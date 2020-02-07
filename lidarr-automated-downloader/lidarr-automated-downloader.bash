@@ -1036,18 +1036,7 @@ lidarrartists () {
 										continue
 									fi
 								fi
-							fi
-								
-							if [ "$replaygaintaggingflac" = true ]; then
-								if [ "$quality" = flac ]; then
-									Replaygain
-								fi
-							fi
-							if [ "$replaygaintaggingopus" = true ]; then
-								if [ "$quality" = opus ]; then
-									Replaygain
-								fi
-							fi
+							fi														
 							
 							beetsmatched="false"
 							
@@ -1079,6 +1068,12 @@ lidarrartists () {
 								else
 									beetsmatched="false"
 									echo "Error: Unable to match with Beets"
+									
+									if [ "$KeepOnlyBeetsMatched" = true ]; then
+										rm -rf "$downloaddir"/*
+										sleep 0.1
+										continue
+									fi
 								fi
 								
 								if [ -f "$downloaddir/beets-match" ]; then 
@@ -1095,6 +1090,18 @@ lidarrartists () {
 									sleep 0.1
 								fi
 							
+							fi
+							
+							if [ "$replaygaintaggingflac" = true ]; then
+								if [ "$quality" = flac ]; then
+									Replaygain
+								fi
+							fi
+							
+							if [ "$replaygaintaggingopus" = true ]; then
+								if [ "$quality" = opus ]; then
+									Replaygain
+								fi
 							fi
 							
 							Convert
