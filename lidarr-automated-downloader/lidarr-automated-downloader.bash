@@ -590,6 +590,21 @@ ConfigSettings () {
 	echo "Download Track Count Verification: $vtc"
 	echo "Download Quality Upgrade: $dlupgrade"
 	echo "Download Lyric Type: $LyricDLType"
+	if [ "$TagWithBeets" = true ]; then
+		echo "Beets Tagging: Enabled"
+	else
+		echo "Beets Tagging: Disabled"
+	fi
+	if [ "$KeepOnlyBeetsMatched" = true ]; then
+		echo "Beets Skip Unmatched Files: Enabled"
+	else
+		echo "Beets Skip Unmatched Files: Disabled"
+	fi
+	if [ "$BeetsDeDupe" = true ]; then
+		echo "Beets Deduping: Enabled"
+	else
+		echo "Beets Deduping: Disabled"
+	fi
 	echo "Total Artists To Process: $TotalLidArtistNames"
 	echo ""
 	echo "Begin archive process..."
@@ -679,27 +694,66 @@ lidarrartists () {
 					echo ""
 					echo "Archiving: $artistname (ID: $artistid) ($artistnumber of $TotalLidArtistNames)"
 					echo "ERROR: No albums found"
-				else
-					echo ""
-					echo ""
-					echo "Archiving: $artistname (ID: $artistid) ($artistnumber of $TotalLidArtistNames)"
-					echo "Searching for albums... $totalnumberalbumlist Albums found"
-					for album in ${!albumlist[@]}; do
-						trackdlfallback=0
-						albumnumber=$(( $album + 1 ))
-						albumid="${albumlist[$album]}"
-						albumurl="https://www.deezer.com/album/${albumlist[$album]}"
-						albumname=$(cat "$tempalbumlistjson" | jq -r ".data | .[]| select(.id=="${albumlist[$album]}") | .title")
-						albumnamesanatized="$(echo "$albumname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
-						sanatizedfuncalbumname="${albumnamesanatized,,}"
+					if [ -f "$tempalbumlistjson"  ]; then
+						rm "$tempalbumlistjson"
+					fi
+					if [ -f "$tempalbumlistjson"  ]; then
+						rm "$tempalbumlistjson"
+					fi
+					sleep 0.1
+					continue
+				fi
+				
+				if [ -d "temp" ]; then
+					sleep 0.1
+					rm -rf "temp"
+				fi
+				
+				for album in ${!albumlist[@]}; do
+					if [ ! -d "temp" ]; then
+						mkdir -p "temp"
+					fi
+					if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "temp/${albumlist[$album]}-album.json"; then
+						sleep 0.1
+					else
+						echo "Error getting album information"
+					fi				
+				done
+				
+				if [ -f "downloadlist.json" ]; then
+					rm "downloadlist.json"
+					sleep 0.1
+				fi
+				
+				jq -s '.' temp/*-album.json > "downloadlist.json"
+				
+				if [ -d "temp" ]; then
+					sleep 0.1
+					rm -rf "temp"
+				fi
+				
+				orderedalbumlist=($(cat "downloadlist.json" | jq -r "sort_by(.explicit_lyrics, .nb_tracks) | reverse | .[] | .id"))
+				
+				echo ""
+				echo ""
+				echo "Archiving: $artistname (ID: $artistid) ($artistnumber of $TotalLidArtistNames)"
+				echo "Searching for albums... $totalnumberalbumlist Albums found"
+				for album in ${!orderedalbumlist[@]}; do
+					trackdlfallback=0
+					albumnumber=$(( $album + 1 ))
+					albumid="${orderedalbumlist[$album]}"
+					albumurl="https://www.deezer.com/album/$albumid"
+					albumname=$(cat "$tempalbumlistjson" | jq -r ".data | .[]| select(.id=="$albumid") | .title")
+					albumnamesanatized="$(echo "$albumname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
+					sanatizedfuncalbumname="${albumnamesanatized,,}"
 						
-						rm -rf "$downloaddir"/*
-						
-						if [ -f "$tempalbumjson" ]; then
+					rm -rf "$downloaddir"/*
+					
+					if [ -f "$tempalbumjson" ]; then
 							rm "$tempalbumjson"
 						fi
 						
-						if [ "$quality" = flac ]; then
+					if [ "$quality" = flac ]; then
 							dlquality="flac"
 							bitrate="lossless"
 							targetformat="FLAC"
@@ -725,9 +779,9 @@ lidarrartists () {
 							fi
 						fi
 						
-						sleep 0.1
+					sleep 0.1
 						
-						if curl -sL --fail "https://api.deezer.com/album/${albumlist[$album]}" -o "$tempalbumjson"; then
+					if curl -sL --fail "https://api.deezer.com/album/$albumid" -o "$tempalbumjson"; then
 							tracktotal=$(cat "$tempalbumjson" | jq -r ".nb_tracks")
 							actualtracktotal=$(cat "$tempalbumjson" | jq -r ".tracks.data | .[] | .id" | wc -l)
 							albumdartistid=$(cat "$tempalbumjson" | jq -r ".artist | .id")
@@ -756,10 +810,10 @@ lidarrartists () {
 							fi														
 							
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
-								if cat "$fullartistpath/$artistalbumlistjson" | grep "${albumlist[$album]}" | read; then
-									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .dlquality")"
-									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .foldername")"
-									archivebitrate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==${albumlist[$album]}) | .bitrate")"
+								if cat "$fullartistpath/$artistalbumlistjson" | grep "$albumid" | read; then
+									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$albumid) | .dlquality")"
+									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$albumid) | .foldername")"
+									archivebitrate="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$albumid) | .bitrate")"
 									archivetrackcount=$(find "$fullartistpath/$archivefoldername" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
 									if [ "$upgrade" = true ]; then
 										if [ "$targetformat" = "$archivequality" ]; then
@@ -1042,13 +1096,15 @@ lidarrartists () {
 							
 							if  [ "$TagWithBeets" = true ]; then
 							
-								if [ -f "$beetslibraryfile" ]; then
-									rm "$beetslibraryfile"
-									sleep 0.1
-								fi
-								if [ -f "$beetslog" ]; then 
-									rm "$beetslog"
-									sleep 0.1
+								if [ "$BeetsDeDupe" != true ]; then
+									if [ -f "$beetslibraryfile" ]; then
+										rm "$beetslibraryfile"
+										sleep 0.1
+									fi
+									if [ -f "$beetslog" ]; then 
+										rm "$beetslog"
+										sleep 0.1
+									fi
 								fi
 								
 								if [ -f "$downloaddir/beets-match" ]; then 
@@ -1081,15 +1137,17 @@ lidarrartists () {
 									sleep 0.1
 								fi
 								
-								if [ -f "$beetslibraryfile" ]; then
-									rm "$beetslibraryfile"
-									sleep 0.1
+								if [ "$BeetsDeDupe" != true ]; then
+									if [ -f "$beetslibraryfile" ]; then
+										rm "$beetslibraryfile"
+										sleep 0.1
+									fi
+									if [ -f "$beetslog" ]; then 
+										rm "$beetslog"
+										sleep 0.1
+									fi
 								fi
-								if [ -f "$beetslog" ]; then 
-									rm "$beetslog"
-									sleep 0.1
-								fi
-							
+								
 							fi
 							
 							if [ "$replaygaintaggingflac" = true ]; then
@@ -1149,16 +1207,17 @@ lidarrartists () {
 						else
 							echo "Error contacting Deezer for album information"
 						fi
-						if [ -d "$fullartistpath" ]; then
+					if [ -d "$fullartistpath" ]; then
 							jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 						fi
-						if [ -f "$tempalbumjson" ]; then
+					if [ -f "$tempalbumjson" ]; then
 							rm "$tempalbumjson"
 						fi
 						
-						find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
-						find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
-					done
+					find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
+					find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
+				done
+				
 				DLArtistArtwork
 				totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" | wc -l)"
 				echo ""
@@ -1175,9 +1234,6 @@ lidarrartists () {
 						rm "$tempalbumlistjson"
 					fi
 				fi
-			else
-				echo "Error contacting Deezer for artist album list information"
-			fi
 		fi
 	else
 		echo "Error contacting Deezer for artist information"
