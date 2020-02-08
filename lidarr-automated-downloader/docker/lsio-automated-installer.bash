@@ -22,7 +22,7 @@ else
 	echo "PRE-REQ ALREADY INSTALLED"
 fi
 
-if ! [ -x "$(command -v beet)" ]; then
+if [ ! -f "/usr/local/bin/beet" ]; then
 	apt-get update -qq && \
 	apt-get install -qq -y \
 		libchromaprint-tools \
@@ -34,6 +34,8 @@ if ! [ -x "$(command -v beet)" ]; then
 	pip install --no-cache-dir -U \
 		beets \
 		pyacoustid
+else
+	echo "BEETS ALREADY INSTALLED"
 fi
 
 if [ ! -f "/usr/local/bin/opusenc" ]; then 
