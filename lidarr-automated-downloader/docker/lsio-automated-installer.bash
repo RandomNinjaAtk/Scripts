@@ -148,7 +148,10 @@ fi
 echo "INSTALLING DEEZLOADER-REMIX"
 
 rm -rf /deezloaderremix && \
-rm -rf /config/xdg && \
+
+if [ -d "/config/xdg" ]; then
+	rm -rf /config/xdg
+fi
 
 if [ ! -d /downloads/deezloaderremix ]; then
 	mkdir /downloads/deezloaderremix
