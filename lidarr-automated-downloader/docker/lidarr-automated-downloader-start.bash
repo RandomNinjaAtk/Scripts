@@ -4,7 +4,8 @@ if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
   
 	rm /config/scripts/script-run.log
 	cd /config/scripts/lidarr-automated-downloader/
-	bash lidarr-automated-downloader.bash 2>&1 | tee "/config/scripts/script-run.log"
+	bash lidarr-automated-downloader.bash 2>&1 | tee "/config/scripts/script-run.log" > /proc/1/fd/1 2>/proc/1/fd/2
+
 	sleep 5
 	rmdir /config/scripts/00-lidarr-automated-downloader.exclusivelock
 	
