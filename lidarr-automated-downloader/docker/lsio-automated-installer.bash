@@ -144,7 +144,7 @@ fi
 
 if [ -f /config/scripts/lidarr-download-automation-start.bash ]; then
 	rm /config/scripts/lidarr-automated-downloader-start.bash
-	sleep 1s
+	sleep 0.1
 fi
 
 if [ ! -f /config/scripts/lidarr-download-automation-start.bash ]; then
