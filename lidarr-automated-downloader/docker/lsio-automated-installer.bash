@@ -280,6 +280,9 @@ if [ ! -f /config/scripts/beets/config.xml ]; then
 	chmod 0666 /config/scripts/beets/config.yaml
 fi
 
+find /config/scripts -type f -exec chmod 0666 {} \;
+find /config/scripts -type d -exec chmod 0777 {} \;
+
 if [ -x "$(command -v crontab)" ]; then	
 	if grep "lidarr-automated-downloader-start.bash" /etc/crontab; then
 		echo "job already added..."
