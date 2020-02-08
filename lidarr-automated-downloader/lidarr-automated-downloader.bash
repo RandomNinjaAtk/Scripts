@@ -69,7 +69,7 @@ ArtistsLidarrReq(){
 		artistdir="$(basename "$LidArtistPath")"
 		if [ -z "${DeezerArtistID}" ]; then			
 			if [ -f "musicbrainzerror.log" ]; then
-				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
+				echo "${artistnumber}/192${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
 				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
 					sleep 0.1
 				else
@@ -132,7 +132,7 @@ AlbumDL () {
 				else
 					sleep 1s
 					if [ "$j" = "$albumtimeout" ]; then
-						dlid=$(curl -s --request GET "http://192.168.1.10:1730/api/queue/" | jq -r ".items | .[] | .queueId")
+						dlid=$(curl -s --request GET "$deezloaderurl/api/queue/" | jq -r ".items | .[] | .queueId")
 						if curl -s --request GET "$deezloaderurl/api/canceldownload/?queueId=$dlid" >/dev/null; then
 							echo "Error downloading $albumname ($dlquality), retrying...via track method "
 							trackdlfallback=1
@@ -180,7 +180,7 @@ DownloadURL () {
 				sleep 1s
 				retry=0
 				if [ "$j" = "$tracktimeout" ]; then
-					dlid=$(curl -s --request GET "http://192.168.1.10:1730/api/queue/" | jq -r ".items | .[] | .queueId")
+					dlid=$(curl -s --request GET "$deezloaderurl/api/queue/" | jq -r ".items | .[] | .queueId")
 					if curl -s --request GET "$deezloaderurl/api/canceldownload/?queueId=$dlid" >/dev/null; then
 						echo "Error downloading track $tracknumber: $trackname ($dlquality), retrying...download"
 						retry=1
@@ -205,7 +205,7 @@ DownloadURL () {
 					sleep 1s
 					fallback=0
 					if [ "$k" = "$trackfallbacktimout" ]; then
-						dlid=$(curl -s --request GET "http://192.168.1.10:1730/api/queue/" | jq -r ".items | .[] | .queueId")
+						dlid=$(curl -s --request GET "$deezloaderurl/api/queue/" | jq -r ".items | .[] | .queueId")
 						if curl -s --request GET "$deezloaderurl/api/canceldownload/?queueId=$dlid" >/dev/null; then
 							echo "Error downloading track $tracknumber: $trackname ($dlquality), retrying...as mp3 320"
 							fallback=1
@@ -238,7 +238,7 @@ DownloadURL () {
 					else
 						sleep 1s
 						if [ "$l" = $tracktimeout ]; then
-							dlid=$(curl -s --request GET "http://192.168.1.10:1730/api/queue/" | jq -r ".items | .[] | .queueId")
+							dlid=$(curl -s --request GET "$deezloaderurl/api/queue/" | jq -r ".items | .[] | .queueId")
 							if curl -s --request GET "$deezloaderurl/api/canceldownload/?queueId=$dlid" >/dev/null; then
 								if [ "$fallbackquality" = 128 ]; then
 									echo "Error downloading track $tracknumber: $trackname (mp3 128), skipping..."
@@ -269,7 +269,7 @@ DownloadURL () {
 					else
 						sleep 1s
 						if [ "$l" = $trackfallbacktimout ]; then
-							dlid=$(curl -s --request GET "http://192.168.1.10:1730/api/queue/" | jq -r ".items | .[] | .queueId")
+							dlid=$(curl -s --request GET "$deezloaderurl/api/queue/" | jq -r ".items | .[] | .queueId")
 							if curl -s --request GET "$deezloaderurl/api/canceldownload/?queueId=$dlid" >/dev/null; then
 								echo "Error downloading track $tracknumber: $trackname (mp3 128), skipping..."
 								error=1
