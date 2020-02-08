@@ -743,8 +743,12 @@ lidarrartists () {
 				
 				if [ -d "$fullartistpath" ]; then
 					if [ "$BeetsDeDupe" = true ]; then
-						rm "$beetslibraryfile"
-						rm "$beetslog"
+						if [ -f "$beetslibraryfile" ]; then
+							rm "$beetslibraryfile"
+						fi
+						if [ -f "$beetslog" ]; then
+							rm "$beetslog"
+						fi
 						sleep 0.1
 						echo "Importing existing library for Beets Dedupe matching"
 						beet -c "$beetsconfig" -l "$beetslibraryfile" import -qWC "$fullartistpath" > /dev/null
