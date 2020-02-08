@@ -705,6 +705,16 @@ lidarrartists () {
 					continue
 				fi
 				
+				if [ -d "$fullartistpath" ]; then
+					if [ "$BeetsDeDupe" = true ]; then
+						rm "$beetslibraryfile"
+						rm "$beetslog"
+						sleep 0.1
+						echo "Importing existing library for beets Dedupe matching"
+						beet -c "$beetsconfig" -l "$beetslibraryfile" import -AWC "$fullartistpath" > /dev/null
+					fi
+				fi
+				
 				if [ -d "temp" ]; then
 					sleep 0.1
 					rm -rf "temp"
@@ -808,16 +818,6 @@ lidarrartists () {
 							
 							if [ "$albumdartistid" -ne "$artistid" ]; then
 								continue
-							fi
-							
-							if [ -d "$fullartistpath" ]; then
-								if [ "$BeetsDeDupe" = true ]; then
-									rm "$beetslibraryfile"
-									rm "$beetslog"
-									sleep 0.1
-									echo "Importing existing library for beets Dedupe matching"
-									beet -c "$beetsconfig" -l "$beetslibraryfile" import -AWC "$fullartistpath" > /dev/null
-								fi
 							fi
 							
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
