@@ -5,7 +5,7 @@ if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
 	rm /config/scripts/script-run.log
 	cd /config/scripts/lidarr-automated-downloader/
 	bash lidarr-automated-downloader.bash > /config/scripts/script-run.log
-	sleep 10s
+	sleep 5
 	rmdir /config/scripts/00-lidarr-automated-downloader.exclusivelock
 	
 	find /config/scripts -type f -exec chmod 0666 {} \;
