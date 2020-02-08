@@ -630,6 +630,12 @@ lidarrartists () {
 	if [ -f "$temptrackfile" ]; then
 		rm "$temptrackfile"
 	fi
+	if [ -f "$beetslibraryfile" ]; then
+		rm "$beetslibraryfile"
+	fi
+	if [ -f "$beetslog" ]; then
+		rm "$beetslog"
+	fi
 	rm -rf "$downloaddir"/*
 	
 	if curl -sL --fail "https://api.deezer.com/artist/$DeezerArtistID" -o "$tempartistjson"; then
@@ -761,8 +767,8 @@ lidarrartists () {
 					rm -rf "$downloaddir"/*
 					
 					if [ -f "$tempalbumjson" ]; then
-							rm "$tempalbumjson"
-						fi
+						rm "$tempalbumjson"
+					fi
 						
 					if [ "$quality" = flac ]; then
 							dlquality="flac"
