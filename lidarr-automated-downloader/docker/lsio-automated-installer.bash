@@ -1,42 +1,54 @@
 #!/bin/bash
 echo "==========lidarr-automated-downloader setup==========="
 
-echo "INSTALLING REQUIREMENTS"
-curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-apt-get update -qq && \
-apt-get install -qq -y \
-	mkvtoolnix \
-	mp3val \
-	flac \
-	wget \
-	nano \
-	unzip \
-	libchromaprint-tools \
-	nodejs \
-	git \
-	jq \
-	cron \
-	autoconf \
-	automake \
-	libtool \
-	gcc \
-	make \
-	pkg-config \
-	openssl \
-	libchromaprint-tools \
-	python-dev \
-	python-pip \
-	libssl-dev && \
-apt-get purge --auto-remove -y && \
-apt-get clean
+
+if ! [ -x "$(command -v flac)" ]; then
+	echo "INSTALLING REQUIREMENTS"
+	curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+	apt-get update -qq && \
+	apt-get install -qq -y \
+		mp3val \
+		flac \
+		wget \
+		nano \
+		unzip \
+		nodejs \
+		git \
+		jq \
+		cron  && \
+	apt-get purge --auto-remove -y && \
+	apt-get clean
+else
+	echo "PRE-REQ ALREADY INSTALLED"
+fi
 
 if ! [ -x "$(command -v beet)" ]; then
+	apt-get update -qq && \
+	apt-get install -qq -y \
+		libchromaprint-tools \
+		python-dev \
+		python-pip && \
+	apt-get purge --auto-remove -y && \
+	apt-get clean
+
 	pip install --no-cache-dir -U \
 		beets \
 		pyacoustid
 fi
 
-if ! [ -x "$(command -v opusenc)" ]; then
+if ! [ -x "$(command -v opusenc)" ]; then 
+	apt-get update -qq && \
+	apt-get install -qq -y \
+		autoconf \
+		automake \
+		libtool \
+		gcc \
+		make \
+		pkg-config \
+		openssl \
+		libssl-dev && \
+	apt-get purge --auto-remove -y && \
+	apt-get clean
 
 	set -e 
 	set -o pipefail
@@ -93,7 +105,10 @@ if ! [ -x "$(command -v opusenc)" ]; then
 	rm -rf "$TEMP_FOLDER"
 
 	cd /
+else
+	echo "OPUSENC ALREADY INSTALLED"
 fi
+
 	
 service cron restart
 
