@@ -36,7 +36,7 @@ if ! [ -x "$(command -v beet)" ]; then
 		pyacoustid
 fi
 
-if ! [ -x "$(command -v opusenc)" ]; then 
+if [ ! -f "/usr/local/bin/opusenc" ]; then 
 	apt-get update -qq && \
 	apt-get install -qq -y \
 		autoconf \
