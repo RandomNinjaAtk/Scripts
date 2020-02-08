@@ -706,17 +706,7 @@ lidarrartists () {
 					sleep 0.1
 					continue
 				fi
-				
-				if [ -d "$fullartistpath" ]; then
-					if [ "$BeetsDeDupe" = true ]; then
-						rm "$beetslibraryfile"
-						rm "$beetslog"
-						sleep 0.1
-						echo "Importing existing library for beets Dedupe matching"
-						beet -c "$beetsconfig" -l "$beetslibraryfile" import -AWC "$fullartistpath" > /dev/null
-					fi
-				fi
-				
+												
 				if [ -d "temp" ]; then
 					sleep 0.1
 					rm -rf "temp"
@@ -750,6 +740,17 @@ lidarrartists () {
 				echo ""
 				echo ""
 				echo "Archiving: $artistname (ID: $artistid) ($artistnumber of $TotalLidArtistNames)"
+				
+				if [ -d "$fullartistpath" ]; then
+					if [ "$BeetsDeDupe" = true ]; then
+						rm "$beetslibraryfile"
+						rm "$beetslog"
+						sleep 0.1
+						echo "Importing existing library for Beets Dedupe matching"
+						beet -c "$beetsconfig" -l "$beetslibraryfile" import -AWC "$fullartistpath" > /dev/null
+					fi
+				fi
+				
 				echo "Searching for albums... $totalnumberalbumlist Albums found"
 				for album in ${!orderedalbumlist[@]}; do
 					trackdlfallback=0
