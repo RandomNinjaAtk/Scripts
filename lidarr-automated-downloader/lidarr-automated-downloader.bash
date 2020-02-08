@@ -639,7 +639,8 @@ lidarrartists () {
 		artistalbumtotal="$(cat "$tempartistjson" | jq -r '.nb_album')"
 		sanatizedartistname="$(echo "$artistname" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
 		shortartistpath="$artistname ($artistid)"
-		fullartistpath="$LidArtistPath"				
+		fullartistpath="$LidArtistPath"		
+		sanatizedlidarrartistname="$(echo "$LidArtistNameCap" | sed -e 's/[\\/:\*\?"<>\|\x01-\x1F\x7F]//g' -e 's/^\(nul\|prn\|con\|lpt[0-9]\|com[0-9]\|aux\)\(\.\|$\)//i' -e 's/^\.*$//' -e 's/^$/NONAME/')"
 		
 		if [ -d "$fullartistpath" ]; then
 			if [ -f "$fullartistpath/$tempartistjson" ]; then
@@ -803,7 +804,7 @@ lidarrartists () {
 								albumlyrictype="Clean"
 							fi
 							
-							libalbumfolder="$sanatizedartistname - $albumtypecap - $albumyear - $albumnamesanatized ($albumlyrictype)"
+							libalbumfolder="$sanatizedlidarrartistname - $albumtypecap - $albumyear - $albumnamesanatized ($albumlyrictype)"
 							
 							if [ "$albumdartistid" -ne "$artistid" ]; then
 								continue
