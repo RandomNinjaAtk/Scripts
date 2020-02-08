@@ -142,7 +142,7 @@ if [ -d /config/scripts/00-lidarr-automated-downloader.exclusivelock ]; then
 fi
 
 if [ -d "/config/scripts/lidarr-automated-downloader" ]; then
-	rm /config/scripts/lidarr-automated-downloader/*.json
+	find "/config/scripts/lidarr-automated-downloader" -type f -iname "*.json" -delete
 fi
 
 echo "INSTALLING DEEZLOADER-REMIX"
