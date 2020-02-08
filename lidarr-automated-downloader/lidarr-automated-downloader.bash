@@ -69,7 +69,7 @@ ArtistsLidarrReq(){
 		artistdir="$(basename "$LidArtistPath")"
 		if [ -z "${DeezerArtistID}" ]; then			
 			if [ -f "musicbrainzerror.log" ]; then
-				echo "${artistnumber}/192${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
+				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
 				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
 					sleep 0.1
 				else
