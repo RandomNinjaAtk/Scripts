@@ -114,7 +114,7 @@ fi
 	
 service cron restart
 
-if ! [ -x "$(command -v ffmpeg)" ]; then
+if [ ! -f "/usr/bin/ffmpeg" ]; then 
 	echo "INSTALLING FFMPEG"
 	apt-get update -qq && \
 	apt-get install -y xz-utils
