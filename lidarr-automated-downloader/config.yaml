@@ -67,7 +67,7 @@ import:
     group_albums: no
 
 chroma:
-    auto: no
+    auto: yes
 
 embedart:
     auto: no
