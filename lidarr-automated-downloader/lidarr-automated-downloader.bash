@@ -496,10 +496,6 @@ Verify () {
 }
 
 DLArtistArtwork () {
-	if [ ! -d "$fullartistpath" ]; then
-		mkdir "$fullartistpath"
-		chmod 0777 "$fullartistpath"
-	fi
 	if [ -d "$fullartistpath" ]; then
 		if [ ! -f "$fullartistpath/folder.jpg"  ]; then
 			echo ""
@@ -1231,23 +1227,28 @@ lidarrartists () {
 					if [ -f "$tempalbumjson" ]; then
 						rm "$tempalbumjson"
 					fi
-						
-					find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
-					find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
+					if [ -d "$fullartistpath" ]; then	
+						find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
+						find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
+					fi
 				done
 				
 				DLArtistArtwork
-				totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" | wc -l)"
-				echo ""
-				if [ "$totalalbumsarchived" = "$totalnumberalbumlist" ]; then
-					echo "Archived $totalalbumsarchived Albums"
-				else
-					echo "Archived $totalalbumsarchived of $totalnumberalbumlist Albums (Some Dupes found... and removed...)"
+				if [ -d "$fullartistpath" ]; then
+					totalalbumsarchived="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | .id" | wc -l)"
+					echo ""
+					if [ "$totalalbumsarchived" = "$totalnumberalbumlist" ]; then
+						echo "Archived $totalalbumsarchived Albums"
+					else
+						echo "Archived $totalalbumsarchived of $totalnumberalbumlist Albums (Some Dupes found... and removed...)"
+					fi
 				fi
 				echo "Archiving $artistname complete!"
 				echo ""
-				find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
-				find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
+				if [ -d "$fullartistpath" ]; then
+					find "$fullartistpath" -type d -exec chmod 0777 "{}" \;
+					find "$fullartistpath" -type f -exec chmod 0666 "{}" \;
+				fi
 				if [ -f "$tempalbumlistjson"  ]; then
 					rm "$tempalbumlistjson"
 					sleep 0.1
