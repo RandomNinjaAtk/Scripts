@@ -807,9 +807,18 @@ lidarrartists () {
 							
 							if [ "$albumdartistid" -ne "$artistid" ]; then
 								continue
-							fi														
+							fi
+							
+							if [ "$BeetsDeDupe" = true ]; then
+								rm "$beetslibraryfile"
+								rm "$beetslog"
+								sleep 0.1
+								echo "Importing existing library for beets Dedupe matching"
+								beet -c "$beetsconfig" -l "$beetslibraryfile" import -AWC "$fullartistpath" > /dev/null
+							fi
 							
 							if [ -f "$fullartistpath/$artistalbumlistjson" ]; then
+							
 								if cat "$fullartistpath/$artistalbumlistjson" | grep "$albumid" | read; then
 									archivequality="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$albumid) | .dlquality")"
 									archivefoldername="$(cat "$fullartistpath/$artistalbumlistjson" | jq -r ".[] | select(.id==$albumid) | .foldername")"
