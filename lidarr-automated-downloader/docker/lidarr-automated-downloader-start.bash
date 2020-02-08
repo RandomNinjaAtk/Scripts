@@ -46,11 +46,6 @@ if mkdir /config/scripts/00-lidarr-automated-downloader.exclusivelock; then
 	    chmod 0666 /config/scripts/lidarr-automated-downloader/config
 	fi
 	
-	if [ -f /config/scripts/beets/config.xml ]; then
-		rm /config/scripts/beets/config.xml
-		sleep 0.1s
-	fi
-	
 	if [ ! -f /config/scripts/beets/config.xml ]; then
 		echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lidarr-automated-downloader/config.yaml"
 		curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/config.yaml
