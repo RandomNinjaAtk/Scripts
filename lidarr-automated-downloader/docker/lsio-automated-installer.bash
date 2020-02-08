@@ -229,6 +229,57 @@ if [ -d "/config/xdg" ]; then
 	chmod 0777 -R /config/xdg
 fi
 
+if [ ! -d /config/scripts/lidarr-automated-downloader ]; then
+    echo "setting up script lidarr-automated-downloader directory..."
+    mkdir -p /config/scripts/lidarr-automated-downloader
+    # Set Permissions
+    echo "setting permissions..."
+    chmod 0777 /config/scripts/lidarr-automated-downloader
+    echo "done"
+fi
+
+if [ ! -d "/config/scripts/beets" ]; then
+    echo "setting up beets directory..."
+    mkdir -p "/config/scripts/beets"
+    # Set Permissions
+    echo "setting permissions..."
+    chmod 0777 "/config/scripts/beets"
+    echo "done"
+fi
+
+#hotio compatibility fix
+if [ ! -f /config/config.xml ]; then
+	ln -s /config/app/config.xml /config/config.xml
+	sleep 0.1
+fi
+	
+# Download Scripts
+if [ -f /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash ]; then
+	rm /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash
+	sleep 0.1
+fi
+
+if [ ! -f /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash ]; then
+    echo "downloading lidarr-automated-downloader.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lidarr-automated-downloader/lidarr-automated-downloader.bash"
+    curl -o /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/lidarr-automated-downloader.bash
+    echo "done"
+    chmod 0666 /config/scripts/lidarr-automated-downloader/lidarr-automated-downloader.bash
+fi
+
+if [ ! -f /config/scripts/lidarr-automated-downloader/config ]; then
+    echo "downloading config from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lidarr-automated-downloader/config"
+    curl -o /config/scripts/lidarr-automated-downloader/config https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/config
+    echo "done"
+    chmod 0666 /config/scripts/lidarr-automated-downloader/config
+fi
+
+if [ ! -f /config/scripts/beets/config.xml ]; then
+	echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/lidarr-automated-downloader/config.yaml"
+	curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/lidarr-automated-downloader/config.yaml
+	echo "done"
+	chmod 0666 /config/scripts/beets/config.yaml
+fi
+
 if [ -x "$(command -v crontab)" ]; then	
 	if grep "lidarr-automated-downloader-start.bash" /etc/crontab; then
 		echo "job already added..."
