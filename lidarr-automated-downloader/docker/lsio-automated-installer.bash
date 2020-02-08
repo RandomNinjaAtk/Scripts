@@ -272,19 +272,19 @@ find /config/scripts -type f -exec chmod 0666 {} \;
 find /config/scripts -type d -exec chmod 0777 {} \;
 
 if [ -x "$(command -v crontab)" ]; then	
-	if grep "lidarr-automated-downloader-start.bash" /etc/crontab; then
+	if grep "lidarr-automated-downloader-start.bash" /etc/crontab | read; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
 		echo "*/15 * * * *   root   bash /config/scripts/lidarr-automated-downloader-start.bash > /config/scripts/cron-job.log" >> "/etc/crontab"
 	fi
-	if grep "musicbrainzerror.log" /etc/crontab; then
+	if grep "musicbrainzerror.log" /etc/crontab | read; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
 		echo "0 18 * * *   root   rm \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\" && touch \"/config/scripts/lidarr-automated-downloader/musicbrainzerror.log\""  >> "/etc/crontab"
 	fi
-	if grep "daily.log" /etc/crontab; then
+	if grep "daily.log" /etc/crontab | read; then
 		echo "job already added..."
 	else
 		echo "adding cron job to crontab..."
