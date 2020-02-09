@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "==========start lsio-automated-installer automated updates==========="
+echo "==========start lidarr-automated-installer automated updates==========="
 
 # Check for folder, create folder if needed (hotio docker image compatibility)
 if [ ! -d /config/custom-cont-init.d ]; then
@@ -20,5 +20,5 @@ if [ ! -f /config/custom-cont-init.d/lsio-automated-installer.bash ]; then
 	bash /config/custom-cont-init.d/lsio-automated-installer.bash && \
 	rm /config/custom-cont-init.d/lsio-automated-installer.bash
 fi
-echo "==========end start lsio-automated-installer automated updates==========="
+echo "==========end start lidarr-automated-installer automated updates==========="
 exit 0
