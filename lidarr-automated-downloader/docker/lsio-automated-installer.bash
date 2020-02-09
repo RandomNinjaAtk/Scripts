@@ -26,8 +26,7 @@ if [ ! -f "/usr/local/bin/beet" ]; then
 	apt-get update -qq && \
 	apt-get install -qq -y \
 		libchromaprint-tools \
-		python-dev \
-		python-pip && \
+		python3-pip && \
 	apt-get purge --auto-remove -y && \
 	apt-get clean
 
