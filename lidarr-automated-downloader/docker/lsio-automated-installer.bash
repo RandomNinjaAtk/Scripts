@@ -30,7 +30,7 @@ if [ ! -f "/usr/local/bin/beet" ]; then
 	apt-get purge --auto-remove -y && \
 	apt-get clean
 
-	pip install --no-cache-dir -U \
+	pip3 install --no-cache-dir -U \
 		beets \
 		pyacoustid
 else
