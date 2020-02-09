@@ -156,6 +156,7 @@ fi
 
 if [ -d "/config/scripts/lidarr-automated-downloader" ]; then
 	find "/config/scripts/lidarr-automated-downloader" -type f -iname "*.json" -delete
+	find "/config/scripts/lidarr-automated-downloader" -type f -iname "temp-*" -delete
 fi
 
 echo "INSTALLING DEEZLOADER-REMIX"
