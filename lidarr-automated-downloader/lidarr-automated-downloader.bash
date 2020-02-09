@@ -751,7 +751,7 @@ lidarrartists () {
 						fi
 						sleep 0.1
 						echo "Importing existing library for Beets Dedupe matching"
-						beet -c "$beetsconfig" -l "$beetslibraryfile" import -qWC "$fullartistpath" > /dev/null
+						beet -c "$beetsconfig" -l "$beetslibraryfile" import -AWC "$fullartistpath" > /dev/null
 					fi
 				fi
 				
