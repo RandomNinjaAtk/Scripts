@@ -509,36 +509,34 @@ DLArtistArtwork () {
 	if [ -d "$fullartistpath" ]; then
 		echo ""
 		echo "Archiving Artist Profile Picture"
-		if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
-			if [ ! -z "$lidarrartistposterlink" ]; then
-								
-				if curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET "${lidarrartistposterlink}" -o "$fullartistpath/folder${lidarrartistposterextension}"; then
-					if find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" | read; then
-						echo "ERROR: Artist artwork is smaller than \"16k\""
-						find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" -delete
-						echo ""
-					else
-						echo "Downloaded 1 profile picture"
-						echo ""
-					fi
+		if [ ! -f "$fullartistpath/folder.jpg"  ]; then	
+			if curl -sL --fail "${LidarrUrl}/api/v1/MediaCover/Artist/${LidArtistID}/poster.jpg?apikey=${LidarrApiKey}" -o "$fullartistpath/folder.jpg"; then
+				if find "$fullartistpath/folder.jpg" -type f -size -16k | read; then
+					echo "ERROR: Artist artwork is smaller than \"16k\""
+					echo "Fallback to deezer..."
+					rm "$fullartistpath/folder.jpg"
+					echo ""
+				else
+					echo "Downloaded 1 profile picture"
+					echo ""
 				fi
+			else
+				echo "ERROR: Lidarr artist artwork failure, fallback to deezer"
 			fi
-			if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
-				if [ ! -f "$fullartistpath/folder.jpg"  ]; then					
-					if curl -sL --fail "${artistartwork}" -o "$fullartistpath/folder.jpg"; then
-						if find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" | read; then
-							echo "ERROR: Artist artwork is smaller than \"16k\""
-							find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" -delete
-							echo ""
-						else
-							echo "Downloaded 1 profile picture"
-							echo ""
-						fi
-					else
-						echo "Error downloading artist artwork"
-						echo ""
-					fi
+		fi
+		if [ ! -f "$fullartistpath/folder.jpg"  ]; then					
+			if curl -sL --fail "${artistartwork}" -o "$fullartistpath/folder.jpg"; then
+				if find "$fullartistpath/folder.jpg" -type f -size -16k | read; then
+					echo "ERROR: Artist artwork is smaller than \"16k\""
+					rm "$fullartistpath/folder.jpg"
+					echo ""
+				else
+					echo "Downloaded 1 profile picture"
+					echo ""
 				fi
+			else
+				echo "Error downloading artist artwork"
+				echo ""
 			fi
 		fi
 	fi
