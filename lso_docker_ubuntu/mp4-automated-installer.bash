@@ -21,15 +21,15 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 
-pip install --no-cache-dir -U \
+pip3 install --no-cache-dir -U \
 	requests \
 	requests[security] \
 	requests-cache \
 	babelfish \
 	mutagen \
-	"guessit<2" \
-	"subliminal<2" \
-	stevedore==1.19.1 \
+	guessit \
+	subliminal \
+	stevedore \
 	python-dateutil \
 	qtfaststart \
 	tmdbsimple
