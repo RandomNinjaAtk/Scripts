@@ -1,6 +1,11 @@
 #!/bin/bash
 echo "==========MP4 AUTOMATOR AUTOMATED UPDATES==========="
 
+# Check for folder, create folder if needed (hotio docker image compatibility)
+if [ ! -d /config/custom-cont-init.d ]; then
+	mkdir /config/custom-cont-init.d
+fi
+
 if [ -f /config/custom-cont-init.d/mp4-automated-installer.bash ]; then
 	rm /config/custom-cont-init.d/mp4-automated-installer.bash
 else 
