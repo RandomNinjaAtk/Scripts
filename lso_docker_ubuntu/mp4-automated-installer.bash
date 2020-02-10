@@ -9,6 +9,7 @@ apt-get install -qq -y \
 	git \
 	openssl \
 	python3-pip \
+	python-pip \
 	libffi-dev \
 	libssl-dev \
 	libxml2-dev \
@@ -20,14 +21,14 @@ apt-get install -qq -y \
 apt-get purge --auto-remove -y && \
 apt-get clean
 
-pip3 install --no-cache-dir -U \
+pip install --no-cache-dir -U \
 	requests \
 	requests[security] \
 	requests-cache \
 	babelfish \
-	guessit \
-	subliminal \
-	stevedore \
+	"guessit<2" \
+	"subliminal<2" \
+	stevedore==1.19.1 \
 	python-dateutil \
 	qtfaststart \
 	tmdbsimple
