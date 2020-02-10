@@ -13,6 +13,17 @@ if [ ! -f /config/scripts/sickbeard_mp4_automator/Deobfuscate.py ]; then
     echo "done"
 fi
 
+if [ ! -f /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash ]; then
+    echo "downloading MKV-Cleaner.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/MKV-Cleaner.bash"
+    curl -o /config/scripts/sickbeard_mp4_automator/MKV-Cleaner.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/MKV-Cleaner.bash
+    echo "done"
+
+    # Set Permissions
+    echo "setting permissions..."
+    chmod 777 /config/scripts/MKV-Cleaner.bash
+    echo "done"
+fi
+
 set -e
 
 # Execute on new downloads
@@ -33,6 +44,8 @@ fi
 
 # Manual run of Sickbeard MP4 Automator
 python3 manual.py -i "$1" -nt
+
+bash MKV-Cleaner.bash "$1"
 
 echo "COMPLETE"
 
