@@ -67,7 +67,7 @@ ArtistsLidarrReq(){
 		lidarrartistposterextension="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType==\"poster\") | .extension")"
 		lidarrartistposterlink="${LidarrUrl}${lidarrartistposterurl}${lidarrartistposterextension}"
 		deezerartisturl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url")"
-		DeezerArtistID=$(printf -- "%s" "${DeezerArtistURL##*/}")
+		DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")
 		artistdir="$(basename "$LidArtistPath")"
 		
 		if [ -z "${DeezerArtistID}" ]; then	
