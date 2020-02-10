@@ -32,7 +32,7 @@ else
 fi
 
 # Manual run of Sickbeard MP4 Automator
-python manual.py -i "$1" -nt
+python3 manual.py -i "$1" -nt
 
 echo "COMPLETE"
 
