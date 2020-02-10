@@ -26,6 +26,7 @@ pip install --no-cache-dir -U \
 	requests[security] \
 	requests-cache \
 	babelfish \
+	mutagen \
 	"guessit<2" \
 	"subliminal<2" \
 	stevedore==1.19.1 \
