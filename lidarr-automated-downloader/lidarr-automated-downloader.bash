@@ -63,6 +63,9 @@ ArtistsLidarrReq(){
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
 		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .id")"
 		LidArtistNameCap="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .artistName")"
+		lidarrartistposterurl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType=="poster") | .url")"
+		lidarrartistposterextension="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType=="poster") | .extension")"
+		lidarrartistposterlink="${LidarrUrl}${lidarrartistposterurl}${lidarrartistposterextension}"
 		deezerartisturl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url")"
 		DeezerArtistID=$(printf -- "%s" "${DeezerArtistURL##*/}")
 		artistdir="$(basename "$LidArtistPath")"
@@ -504,25 +507,34 @@ Verify () {
 
 DLArtistArtwork () {
 	if [ -d "$fullartistpath" ]; then
-		if [ ! -f "$fullartistpath/folder.jpg"  ]; then
-			echo ""
-			echo "Archiving Artist Profile Picture"
-			if curl -sL --fail "${artistartwork}" -o "$fullartistpath/folder.jpg"; then
-				if find "$fullartistpath/folder.jpg" -type f -size -16k | read; then
-					echo "ERROR: Artist artwork is smaller than \"16k\""
-					rm "$fullartistpath/folder.jpg"
-					echo ""
-				else
+		if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
+			if [ -z "$lidarrartistposterlink" ]; then
+				if curl -sL --fail "${lidarrartistposterlink}" -o "$fullartistpath/folder${lidarrartistposterextension}"; then
 					echo "Downloaded 1 profile picture"
 					echo ""
 				fi
-			else
-				echo "Error downloading artist artwork"
-				echo ""
+			fi
+			if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
+				if [ ! -f "$fullartistpath/folder.jpg"  ]; then
+					echo ""
+					echo "Archiving Artist Profile Picture"
+					if curl -sL --fail "${artistartwork}" -o "$fullartistpath/folder.jpg"; then
+						if find "$fullartistpath/folder.jpg" -type f -size -16k | read; then
+							echo "ERROR: Artist artwork is smaller than \"16k\""
+							rm "$fullartistpath/folder.jpg"
+							echo ""
+						else
+							echo "Downloaded 1 profile picture"
+							echo ""
+						fi
+					else
+						echo "Error downloading artist artwork"
+						echo ""
+					fi
+				fi
 			fi
 		fi
 	fi
-
 }
 
 DLAlbumArtwork () {
