@@ -508,7 +508,7 @@ Verify () {
 DLArtistArtwork () {
 	if [ -d "$fullartistpath" ]; then
 		if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
-			if [ -z "$lidarrartistposterlink" ]; then
+			if [ ! -z "$lidarrartistposterlink" ]; then
 				if curl -sL --fail "${lidarrartistposterlink}" -o "$fullartistpath/folder${lidarrartistposterextension}"; then
 					echo "Downloaded 1 profile picture"
 					echo ""
