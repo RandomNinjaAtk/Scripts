@@ -8,27 +8,26 @@ apt-get update -qq && \
 apt-get install -qq -y \
 	git \
 	openssl \
-	python-dev \
+	python3-pip \
 	libffi-dev \
 	libssl-dev \
 	libxml2-dev \
 	libxslt1-dev \
 	mkvtoolnix \
 	zlib1g-dev \
-	ffmpeg \
-	python-pip
-
+	ffmpeg && \
+	
 apt-get purge --auto-remove -y && \
 apt-get clean
 
-pip install --no-cache-dir -U \
+pip3 install --no-cache-dir -U \
 	requests \
 	requests[security] \
 	requests-cache \
 	babelfish \
-	"guessit<2" \
-	"subliminal<2" \
-	stevedore==1.19.1 \
+	guessit \
+	subliminal \
+	stevedore \
 	python-dateutil \
 	qtfaststart \
 	tmdbsimple
