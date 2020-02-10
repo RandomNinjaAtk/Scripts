@@ -63,10 +63,17 @@ ArtistsLidarrReq(){
 		LidArtistPath="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .path")"
 		LidArtistID="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .id")"
 		LidArtistNameCap="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .artistName")"
-		mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
-		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
-		DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")
+		deezerartisturl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url")"
+		DeezerArtistID=$(printf -- "%s" "${DeezerArtistURL##*/}")
 		artistdir="$(basename "$LidArtistPath")"
+		
+		if [ -z "${DeezerArtistID}" ]; then	
+			echo "ERROR: Fallback to MusicBrainz for url..."
+			mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
+			deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
+			DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")			
+		fi		
+		
 		if [ -z "${DeezerArtistID}" ]; then			
 			if [ -f "musicbrainzerror.log" ]; then
 				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
