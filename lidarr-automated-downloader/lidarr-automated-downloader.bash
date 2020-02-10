@@ -507,21 +507,27 @@ Verify () {
 
 DLArtistArtwork () {
 	if [ -d "$fullartistpath" ]; then
+		echo ""
+		echo "Archiving Artist Profile Picture"
 		if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
 			if [ ! -z "$lidarrartistposterlink" ]; then
 				if curl -sL --header "X-Api-Key:"${LidarrApiKey} --fail "${lidarrartistposterlink}" -o "$fullartistpath/folder${lidarrartistposterextension}"; then
-					echo "Downloaded 1 profile picture"
-					echo ""
+					if find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" | read; then
+						echo "ERROR: Artist artwork is smaller than \"16k\""
+						find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" -delete
+						echo ""
+					else
+						echo "Downloaded 1 profile picture"
+						echo ""
+					fi
 				fi
 			fi
 			if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
-				if [ ! -f "$fullartistpath/folder.jpg"  ]; then
-					echo ""
-					echo "Archiving Artist Profile Picture"
+				if [ ! -f "$fullartistpath/folder.jpg"  ]; then					
 					if curl -sL --fail "${artistartwork}" -o "$fullartistpath/folder.jpg"; then
-						if find "$fullartistpath/folder.jpg" -type f -size -16k | read; then
+						if find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" | read; then
 							echo "ERROR: Artist artwork is smaller than \"16k\""
-							rm "$fullartistpath/folder.jpg"
+							find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" -delete
 							echo ""
 						else
 							echo "Downloaded 1 profile picture"
