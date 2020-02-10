@@ -511,7 +511,8 @@ DLArtistArtwork () {
 		echo "Archiving Artist Profile Picture"
 		if [ ! -f "$fullartistpath/folder${lidarrartistposterextension}"  ]; then
 			if [ ! -z "$lidarrartistposterlink" ]; then
-				if curl -sL --header "X-Api-Key:"${LidarrApiKey} --fail "${lidarrartistposterlink}" -o "$fullartistpath/folder${lidarrartistposterextension}"; then
+								
+				if curl -s --header "X-Api-Key:"${LidarrApiKey} --request GET "${lidarrartistposterlink}" -o "$fullartistpath/folder${lidarrartistposterextension}"; then
 					if find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" | read; then
 						echo "ERROR: Artist artwork is smaller than \"16k\""
 						find "$fullartistpath" -type f -maxdepth 1 -size -16k -iname "folder*" -delete
