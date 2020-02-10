@@ -21,7 +21,7 @@ match:
         album: 3.0 # 3.0
         media: 0.01 # 1.0
         mediums: 1.0 # 1.0
-        year: 1.0 # 1.0
+        year: 5.0 # 1.0
         country: 0.01 # 0.5
         label: 0.01 # 0.5
         catalognum: 0.01 # 0.5
@@ -44,8 +44,8 @@ match:
     ignored_media: [] # []
     ignore_data_tracks: yes # yes
     ignore_video_tracks: yes # yes
-    track_length_grace: 5 # 10
-    track_length_max: 15 # 30
+    track_length_grace: 10 # 10
+    track_length_max: 30 # 30
 
 paths:
     default: $disc$track - $title
