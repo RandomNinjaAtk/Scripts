@@ -13,6 +13,7 @@
 
 ############ Paths
 downloaddir="/downloads/deezloaderremix" # Deezloader download directory location
+beetsunmatcheddirectory="/music/unmatched" # Beets unmatched file directory location
 beetsconfig="/config/scripts/beets/config.yaml" # Beets configuration file
 beetslibraryfile="/config/scripts/beets/library.blb" # Beets library file
 beetslog="/config/scripts/beets/beets.log" # Beets log file
@@ -37,6 +38,7 @@ upgrade="false" # true = enabled :: Enables or Disables upgrading dl quality bas
 bitrate="192" # bitrate quality for OPUS and AAC formats only
 TagWithBeets="false" # true = enabled :: tag files with beets for better lidarr matching
 KeepOnlyBeetsMatched="false" # true = enabled :: only keep files that could be successfully matched with beets (keeps really clean library with perfect matches)
+MoveBeetsUnMatched="false" # true = enabled :: Moves unmatched beets files to a alternate location for safe keeping
 BeetsDeDupe="false" # true = enabled :: Prevents clearing database to allow beets to filter duplicate matches 
 replaygaintaggingflac="true" # true = enabled :: Adds replaygain audio normalization tags to flac files
 replaygaintaggingopus="false" # true = enabled :: Adds replaygain audio normalization tags to opus files
