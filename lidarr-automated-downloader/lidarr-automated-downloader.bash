@@ -1194,6 +1194,11 @@ lidarrartists () {
 											
 											Convert
 										
+											if [ -f "$downloaddir/beets-match" ]; then 
+												rm "$downloaddir/beets-match"
+												sleep 0.1
+											fi
+											
 											mkdir -p "$beetsunmatcheddirectory/$artistdir/$libalbumfolder"
 								
 											for file in "$downloaddir"/*; do
@@ -1208,6 +1213,10 @@ lidarrartists () {
 												find "$beetsunmatcheddirectory/$artistdir" -type f -exec chmod 0666 "{}" \;
 											fi
 											
+											continue
+										else
+											rm -rf "$downloaddir"/*
+											sleep 0.1
 											continue
 										fi
 									fi
