@@ -1168,6 +1168,46 @@ lidarrartists () {
 									beetsmatched="false"
 									echo "Error: Unable to match with Beets"
 									
+									if [ "$MoveBeetsUnMatched" = true ]; then 
+																				
+										if [ ! -d "$beetsunmatcheddirectory/$artistdir" ]; then 
+											mkdir -p "$beetsunmatcheddirectory/$artistdir"
+										fi
+										if [ ! -d "$beetsunmatcheddirectory/$artistdir/$libalbumfolder" ]; then
+											echo "Moving to Beets Unmatched directory"
+										
+											if [ "$replaygaintaggingflac" = true ]; then
+												if [ "$quality" = flac ]; then
+													Replaygain
+												fi
+											fi
+											
+											if [ "$replaygaintaggingopus" = true ]; then
+												if [ "$quality" = opus ]; then
+													Replaygain
+												fi
+											fi
+											
+											Convert
+										
+											mkdir -p "$beetsunmatcheddirectory/$artistdir/$libalbumfolder"
+								
+											for file in "$downloaddir"/*; do
+												mv "$file" "$beetsunmatcheddirectory/$artistdir/$libalbumfolder"/
+											done
+										
+											rm -rf "$downloaddir"/*
+											sleep 0.1
+											
+											if [ -d "$beetsunmatcheddirectory/$artistdir" ]; then
+												find "$beetsunmatcheddirectory/$artistdir" -type d -exec chmod 0777 "{}" \;
+												find "$beetsunmatcheddirectory/$artistdir" -type f -exec chmod 0666 "{}" \;
+											fi
+											
+											continue
+										fi
+									fi
+									
 									if [ "$KeepOnlyBeetsMatched" = true ]; then
 										rm -rf "$downloaddir"/*
 										sleep 0.1
