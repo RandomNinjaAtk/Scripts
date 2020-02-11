@@ -16,7 +16,7 @@ PerferredLanguage="eng" # Keeps only the audio for the language selected, if not
 SubtitleLanguage="eng" # Removes all subtitles not matching specified language
 SetUnknownAudioLanguage="true" # true = ENABLED, if enabled, sets found unknown (und) audio tracks to the language in the next setting
 UnkownAudioLanguage="eng" # Sets unknown language tracks to the language specified
-MatchVideoLanguage="true" # Sets video language to match perferred language
+MatchVideoLanguage="false" # Sets video language to match perferred language
 #===============FUNCTIONS==============
 
 set -e
