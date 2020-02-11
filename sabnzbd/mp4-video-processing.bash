@@ -32,20 +32,13 @@ cd /config/scripts/sickbeard_mp4_automator
 # Run sabnzbd Deobfuscation script
 timeout --foreground 1m python Deobfuscate.py
 
-# Check for video files, if none found error out
-if find "$1" -type f -iregex ".*/.*\.\(mp4\|mkv\|avi\|ts\|mov\|vob\|mpg\|mts\)" | read; then
-	echo "REMOVE NON VIDEO FILES"
-	find "$1"/* -type f -not -iregex ".*/.*\.\(webvtt\|ass\|srt\|mp4\|mkv\|ts\|avi\|mov\|vob\|mpg\|mts\)" -delete
-	echo "REMOVE NON VIDEO FILES COMPLETE"
-else
-	echo "ERROR: NO VIDEO FILES FOUND"
-	exit 1
-fi
+# Run Cleaner before processing wtih mp4 automator
+bash MKV-Cleaner.bash "$1"
 
 # Manual run of Sickbeard MP4 Automator
 python3 manual.py -i "$1" -nt
 
-bash MKV-Cleaner.bash "$1"
+
 
 echo "COMPLETE"
 
