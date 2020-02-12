@@ -66,63 +66,62 @@ ArtistsLidarrReq(){
 		lidarrartistposterurl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType==\"poster\") | .url")"
 		lidarrartistposterextension="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType==\"poster\") | .extension")"
 		lidarrartistposterlink="${LidarrUrl}${lidarrartistposterurl}${lidarrartistposterextension}"
-		mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
-		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource')
+		deezerartisturl=($(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url"))
+		
+		if [ -z "${deezerartisturl}" ]; then	
+			echo "ERROR: Fallback to musicbrainz for url..."
+			mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
+			deezerartisturl=($(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource'))		
+		fi	
+		
+		if [ -z "${deezerartisturl}" ]; then			
+			if [ -f "musicbrainzerror.log" ]; then
+				echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
+				if cat "musicbrainzerror.log" | grep "$mbid" | read; then
+					sleep 0.1
+				else
+					echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
+				fi
+			fi
+			continue
+		fi
 		
 		for url in ${!deezerartisturl[@]}; do
 			deezerid="${deezerartisturl[$url]}"
 			DeezerArtistID=$(printf -- "%s" "${deezerid##*/}")
 			artistdir="$(basename "$LidArtistPath")"
 			
-			if [ -z "${DeezerArtistID}" ]; then	
-				echo "ERROR: Fallback to lidarr for url..."
-				eezerartisturl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url")"
-				DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")			
-			fi		
-			
-			if [ -z "${DeezerArtistID}" ]; then			
-				if [ -f "musicbrainzerror.log" ]; then
-					echo "${artistnumber}/${TotalLidArtistNames}: ERROR: \"$LidArtistNameCap\"... musicbrainz id: $mbid is missing deezer link, see: \"$(pwd)/musicbrainzerror.log\" for more detail..."
-					if cat "musicbrainzerror.log" | grep "$mbid" | read; then
-						sleep 0.1
-					else
-						echo "Update Musicbrainz Relationship Page: https://musicbrainz.org/artist/$mbid/relationships for \"${LidArtistNameCap}\" with Deezer Artist Link" >> "musicbrainzerror.log"
-					fi
-				fi
-			else
-				if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
-					rm "$LidArtistPath/musicbrainzerror.log"
-				fi
+			if [ -f "$LidArtistPath/musicbrainzerror.log" ]; then
+				rm "$LidArtistPath/musicbrainzerror.log"
+			fi
 				
-				if [ "$dailycheck" = true ]; then
+			if [ "$dailycheck" = true ]; then
 
-					if cat "daily.log" | grep "$LidArtistID" | read; then
-						echo "${artistnumber}/${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
-					else			
-						lidarrartists
-
-						if ! [ -f "daily.log" ]; then
-							touch "daily.log"
-						fi
-
-						if cat "daily.log" | grep "$LidArtistID" | read; then
-							sleep 0.1
-						else
-							echo "${LidArtistNameCap} :: $LidArtistID :: Daily Check Completed" >> "daily.log"
-						fi
-					fi
-				else
+				if cat "daily.log" | grep "$LidArtistID" | read; then
+					echo "${artistnumber}/${TotalLidArtistNames}: Already Checked \"$LidArtistNameCap\" for new music, skipping..."
+				else			
 					lidarrartists
 
 					if ! [ -f "daily.log" ]; then
 						touch "daily.log"
 					fi
-					
 					if cat "daily.log" | grep "$LidArtistID" | read; then
 						sleep 0.1
 					else
 						echo "${LidArtistNameCap} :: $LidArtistID :: Daily Check Completed" >> "daily.log"
 					fi
+				fi
+			else
+				lidarrartists
+
+				if ! [ -f "daily.log" ]; then
+					touch "daily.log"
+				fi
+					
+				if cat "daily.log" | grep "$LidArtistID" | read; then
+					sleep 0.1
+				else
+					echo "${LidArtistNameCap} :: $LidArtistID :: Daily Check Completed" >> "daily.log"
 				fi
 			fi
 		done
