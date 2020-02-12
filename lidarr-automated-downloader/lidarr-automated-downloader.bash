@@ -66,7 +66,8 @@ ArtistsLidarrReq(){
 		lidarrartistposterurl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType==\"poster\") | .url")"
 		lidarrartistposterextension="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .images | .[] | select(.coverType==\"poster\") | .extension")"
 		lidarrartistposterlink="${LidarrUrl}${lidarrartistposterurl}${lidarrartistposterextension}"
-		deezerartisturl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url")"
+		mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
+		deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource')
 		
 		for url in ${!deezerartisturl[@]}; do
 			deezerid="${deezerartisturl[$url]}"
@@ -74,11 +75,10 @@ ArtistsLidarrReq(){
 			artistdir="$(basename "$LidArtistPath")"
 			
 			if [ -z "${DeezerArtistID}" ]; then	
-				echo "ERROR: Fallback to MusicBrainz for url..."
-				mbjson=$(curl -s "http://musicbrainz.org/ws/2/artist/${mbid}?inc=url-rels&fmt=json")
-				deezerartisturl=$(echo "$mbjson" | jq -r '.relations | .[] | .url | select(.resource | contains("deezer")) | .resource' | head -n 1)
+				echo "ERROR: Fallback to lidarr for url..."
+				eezerartisturl="$(echo "${wantit}" | jq -r ".[] | select(.foreignArtistId==\"${mbid}\") | .links | .[] | select(.name==\"deezer\") | .url")"
 				DeezerArtistID=$(printf -- "%s" "${deezerartisturl##*/}")			
-			fi	
+			fi		
 			
 			if [ -z "${DeezerArtistID}" ]; then			
 				if [ -f "musicbrainzerror.log" ]; then
