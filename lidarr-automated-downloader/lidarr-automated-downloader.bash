@@ -840,7 +840,31 @@ lidarrartists () {
 							albumdurationdisplay=$(DurationCalc $albumduration)
 							albumtimeout=$(($albumduration*$albumtimeoutpercentage/100))
 							albumtimeoutdisplay=$(DurationCalc $albumtimeout)
-							albumfallbacktimout=$(($albumduration*2))							
+							albumfallbacktimout=$(($albumduration*2))
+							
+							if [ "$downloadalbums" != true ]; then
+								if [ "$albumtype" = "album" ]; then									
+									continue
+								fi
+							fi
+							
+							if [ "$downloadcompilations" != true ]; then
+								if [ "$albumtype" = "compile" ]; then									
+									continue
+								fi
+							fi
+							
+							if [ "$downloadeps" != true ]; then
+								if [ "$albumtype" = "ep" ]; then									
+									continue
+								fi
+							fi
+							
+							if [ "$downloadsingles" != true ]; then
+								if [ "$albumtype" = "single" ]; then									
+									continue
+								fi
+							fi	
 							
 							if [ "$albumlyrictype" = true ]; then
 								albumlyrictype="Explicit"
