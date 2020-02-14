@@ -1294,6 +1294,9 @@ lidarrartists () {
 							
 							jq ". + {\"sanatized_album_name\": \"$sanatizedfuncalbumname\"} + {\"foldername\": \"$libalbumfolder\"} + {\"artistpath\": \"$fullartistpath\"} + {\"dlquality\": \"$archivequality\"} + {\"bitrate\": \"$archivebitrate\"} + {\"beetsmatched\": \"$beetsmatched\"}" "$tempalbumjson" > "$fullartistpath/$libalbumfolder/$tempalbumjson"
 							
+							LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RescanFolders\", \"folders\": [\"$fullartistpath/$libalbumfolder\"]}" --header "X-Api-Key:${LidarrApiKey}" );
+							echo "Notified Lidarr to scan ${LidArtistNameCap} :: $libalbumfolder"
+							
 							if [ -f "$tempalbumfile" ]; then
 								rm "$tempalbumfile"
 							fi
@@ -1358,9 +1361,6 @@ lidarrartists () {
 		if [ -d "$fullartistpath" ]; then
 			jq -s '.' "$fullartistpath"/*/"$tempalbumjson" > "$fullartistpath/$artistalbumlistjson"
 		fi
-		
-		LidarrProcessIt=$(curl -s $LidarrUrl/api/v1/command -X POST -d "{\"name\": \"RefreshArtist\", \"artistID\": \"${LidArtistID}\"}" --header "X-Api-Key:${LidarrApiKey}" );
-		echo "Notified Lidarr to scan ${LidArtistNameCap}"
 		
 	fi
 	sleep 0.1
