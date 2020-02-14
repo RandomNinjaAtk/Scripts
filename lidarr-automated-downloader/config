@@ -37,7 +37,7 @@ albumtimeoutpercentage=8 # Set the number between 1 and 100 :: This number is us
 tracktimeoutpercentage=25 # Set the number between 1 and 100 :: This number is used to caculate  track download timeout length by multiplying Track Length by ##%
 
 ############ File Options
-quality="flac" # flac or mp3 or opus or aac or alac :: Downloads flac or mp3 and then converts to requested format
+quality="flac" # flac or mp3 or opus or aac or alac :: Set desired library format (Flac is converted for opus, aac, and alac types)
 upgrade="false" # true = enabled :: Enables or Disables upgrading dl quality based on quality type and bitrate changes.
 bitrate="192" # bitrate quality for OPUS and AAC formats only
 TagWithBeets="false" # true = enabled :: tag files with beets for better lidarr matching
