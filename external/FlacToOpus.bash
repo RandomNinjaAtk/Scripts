@@ -1,6 +1,19 @@
 #!/bin/bash
 ################ FLAC -> OPUS CONVERSION TOOL ################
-bitrate="192"
+
+############ Usage
+# Execute via CLI using the following command: bash FlacToOpus.bash "/path/to/starting/directory"
+# Replace "/path/to/starting/directory" with the path to your starting directory
+
+############ Requirements
+# Software Packages:
+# opusenc
+# find
+
+############ Settings
+bitrate="192" # Desired bitrate for OPUS conversion (VBR is used, so will not be exact)
+
+################ Script Start
 
 filecount=($(find "$1" -iname "*.flac" | wc -l))
 
@@ -25,6 +38,5 @@ find "$1" -iname "*.flac" -print0 | while IFS= read -r -d '' file; do
 done
 
 
-################ END SCRIPT
-
+################ Script End
 exit 0
