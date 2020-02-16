@@ -172,6 +172,8 @@ if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
   echo "done"
 echo "script downloads complete..."
 
+fi
+
 find /config/scripts -type f -exec chmod 0666 {} \;
 find /config/scripts -type d -exec chmod 0777 {} \;
 
