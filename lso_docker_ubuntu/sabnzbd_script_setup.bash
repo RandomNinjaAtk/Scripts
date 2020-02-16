@@ -139,21 +139,13 @@ fi
 # Download Scripts
 echo "downloading scripts..."
 
-if [ -f /config/scripts/video-processing.bash ]; then
-	rm /config/scripts/video-processing.bash
-	sleep 0.1
-fi
-
 if [ ! -f /config/scripts/video-processing.bash ]; then
 	echo "downloading video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/video-processing.bash"
 	curl -o /config/scripts/video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/video-processing.bash
 	echo "done"
 fi
 
-if [ -f /config/scripts/AudioPostProcessing.bash ]; then
-	rm /config/scripts/AudioPostProcessing.bash
-	sleep 0.1
-fi
+
 if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
 	echo "downloading AudioPostProcessing.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/AudioPostProcessing.bash"
 	curl -o /config/scripts/AudioPostProcessing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/AudioPostProcessing.bash
