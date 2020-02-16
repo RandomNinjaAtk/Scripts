@@ -122,10 +122,7 @@ fi
 
 if [ ! -d /config/scripts ]; then
 	echo "setting up script directory"
-	mkdir /config/scripts
-	# Set Permissions
-	echo "setting permissions..."
-	chmod 0777 -R /config/scripts
+	mkdir -p /config/scripts
 	echo "done"
 fi
 
@@ -137,24 +134,20 @@ if [ ! -f /config/scripts/beets/config.xml ]; then
 	echo "downloading config.yaml from: https://github.com/RandomNinjaAtk/Scripts/blob/master/config/config.yaml"
 	curl -o /config/scripts/beets/config.yaml https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/config/config.yaml
 	echo "done"
-	chmod 0666 /config/scripts/beets/config.yaml
 fi
 
 # Download Scripts
 echo "downloading scripts..."
+
 if [ -f /config/scripts/video-processing.bash ]; then
 	rm /config/scripts/video-processing.bash
 	sleep 0.1
 fi
-if [ ! -f /config/scripts/video-processing.bash ]; then
-  echo "downloading video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/video-processing.bash"
-  curl -o /config/scripts/video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/video-processing.bash
-  echo "done"
 
-  # Set Permissions
-  echo "setting permissions..."
-  chmod 777 /config/scripts/video-processing.bash
-  echo "done"
+if [ ! -f /config/scripts/video-processing.bash ]; then
+	echo "downloading video-processing.bash from: https://github.com/RandomNinjaAtk/Scripts/blob/master/sabnzbd/video-processing.bash"
+	curl -o /config/scripts/video-processing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/video-processing.bash
+	echo "done"
 fi
 
 if [ -f /config/scripts/AudioPostProcessing.bash ]; then
@@ -165,15 +158,12 @@ if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
 	echo "downloading AudioPostProcessing.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/AudioPostProcessing.bash"
 	curl -o /config/scripts/AudioPostProcessing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/AudioPostProcessing.bash
 	echo "done"
-
-	# Set Permissions
-	echo "setting permissions..."
-	chmod 777 /config/scripts/AudioPostProcessing.bash
-	echo "done"
-	echo "script downloads complete..."
 fi
+
+echo "script downloads complete..."
 
 find /config/scripts -type f -exec chmod 0666 {} \;
 find /config/scripts -type d -exec chmod 0777 {} \;
+find /config/scripts -type f -iname "*.bash" -exec chmod 0777 {} \;
 
 exit 0
