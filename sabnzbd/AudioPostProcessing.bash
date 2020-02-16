@@ -10,8 +10,8 @@ RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG f
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
 AudioVerification="TRUE" # TRUE = ENABLED, Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)
 Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
-ConversionFormat="MP3" # SET TO: OPUS or AAC or MP3 or FLAC or ALAC - converts lossless FLAC files to set format
-Threads="0" # SET TO: "0" to use maximum number of threads for multi-threaded operations
+ConversionFormat="MP3" # SET TO: OPUS or AAC or MP3 or ALAC - converts lossless FLAC files to set format
+ConversionBitrate="192" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
 BeetsProcessing="TRUE" # TRUE = ENABLED
 
@@ -46,73 +46,146 @@ duplicatefilecleanup () {
 }
 
 verify () {
-	if find "$1" -type f -iregex ".*/.*\.\(flac\)" | read; then
-		echo "START FLAC VERIFICATION"
-		find "$1" -type f -iregex ".*/.*\.\(flac\)" | xargs -0 -d '\n' -n1 -I@ -P ${Threads} bash -c 'if flac -t --totally-silent "@"; then echo "FLAC CHECK PASSED: @"; else rm "@" && echo "FAILED FLAC CHECK, FILE DELETED: @"; fi;' && echo "VERIFICATION COMPLETE"
-	elif find "$1" -type f -iregex ".*/.*\.\(mp3\)" | read; then
-		echo "START MP3 VERIFICATION"
-		find "$1" -type f -iregex ".*/.*\.\(mp3\)" | xargs -0 -d '\n' -n1 -I@ -P ${Threads} bash -c 'mp3val -f -nb "@"' && echo "VERIFICATION COMPLETE"
-	else
-		echo "NO FLAC/MP3 FILES TO VERIFY"
+	if find "$1" -iname "*.flac" | read; then
+		if ! [ -x "$(command -v flac)" ]; then
+			echo "ERROR: FLAC verification utility not installed (ubuntu: apt-get install -y flac)"
+		else
+			for fname in "$1"/*.flac; do
+				filename="$(basename "$fname")"
+				if flac -t --totally-silent "$fname"; then
+					echo "Verified Track: $filename"
+				else
+					echo "ERROR: Track Verification Failed: \"$filename\""
+					rm -rf "$1"/*
+					sleep 0.1
+					exit 1
+				fi
+			done
+		fi
+	fi
+	if find "$1" -iname "*.mp3" | read; then
+		if ! [ -x "$(command -v mp3val)" ]; then
+			echo "MP3VAL verification utility not installed (ubuntu: apt-get install -y mp3val)"
+		else
+			for fname in "$1"/*.mp3; do
+				filename="$(basename "$fname")"
+				if mp3val -f -nb "$fname" > /dev/null; then
+					echo "Verified Track: $filename"
+				fi
+			done
+		fi
 	fi
 }
 
 conversion () {
-	if find "$1" -type f -iregex ".*/.*\.\(flac\)" | read; then
-		echo "FLAC FILES FOUND"
-		if [ "${ConversionFormat}" = OPUS ]; then
-			echo "OPUS CONVERSION START"
-			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec libopus -ab 160k -application audio \"@.opus\" && echo \"CONVERSION SUCCESS: @.opus\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
-				echo "OPUS CONVERSION COMPLETE"
-			else
-				echo "ERROR: OPUS CONVERSION FAILED" && exit 1
+	converttrackcount=$(find  "$1/" -name "*.flac" | wc -l)
+	targetformat="$ConversionFormat"
+	bitrate="$ConversionBitrate"
+	if [ "${ConversionFormat}" = OPUS ]; then
+		if [ -x "$(command -v opusenc)" ]; then
+			if find  "$1"/ -name "*.flac" | read; then
+				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
+				for fname in "$1"/*.flac; do
+					filename="$(basename "${fname%.flac}")"
+					if opusenc --bitrate $bitrate --vbr --music "$fname" "${fname%.flac}.opus" 2> /dev/null; then
+						echo "Converted: $filename"
+						if [ -f "${fname%.flac}.opus" ]; then
+							rm "$fname"
+						fi
+					else
+						echo "Conversion failed: $filename, performing cleanup..."
+						rm -rf "$1"/*
+						sleep 0.1
+						exit 1
+					fi
+				done
 			fi
+		else
+			echo "ERROR: opus-tools not installed, please install opus-tools to use this conversion feature"
+			sleep 5
 		fi
-		if [ "${ConversionFormat}" = AAC ]; then
-			echo "AAC CONVERSION START"
-			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec aac -ab 320k -movflags faststart \"@.m4a\" && echo \"CONVERSION SUCCESS: @.m4a\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
-				echo "AAC CONVERSION COMPLETE"
-			else
-				echo "ERROR: AAC CONVERSION FAILED" && exit 1
+	fi
+	if [ "${ConversionFormat}" = AAC ]; then
+		if [ -x "$(command -v ffmpeg)" ]; then
+			if find "$1"/ -name "*.flac" | read; then
+				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
+				for fname in "$1"/*.flac; do
+					filename="$(basename "${fname%.flac}")"
+					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec aac -ab ${bitrate}k -movflags faststart "${fname%.flac}.m4a"; then
+						echo "Converted: $filename"
+						if [ -f "${fname%.flac}.m4a" ]; then
+							rm "$fname"
+						fi
+					else
+						echo "Conversion failed: $filename, performing cleanup..."
+						rm -rf "$1"/*
+						sleep 0.1
+						exit 1
+					fi
+				done
 			fi
+		else
+			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
+			sleep 5
 		fi
-		if [ "${ConversionFormat}" = MP3 ]; then
-			echo "MP3 CONVERSION START"
-			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec libmp3lame -ab 320k \"@.mp3\" && echo \"CONVERSION SUCCESS: @.mp3\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
-				echo "MP3 CONVERSION COMPLETE"
-			else
-				echo "ERROR: MP3 CONVERSION FAILED" && exit 1
+	fi
+	
+	if [ "${ConversionFormat}" = MP3 ]; then
+		if [ -x "$(command -v ffmpeg)" ]; then
+			if find "$1"/ -name "*.flac" | read; then
+				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
+				for fname in "$1"/*.flac; do
+					filename="$(basename "${fname%.flac}")"
+					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec libmp3lame -ab ${bitrate}k "${fname%.flac}.mp3"; then
+						echo "Converted: $filename"
+						if [ -f "${fname%.flac}.mp3" ]; then
+							rm "$fname"
+						fi
+					else
+						echo "Conversion failed: $filename, performing cleanup..."
+						rm -rf "$1"/*
+						sleep 0.1
+						exit 1
+					fi
+				done
 			fi
+		else
+			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
+			sleep 5
 		fi
-		if [ "${ConversionFormat}" = FLAC ]; then
-			echo "FLAC CONVERSION START"
-			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec flac \"@.temp.flac\" && echo \"CONVERSION SUCCESS: @.flac\" && rm \"@.flac\" && mv \"@.temp.flac\" \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
-				echo "FLAC CONVERSION COMPLETE"
-			else
-				echo "ERROR: FLAC CONVERSION FAILED" && exit 1
+	fi
+	if [ "${ConversionFormat}" = ALAC ]; then
+		if [ -x "$(command -v ffmpeg)" ]; then
+			if find "$1"/ -name "*.flac" | read; then
+				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat)"
+				for fname in "$1"/*.flac; do
+					filename="$(basename "${fname%.flac}")"
+					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec alac -movflags faststart "${fname%.flac}.m4a"; then
+						echo "Converted: $filename"
+						if [ -f "${fname%.flac}.m4a" ]; then
+							rm "$fname"
+						fi
+					else
+						echo "Conversion failed: $filename, performing cleanup..."
+						rm -rf "$1"/*
+						sleep 0.1
+						exit 1
+					fi
+				done
 			fi
+		else
+			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
+			sleep 5
 		fi
-		if [ "${ConversionFormat}" = ALAC ]; then
-			echo "ALAC CONVERSION START"
-			if { find "$1" -type f -iregex ".*/.*\.\(flac\)" | sed -e 's/.flac$//' -e "s/'/\\'/g" -e 's/\$/\\$/g' | xargs -d '\n' -n1 -I@ -P ${Threads} bash -c "ffmpeg -loglevel warning -hide_banner -stats -i \"@.flac\" -n -vn -acodec alac -movflags faststart \"@.m4a\" && echo \"CONVERSION SUCCESS: @.m4a\" && rm \"@.flac\" && echo \"SOURCE FILE DELETED: @.flac\""; }; then
-				echo "ALAC CONVERSION COMPLETE"
-			else
-				echo "ERROR: ALAC CONVERSION FAILED" && exit 1
-			fi
-		fi
-	else
-		echo "No lossless (FLAC) files found to convert"
 	fi
 }
 
 replaygain () {
-	if find "$1" -type f -iregex ".*/.*\.\(flac\)" | read; then
-		echo "FLAC - ADDING REPLAYGAIN TAGS"
-		if find "$1" -type f -iregex ".*/.*\.\(flac\)" -exec metaflac --add-replay-gain "{}" +; then
-			echo "FLAC REPLAYGAIN TAGGING COMPLETE"
-		else
-			echo "ERROR: FLAC REPLAYGAIN TAGGING FAILED" && exit 1
-		fi
+	if ! [ -x "$(command -v flac)" ]; then
+		echo "ERROR: METAFLAC replaygain utility not installed (ubuntu: apt-get install -y flac)"
+	elif find "$1" -name "*.flac" | read; then
+		replaygaintrackcount=$(find  "$1"/ -name "*.flac" | wc -l)
+		find "$1" -name "*.flac" -exec metaflac --add-replay-gain "{}" + && echo "Replaygain: $replaygaintrackcount Tracks Tagged"
 	fi
 }
 
@@ -120,18 +193,18 @@ beets () {
 	echo "MATCHING WITH BEETS"
 	if [ -f /config/scripts/beets/library.blb ]; then
 		rm /config/scripts/beets/library.blb
-		sleep 1s
+		sleep 0.2
 	fi
 	if [ -f /config/scripts/beets/beets.log ]; then 
 		rm /config/scripts/beets/beets.log
-		sleep 1s
+		sleep 0.2
 	fi
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | read; then
-		beet -c /config/scripts/beets/config.yaml -d "$1" import -q "$1"
+		beet -c /config/scripts/beets/config.yaml -d "$1" import -q "$1" > /dev/null
 		if find "$1" -type f -iname "*.MATCHED.*" | read; then
 			echo "SUCCESS: Matched with beets!"
 		else
-			rm -rf "$1" 
+			rm -rf "$1"/* 
 			echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..." && exit 1
 		fi	
 	fi
@@ -144,32 +217,17 @@ if [ "${RemoveNonAudioFiles}" = TRUE ]; then
 else
 	echo "CLEANING DISABLED"
 fi
+
 if [ "${DuplicateFileCleanUp}" = TRUE ]; then
 	duplicatefilecleanup "$1"
 else
 	echo "DUPLICATE CLEANUP DISABLED"
 fi
+
 if [ "${AudioVerification}" = TRUE ]; then
-	if [ -x "$(command -v flac)" ]; then
-		if [ -x "$(command -v mp3val)" ]; then
-			verify "$1"
-		else
-			echo "MP3VAL not installed" && exit 1
-		fi
-	else
-		echo "FLAC not installed" && exit 1
-	fi
+	verify "$1"
 else
 	echo "AUDIO VERFICATION DISABLED"
-fi
-if [ "${Convert}" = TRUE ];	then
-	if [ -x "$(command -v ffmpeg)" ]; then
-		conversion "$1"
-	else
-		echo "FFMPEG not installed" && exit 1
-	fi
-else
-	echo "CONVERSION DISABLED"
 fi
 
 if [ "${BeetsProcessing}" = TRUE ]; then
@@ -178,14 +236,18 @@ else
 	echo "BEETS PROCESSING DISABLED"
 fi
 
+if [ "${Convert}" = TRUE ];	then
+	conversion "$1"
+else
+	echo "CONVERSION DISABLED"
+fi
+
+
 if [ "${ReplaygainTagging}" = TRUE ]; then
-	if [ -x "$(command -v metaflac)" ];	then
-		replaygain "$1"
-	else
-		echo "metaflac not installed" && exit 1
-	fi
+	replaygain "$1"
 else
 	echo "REPLAYGAIN TAGGING DISABLED"
 fi
+
 echo "AUDIO POST-PROCESSING COMPLETE" && exit 0
 #============END SCRIPT============
