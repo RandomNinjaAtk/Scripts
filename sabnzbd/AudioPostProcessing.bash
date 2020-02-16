@@ -78,7 +78,7 @@ verify () {
 }
 
 conversion () {
-	converttrackcount=$(find  "$1/" -name "*.flac" | wc -l)
+	converttrackcount=$(find  "$1"/ -name "*.flac" | wc -l)
 	targetformat="$ConversionFormat"
 	bitrate="$ConversionBitrate"
 	if [ "${ConversionFormat}" = OPUS ]; then
@@ -183,9 +183,9 @@ conversion () {
 replaygain () {
 	if ! [ -x "$(command -v flac)" ]; then
 		echo "ERROR: METAFLAC replaygain utility not installed (ubuntu: apt-get install -y flac)"
-	elif find "$1" -name "*.flac" | read; then
-		replaygaintrackcount=$(find  "$1"/ -name "*.flac" | wc -l)
-		find "$1" -name "*.flac" -exec metaflac --add-replay-gain "{}" + && echo "Replaygain: $replaygaintrackcount Tracks Tagged"
+	elif find "$1" -iname "*.flac" | read; then
+		replaygaintrackcount=$(find  "$1"/ -iname "*.flac" | wc -l)
+		find "$1" -iname "*.flac" -exec metaflac --add-replay-gain "{}" + && echo "Replaygain: $replaygaintrackcount Tracks Tagged"
 	fi
 }
 
