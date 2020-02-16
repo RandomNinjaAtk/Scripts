@@ -170,6 +170,9 @@ if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
   echo "setting permissions..."
   chmod 777 /config/scripts/AudioPostProcessing.bash
   echo "done"
-fi
 echo "script downloads complete..."
+
+find /config/scripts -type f -exec chmod 0666 {} \;
+find /config/scripts -type d -exec chmod 0777 {} \;
+
 exit 0
