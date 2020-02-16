@@ -162,16 +162,15 @@ if [ -f /config/scripts/AudioPostProcessing.bash ]; then
 	sleep 0.1
 fi
 if [ ! -f /config/scripts/AudioPostProcessing.bash ]; then
-  echo "downloading AudioPostProcessing.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/AudioPostProcessing.bash"
-  curl -o /config/scripts/AudioPostProcessing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/AudioPostProcessing.bash
-  echo "done"
+	echo "downloading AudioPostProcessing.bash from: https://github.com/RandomNinjaAtk/Scripts/tree/master/sabnzbd/AudioPostProcessing.bash"
+	curl -o /config/scripts/AudioPostProcessing.bash https://raw.githubusercontent.com/RandomNinjaAtk/Scripts/master/sabnzbd/AudioPostProcessing.bash
+	echo "done"
 
-  # Set Permissions
-  echo "setting permissions..."
-  chmod 777 /config/scripts/AudioPostProcessing.bash
-  echo "done"
-echo "script downloads complete..."
-
+	# Set Permissions
+	echo "setting permissions..."
+	chmod 777 /config/scripts/AudioPostProcessing.bash
+	echo "done"
+	echo "script downloads complete..."
 fi
 
 find /config/scripts -type f -exec chmod 0666 {} \;
