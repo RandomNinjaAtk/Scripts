@@ -1,5 +1,5 @@
 #!/bin/bash
-################ FLAC -> OPUS CONVERSION TOOL#########
+################ FLAC -> OPUS CONVERSION TOOL ################
 bitrate="192"
 
 filecount=($(find "$1" -iname "*.flac" | wc -l))
