@@ -4,13 +4,13 @@
 #             Bash Script             #
 #######################################
 #=============REQUIREMENTS=============
-#        flac, mp3val, ffmpeg         #
+#    flac, opusenc, mp3val, ffmpeg    #
 #============CONFIGURATION=============
 RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG files
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
 AudioVerification="TRUE" # TRUE = ENABLED, Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)
 Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
-ConversionFormat="MP3" # SET TO: OPUS or AAC or MP3 or ALAC - converts lossless FLAC files to set format
+ConversionFormat="OPUS" # SET TO: OPUS or AAC or MP3 or ALAC - converts lossless FLAC files to set format
 ConversionBitrate="192" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
 BeetsProcessing="TRUE" # TRUE = ENABLED
