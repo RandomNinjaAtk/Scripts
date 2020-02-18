@@ -21,19 +21,19 @@ match:
         album: 3.0 # 3.0
         media: 0.01 # 1.0
         mediums: 1.0 # 1.0
-        year: 8.0 # 1.0
+        year: 9.0 # 1.0
         country: 0.01 # 0.5
         label: 0.01 # 0.5
         catalognum: 0.01 # 0.5
         albumdisambig: 0.5 # 0.5
         album_id: 5.0 # 5.0
         tracks: 2.0 # 2.0
-        missing_tracks: 8.0 # 0.9
-        unmatched_tracks: 8.0 # 0.6
+        missing_tracks: 9.0 # 0.9
+        unmatched_tracks: 9.0 # 0.6
         track_title: 3.0 # 3.0
         track_artist: 2.0 # 2.0
         track_index: 1.0 # 1.0
-        track_length: 8.0 # 2.0
+        track_length: 9.0 # 2.0
         track_id: 5.0 # 5.0
     preferred:
         countries: [] # []
