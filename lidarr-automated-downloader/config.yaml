@@ -16,15 +16,15 @@ match:
         mediums: medium
         year: medium
     distance_weights:
-        source: 0.01 # 2.0
+        source: 2.0 # 2.0
         artist: 3.0 # 3.0
         album: 3.0 # 3.0
-        media: 0.01 # 1.0
-        mediums: 1.0 # 1.0
+        media: 1.0 # 1.0
+        mediums: 9.0 # 1.0
         year: 9.0 # 1.0
-        country: 0.01 # 0.5
-        label: 0.01 # 0.5
-        catalognum: 0.01 # 0.5
+        country: 0.5 # 0.5
+        label: 0.5 # 0.5
+        catalognum: 0.5 # 0.5
         albumdisambig: 0.5 # 0.5
         album_id: 5.0 # 5.0
         tracks: 2.0 # 2.0
@@ -67,7 +67,7 @@ import:
     group_albums: no
 
 chroma:
-    auto: yes
+    auto: no
 
 embedart:
     auto: no
