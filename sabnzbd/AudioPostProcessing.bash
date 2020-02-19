@@ -10,7 +10,7 @@ RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG f
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
 AudioVerification="TRUE" # TRUE = ENABLED, Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)
 Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
-ConversionFormat="AAC" # SET TO: OPUS or AAC or MP3 or ALAC or FLAC - converts lossless FLAC files to set format
+ConversionFormat="FLAC" # SET TO: OPUS or AAC or MP3 or ALAC or FLAC - converts lossless FLAC files to set format
 ConversionBitrate="320" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
 BeetsProcessing="TRUE" # TRUE = ENABLED
@@ -109,10 +109,12 @@ conversion () {
 			echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${targetbitrate}))"
 			for fname in "$1"/*.flac; do
 				filename="$(basename "${fname%.flac}")"
-				if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn $options "${fname%.flac}.$extension"; then
+				if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn $options "${fname%.flac}.temp.$extension"; then
 					echo "Converted: $filename"
-					if [ -f "${fname%.flac}.$extension" ]; then
+					if [ -f "${fname%.flac}.temp.$extension" ]; then
 						rm "$fname"
+						sleep 0.1
+						mv "${fname%.flac}.temp.$extension" "${fname%.flac}.$extension"
 					fi
 				else
 					echo "Conversion failed: $filename, performing cleanup..."
@@ -149,6 +151,7 @@ beets () {
 	fi
 	
 	touch "$1/beets-match"
+	sleep 0.1
 	
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | read; then
 		beet -c /config/scripts/beets/config.yaml -d "$1" import -q "$1" > /dev/null
