@@ -10,8 +10,8 @@ RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG f
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
 AudioVerification="TRUE" # TRUE = ENABLED, Verifies FLAC/MP3 files for errors (fixes MP3's, deletes bad FLAC files)
 Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
-ConversionFormat="OPUS" # SET TO: OPUS or AAC or MP3 or ALAC - converts lossless FLAC files to set format
-ConversionBitrate="192" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
+ConversionFormat="AAC" # SET TO: OPUS or AAC or MP3 or ALAC or FLAC - converts lossless FLAC files to set format
+ConversionBitrate="320" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
 BeetsProcessing="TRUE" # TRUE = ENABLED
 
@@ -39,8 +39,6 @@ duplicatefilecleanup () {
 	find "$1"/* -type f -iname "*.[0-9].*" -delete
 	if find "$1" -type f -iregex ".*/.*\.\(flac\)" | read; then
 		find "$1"/* -type f -not -iregex ".*/.*\.\(flac\)" -delete
-	elif find "$1" -type f -iregex ".*/.*\.\(alac\)" | read; then
-		find "$1"/* -type f -not -iregex ".*/.*\.\(alac\)" -delete
 	fi
 	echo "DUPLICATE FILE CLEANUP COMPLETE"
 }
@@ -101,6 +99,11 @@ conversion () {
 		extension="m4a"
 		targetbitrate="lossless"
 	fi
+	if [ "${ConversionFormat}" = FLAC ]; then
+		options="-acodec flac"
+		extension="flac"
+		targetbitrate="lossless"
+	fi
 	if [ -x "$(command -v ffmpeg)" ]; then
 		if find "$1"/ -name "*.flac" | read; then
 			echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${targetbitrate}))"
@@ -138,20 +141,28 @@ beets () {
 	echo "MATCHING WITH BEETS"
 	if [ -f /config/scripts/beets/library.blb ]; then
 		rm /config/scripts/beets/library.blb
-		sleep 0.2
+		sleep 0.1
 	fi
 	if [ -f /config/scripts/beets/beets.log ]; then 
 		rm /config/scripts/beets/beets.log
-		sleep 0.2
+		sleep 0.1
 	fi
+	
+	touch "$1/beets-match"
+	
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | read; then
 		beet -c /config/scripts/beets/config.yaml -d "$1" import -q "$1" > /dev/null
-		if find "$1" -type f -iname "*.MATCHED.*" | read; then
+		if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" -newer "$1/beets-match" | read; then
 			echo "SUCCESS: Matched with beets!"
 		else
 			rm -rf "$1"/* 
 			echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..." && exit 1
 		fi	
+	fi
+	
+	if [ -f "$1/beets-match" ]; then 
+		rm "$1/beets-match"
+		sleep 0.1
 	fi
 }
 
