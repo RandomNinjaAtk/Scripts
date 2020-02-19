@@ -7,7 +7,7 @@ id3v23: no
 asciify_paths: true
 
 match:
-    strong_rec_thresh: 0.15 # 0.04
+    strong_rec_thresh: 0.10 # 0.04
     medium_rec_thresh: 0.25 # 0.25
     rec_gap_thresh: 0.25 # 0.25
     max_rec:
@@ -17,36 +17,36 @@ match:
         mediums: medium
         year: medium
     distance_weights:
-        source: 0.01 # 2.0
+        source: 2.0 # 2.0
         artist: 3.0 # 3.0
         album: 3.0 # 3.0
-        media: 0.01 # 1.0
-        mediums: 1.0 # 1.0
-        year: 8.0 # 1.0
-        country: 0.01 # 0.5
-        label: 0.01 # 0.5
-        catalognum: 0.01 # 0.5
+        media: 1.0 # 1.0
+        mediums: 9.0 # 1.0
+        year: 9.0 # 1.0
+        country: 0.5 # 0.5
+        label: 0.5 # 0.5
+        catalognum: 0.5 # 0.5
         albumdisambig: 0.5 # 0.5
         album_id: 5.0 # 5.0
         tracks: 2.0 # 2.0
-        missing_tracks: 8.0 # 0.9
-        unmatched_tracks: 8.0 # 0.6
+        missing_tracks: 9.0 # 0.9
+        unmatched_tracks: 9.0 # 0.6
         track_title: 3.0 # 3.0
         track_artist: 2.0 # 2.0
         track_index: 1.0 # 1.0
-        track_length: 8.0 # 2.0
+        track_length: 9.0 # 2.0
         track_id: 5.0 # 5.0
     preferred:
         countries: [] # []
-        media: ['Digital Media|CD'] # []
+        media: [] # []
         original_year: no # no
     ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums', 'year'] # []
     required: ['year', 'album', 'artist'] # []
     ignored_media: [] # []
     ignore_data_tracks: yes # yes
     ignore_video_tracks: yes # yes
-    track_length_grace: 1 # 10
-    track_length_max: 1 # 30
+    track_length_grace: 10 # 10
+    track_length_max: 30 # 30
 
 paths:
     default: $disc$track - $title.MATCHED
@@ -57,7 +57,7 @@ paths:
 import:
     write: yes
     copy: no
-    move: yes
+    move: no
     resume: ask
     incremental: no
     quiet_fallback: skip
@@ -68,7 +68,7 @@ import:
     group_albums: no
 
 chroma:
-    auto: no
+    auto: yes
 
 embedart:
     auto: no
