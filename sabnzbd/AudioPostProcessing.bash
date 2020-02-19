@@ -4,7 +4,7 @@
 #             Bash Script             #
 #######################################
 #=============REQUIREMENTS=============
-#    flac, opusenc, mp3val, ffmpeg    #
+#         flac, mp3val, ffmpeg        #
 #============CONFIGURATION=============
 RemoveNonAudioFiles="TRUE" # TURE = ENABLED, Deletes non FLAC/M4A/MP3/OPUS/OGG files
 DuplicateFileCleanUp="TRUE" # TRUE = ENABLED, Deletes duplicate files
@@ -13,7 +13,9 @@ Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
 ConversionFormat="FLAC" # SET TO: OPUS or AAC or MP3 or ALAC or FLAC - converts lossless FLAC files to set format
 ConversionBitrate="320" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
-BeetsProcessing="TRUE" # TRUE = ENABLED
+BeetsProcessing="TRUE" # TRUE = ENABLED :: Match with beets, if unmatched mark download as failed
+DetectNonSplitAlubms="TRUE" # TRUE = ENABLED :: Uses "MaxFileSize" to detect and mark download as failed if detected
+MaxFileSize="150M" # M = MB, G = GB :: Set size threshold for detecting single file albums
 
 #============FUNCTIONS============
 
@@ -41,6 +43,12 @@ duplicatefilecleanup () {
 		find "$1"/* -type f -not -iregex ".*/.*\.\(flac\)" -delete
 	fi
 	echo "DUPLICATE FILE CLEANUP COMPLETE"
+}
+
+detectsinglefilealbums () {
+	if find "$1" -type f -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -size +${MaxFileSize} | read; then
+		echo "ERROR: Non split album detected" && exit 1
+	fi
 }
 
 verify () {
@@ -183,6 +191,12 @@ else
 	echo "DUPLICATE CLEANUP DISABLED"
 fi
 
+if [ "${DetectNonSplitAlubms}" = TRUE ]; then
+	detectsinglefilealbums "$1"
+else
+	echo "NON-SPLIT ABLUM DETECTION DISABLED"
+fi
+
 if [ "${AudioVerification}" = TRUE ]; then
 	verify "$1"
 else
@@ -200,7 +214,6 @@ if [ "${Convert}" = TRUE ];	then
 else
 	echo "CONVERSION DISABLED"
 fi
-
 
 if [ "${ReplaygainTagging}" = TRUE ]; then
 	replaygain "$1"
