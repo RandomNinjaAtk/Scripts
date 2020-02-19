@@ -82,101 +82,46 @@ conversion () {
 	targetformat="$ConversionFormat"
 	bitrate="$ConversionBitrate"
 	if [ "${ConversionFormat}" = OPUS ]; then
-		if [ -x "$(command -v opusenc)" ]; then
-			if find  "$1"/ -name "*.flac" | read; then
-				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
-				for fname in "$1"/*.flac; do
-					filename="$(basename "${fname%.flac}")"
-					if opusenc --bitrate $bitrate --vbr --music "$fname" "${fname%.flac}.opus" 2> /dev/null; then
-						echo "Converted: $filename"
-						if [ -f "${fname%.flac}.opus" ]; then
-							rm "$fname"
-						fi
-					else
-						echo "Conversion failed: $filename, performing cleanup..."
-						rm -rf "$1"/*
-						sleep 0.1
-						exit 1
-					fi
-				done
-			fi
-		else
-			echo "ERROR: opus-tools not installed, please install opus-tools to use this conversion feature"
-			sleep 5
-		fi
+		options="-acodec libopus -ab ${bitrate}k -application audio"
+		extension="opus"
+		targetbitrate="${bitrate}k"
 	fi
 	if [ "${ConversionFormat}" = AAC ]; then
-		if [ -x "$(command -v ffmpeg)" ]; then
-			if find "$1"/ -name "*.flac" | read; then
-				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
-				for fname in "$1"/*.flac; do
-					filename="$(basename "${fname%.flac}")"
-					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec aac -ab ${bitrate}k -movflags faststart "${fname%.flac}.m4a"; then
-						echo "Converted: $filename"
-						if [ -f "${fname%.flac}.m4a" ]; then
-							rm "$fname"
-						fi
-					else
-						echo "Conversion failed: $filename, performing cleanup..."
-						rm -rf "$1"/*
-						sleep 0.1
-						exit 1
-					fi
-				done
-			fi
-		else
-			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
-			sleep 5
-		fi
+		options="-acodec aac -ab ${bitrate}k -movflags faststart"
+		extension="m4a"
+		targetbitrate="${bitrate}k"
 	fi
-	
 	if [ "${ConversionFormat}" = MP3 ]; then
-		if [ -x "$(command -v ffmpeg)" ]; then
-			if find "$1"/ -name "*.flac" | read; then
-				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${bitrate}k))"
-				for fname in "$1"/*.flac; do
-					filename="$(basename "${fname%.flac}")"
-					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec libmp3lame -ab ${bitrate}k "${fname%.flac}.mp3"; then
-						echo "Converted: $filename"
-						if [ -f "${fname%.flac}.mp3" ]; then
-							rm "$fname"
-						fi
-					else
-						echo "Conversion failed: $filename, performing cleanup..."
-						rm -rf "$1"/*
-						sleep 0.1
-						exit 1
-					fi
-				done
-			fi
-		else
-			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
-			sleep 5
-		fi
+		options="-acodec libmp3lame -ab ${bitrate}k"
+		extension="mp3"
+		targetbitrate="${bitrate}k"
 	fi
 	if [ "${ConversionFormat}" = ALAC ]; then
-		if [ -x "$(command -v ffmpeg)" ]; then
-			if find "$1"/ -name "*.flac" | read; then
-				echo "Converting: $converttrackcount Tracks (Target Format: $targetformat)"
-				for fname in "$1"/*.flac; do
-					filename="$(basename "${fname%.flac}")"
-					if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn -acodec alac -movflags faststart "${fname%.flac}.m4a"; then
-						echo "Converted: $filename"
-						if [ -f "${fname%.flac}.m4a" ]; then
-							rm "$fname"
-						fi
-					else
-						echo "Conversion failed: $filename, performing cleanup..."
-						rm -rf "$1"/*
-						sleep 0.1
-						exit 1
+		options="-acodec alac -movflags faststart"
+		extension="m4a"
+		targetbitrate="lossless"
+	fi
+	if [ -x "$(command -v ffmpeg)" ]; then
+		if find "$1"/ -name "*.flac" | read; then
+			echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${targetbitrate}))"
+			for fname in "$1"/*.flac; do
+				filename="$(basename "${fname%.flac}")"
+				if ffmpeg -loglevel warning -hide_banner -nostats -i "$fname" -n -vn $options "${fname%.flac}.$extension"; then
+					echo "Converted: $filename"
+					if [ -f "${fname%.flac}.$extension" ]; then
+						rm "$fname"
 					fi
-				done
-			fi
-		else
-			echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
-			sleep 5
+				else
+					echo "Conversion failed: $filename, performing cleanup..."
+					rm -rf "$1"/*
+					sleep 0.1
+					exit 1
+				fi
+			done
 		fi
+	else
+		echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
+		sleep 5
 	fi
 }
 
