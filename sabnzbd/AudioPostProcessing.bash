@@ -43,10 +43,10 @@ clean () {
 
 duplicatefilecleanup () {
 	echo "DUPLICATE FILE CLEANUP"
-	find "$1"/* -type f -iname "*([0-9]).*" -delete
-	find "$1"/* -type f -iname "*.[0-9].*" -delete
-	if find "$1" -type f -iregex ".*/.*\.\(flac\)" | read; then
-		find "$1"/* -type f -not -iregex ".*/.*\.\(flac\)" -delete
+	find "$1" -type f -mindepth 1 -iname "*([0-9]).*" -delete
+	find "$1" -type f -mindepth 1 -iname "*.[0-9].*" -delete
+	if find "$1" -type f -mindepth 1 -iname "*.flac" | read; then
+		find "$1"/* -type f -not -iname "*.flac" -delete
 	fi
 	echo "DUPLICATE FILE CLEANUP COMPLETE"
 }
