@@ -242,7 +242,8 @@ replaygain () {
 
 beets () {
 	echo ""
-	echo "MATCHING WITH BEETS"
+	trackcount=$(find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" | wc -l)
+	echo "Matching $trackcount tracks with Beets"
 	if [ -f /config/scripts/beets/library.blb ]; then
 		rm /config/scripts/beets/library.blb
 		sleep 0.1
@@ -321,5 +322,6 @@ else
 	echo "REPLAYGAIN TAGGING DISABLED"
 fi
 
+echo ""
 echo "AUDIO POST-PROCESSING COMPLETE" && exit 0
 #============END SCRIPT============
