@@ -234,6 +234,7 @@ replaygain () {
 		echo "ERROR: METAFLAC replaygain utility not installed (ubuntu: apt-get install -y flac)"
 	elif find "$1" -iname "*.flac" | read; then
 		replaygaintrackcount=$(find  "$1"/ -iname "*.flac" | wc -l)
+		echo ""
 		find "$1" -iname "*.flac" -exec metaflac --add-replay-gain "{}" + && echo "Replaygain: $replaygaintrackcount Tracks Tagged"
 	fi
 }
