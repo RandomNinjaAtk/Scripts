@@ -261,10 +261,10 @@ beets () {
 			echo "SUCCESS: Matched with beets!"
 		else
 			if [ "${BeetsFallbackToLidarr}" = TRUE ]; then
-				echo "ERROR: Unable to match using beets to a musicbrainz release..."
+				echo "ERROR: Unable to match using beets, fallback to lidarr import matching..."
 			else
 				rm -rf "$1"/* 
-				echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..." && exit 1
+				echo "ERROR: Unable to match using beets to a musicbrainz release, marking download as failed..." && exit 1
 			fi
 		fi	
 	fi
