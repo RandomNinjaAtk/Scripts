@@ -21,15 +21,21 @@ MaxFileSize="150M" # M = MB, G = GB :: Set size threshold for detecting single f
 
 clean () {
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" | read; then
-		echo "REMOVE NON AUDIO FILES"
-		find "$1" -type f -not -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -delete
-		echo "REMOVE NON AUDIO FILES COMPLETE"
-		echo "MOVE FILES TO DIR"
-		find "$1" -type f -mindepth 2 -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -exec mv "{}" "$1"/ \;
-		echo "MOVE FILES TO DIR COMPLETE"
-		echo "REMOVE SUB-DIRECTORIES"
-		find "$1" -type d -mindepth 1 -exec rm -rf "{}" \;
-		echo "REMOVE SUB-DIRECTORIES COMPLETE"
+		if find "$1" -type f -not -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" | read; then
+			echo "REMOVE NON AUDIO FILES"
+			find "$1" -type f -not -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -delete
+			echo "REMOVE NON AUDIO FILES COMPLETE"
+		fi
+		if find "$1" -type f -mindepth 2 -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" | read; then
+			echo "MOVE FILES TO DIR"
+			find "$1" -type f -mindepth 2 -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" -exec mv "{}" "$1"/ \;
+			echo "MOVE FILES TO DIR COMPLETE"
+		fi
+		if find "$1" -type d -mindepth 1 | read; then
+			echo "REMOVE SUB-DIRECTORIES"
+			find "$1" -type d -mindepth 1 -exec rm -rf "{}" \;
+			echo "REMOVE SUB-DIRECTORIES COMPLETE"
+		fi
 	else
 		echo "ERROR: NO AUDIO FILES FOUND" && exit 1
 	fi
