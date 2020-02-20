@@ -86,9 +86,7 @@ fi
 
 if [ "${DetectNonSplitAlubms}" = TRUE ]; then
 	echo "DetectNonSplitAlubms: ENABLED"
-	if [ "${MaxFileSize}" = TRUE ]; then
-		echo "MaxFileSize: $MaxFileSize" 
-	fi
+	echo "MaxFileSize: $MaxFileSize" 
 else
 	echo "DetectNonSplitAlubms: DISABLED"
 fi
