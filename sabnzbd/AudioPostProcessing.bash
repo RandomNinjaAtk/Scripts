@@ -22,7 +22,6 @@ MaxFileSize="150M" # M = MB, G = GB :: Set size threshold for detecting single f
 
 settings () {
 
-echo "Processing: $1" 
 echo ""
 echo "Configuration:"
 if [ "${RemoveNonAudioFiles}" = TRUE ]; then
@@ -92,7 +91,7 @@ else
 fi
 
 echo ""
-echo ""
+echo "Processing: $1" 
 
 }
 
