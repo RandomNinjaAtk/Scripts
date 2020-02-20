@@ -121,14 +121,26 @@ clean () {
 }
 
 duplicatefilecleanup () {
-	echo ""
-	echo "DUPLICATE FILE CLEANUP"
-	find "$1" -type f -mindepth 1 -iname "*([0-9]).*" -delete
-	find "$1" -type f -mindepth 1 -iname "*.[0-9].*" -delete
+	duplicate="FALSE"
+	if find "$1" -type f -mindepth 1 -iname "*([0-9]).*" | read; then
+		find "$1" -type f -mindepth 1 -iname "*([0-9]).*" -delete
+		duplicate="TRUE"
+	fi
+		
+	if find "$1" -type f -mindepth 1 -iname "*.[0-9].*" | read; then
+		find "$1" -type f -mindepth 1 -iname "*.[0-9].*" -delete
+		duplicate="TRUE"
+	fi
+	
 	if find "$1" -type f -mindepth 1 -iname "*.flac" | read; then
 		find "$1"/* -type f -not -iname "*.flac" -delete
+		duplicate="TRUE"
 	fi
-	echo "DUPLICATE FILE CLEANUP COMPLETE"
+	if [ "${duplicate}" = TRUE ]; then
+		echo ""
+		echo "DUPLICATE FILE CLEANUP"
+		echo "DUPLICATE FILE CLEANUP COMPLETE"
+	fi
 }
 
 detectsinglefilealbums () {
