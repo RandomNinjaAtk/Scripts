@@ -16,11 +16,12 @@ match:
         track_length: medium
         mediums: medium
         year: medium
+        media: medium
     distance_weights:
         source: 2.0 # 2.0
         artist: 3.0 # 3.0
         album: 3.0 # 3.0
-        media: 1.0 # 1.0
+        media: 9.0 # 1.0
         mediums: 9.0 # 1.0
         year: 9.0 # 1.0
         country: 0.5 # 0.5
@@ -38,21 +39,21 @@ match:
         track_id: 5.0 # 5.0
     preferred:
         countries: [] # []
-        media: [] # []
+        media: ['CD|Digital Media'] # []
         original_year: no # no
-    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums', 'year'] # []
+    ignored: ['missing_tracks', 'track_length', 'unmatched_tracks', 'mediums', 'year', 'media'] # []
     required: ['year', 'album', 'artist'] # []
     ignored_media: [] # []
     ignore_data_tracks: yes # yes
     ignore_video_tracks: yes # yes
-    track_length_grace: 10 # 10
-    track_length_max: 30 # 30
+    track_length_grace: 1 # 10
+    track_length_max: 1 # 30
 
 paths:
-    default: $disc$track - $title.MATCHED
-    singleton: $disc$track - $title.MATCHED
-    comp: $disc$track - $title.MATCHED
-    albumtype_soundtrack: $disc$track - $title.MATCHED
+    default: $disc$track - $title
+    singleton: $disc$track - $title
+    comp: $disc$track - $title
+    albumtype_soundtrack: $disc$track - $title
         
 import:
     write: yes
@@ -68,7 +69,7 @@ import:
     group_albums: no
 
 chroma:
-    auto: yes
+    auto: no
 
 embedart:
     auto: no
