@@ -58,12 +58,6 @@ echo "Conversion Bitrate: $targetbitrate"
 echo "Starting Directory: $1"
 echo "FLAC Files to process: $filecount"
 echo ""
-echo "Configuration:"
-echo "Conversion Format: $ConversionFormat"
-echo "Conversion Bitrate: $targetbitrate"
-echo "Starting Directory: $1"
-echo "FLAC Files to process: $filecount"
-echo ""
 sleep 5
 
 find "$1" -type f -name "*.flac" -exec bash -c '
