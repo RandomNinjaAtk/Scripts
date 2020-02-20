@@ -121,6 +121,7 @@ clean () {
 }
 
 duplicatefilecleanup () {
+	echo ""
 	echo "DUPLICATE FILE CLEANUP"
 	find "$1" -type f -mindepth 1 -iname "*([0-9]).*" -delete
 	find "$1" -type f -mindepth 1 -iname "*.[0-9].*" -delete
@@ -138,6 +139,9 @@ detectsinglefilealbums () {
 
 verify () {
 	if find "$1" -iname "*.flac" | read; then
+		verifytrackcount=$(find  "$1"/ -iname "*.flac" | wc -l)
+		echo ""
+		echo "Verifying: $verifytrackcount Tracks"
 		if ! [ -x "$(command -v flac)" ]; then
 			echo "ERROR: FLAC verification utility not installed (ubuntu: apt-get install -y flac)"
 		else
@@ -155,6 +159,9 @@ verify () {
 		fi
 	fi
 	if find "$1" -iname "*.mp3" | read; then
+		verifytrackcount=$(find  "$1"/ -iname "*.mp3" | wc -l)
+		echo ""
+		echo "Verifying: $verifytrackcount Tracks"
 		if ! [ -x "$(command -v mp3val)" ]; then
 			echo "MP3VAL verification utility not installed (ubuntu: apt-get install -y mp3val)"
 		else
@@ -199,6 +206,7 @@ conversion () {
 	fi
 	if [ -x "$(command -v ffmpeg)" ]; then
 		if find "$1"/ -name "*.flac" | read; then
+			echo ""
 			echo "Converting: $converttrackcount Tracks (Target Format: $targetformat (${targetbitrate}))"
 			for fname in "$1"/*.flac; do
 				filename="$(basename "${fname%.flac}")"
@@ -233,6 +241,7 @@ replaygain () {
 }
 
 beets () {
+	echo ""
 	echo "MATCHING WITH BEETS"
 	if [ -f /config/scripts/beets/library.blb ]; then
 		rm /config/scripts/beets/library.blb
