@@ -58,28 +58,33 @@ echo "Conversion Bitrate: $targetbitrate"
 echo "Starting Directory: $1"
 echo "FLAC Files to process: $filecount"
 echo ""
+echo "Configuration:"
+echo "Conversion Format: $ConversionFormat"
+echo "Conversion Bitrate: $targetbitrate"
+echo "Starting Directory: $1"
+echo "FLAC Files to process: $filecount"
+echo ""
+sleep 5
 
-find "$1" -iname "*.flac" -print0 | while IFS= read -r -d '' file; do
+find "$1" -type f -name "*.flac" -exec bash -c '
 	if [ -x "$(command -v ffmpeg)" ]; then
-		filename="$(basename "${file%.flac}")"
-		if ffmpeg -loglevel warning -hide_banner -nostats -i "$file" -n -vn $options "${file%.flac}.temp.$extension"; then
-			echo "Converted: $filename"
-			if [ -f "${file%.flac}.temp.$extension" ]; then
-				rm "$file"
+		if ffmpeg -loglevel warning -hide_banner -nostats -i "$0" -n -vn $1 "${0%.flac}.temp.$2"; then
+			echo "Converted: $0"
+			if [ -f "${0%.flac}.temp.$2" ]; then
+				rm "$0"
 				sleep 0.1
-				mv "${file%.flac}.temp.$extension" "${file%.flac}.$extension"
+				mv "${0%.flac}.temp.$2" "${0%.flac}.$2"
 			fi
 		else
-			echo "Conversion failed: $filename, performing cleanup..."
-			echo "Deleted: $file"
-			rm "$file"
+			echo "Conversion failed: $0, performing cleanup..."
+			echo "Deleted: $0"
+			rm "$0"
 		fi
 	else
 		echo "ERROR: ffmpeg not installed, please install ffmpeg to use this conversion feature"
 		sleep 5
-	fi
-done
-
+	fi	
+' {} "$options" "$extension" \;
 
 ################ Script End
 exit 0
