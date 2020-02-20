@@ -133,8 +133,10 @@ duplicatefilecleanup () {
 	fi
 	
 	if find "$1" -type f -mindepth 1 -iname "*.flac" | read; then
-		find "$1"/* -type f -not -iname "*.flac" -delete
-		duplicate="TRUE"
+		if find "$1"/* -type f -not -iname "*.flac" | read; then
+			find "$1"/* -type f -not -iname "*.flac" -delete
+			duplicate="TRUE"
+		fi
 	fi
 	if [ "${duplicate}" = TRUE ]; then
 		echo ""
