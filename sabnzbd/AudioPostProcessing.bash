@@ -13,11 +13,90 @@ Convert="FALSE" # TRUE = ENABLED, Only converts lossless FLAC files
 ConversionFormat="FLAC" # SET TO: OPUS or AAC or MP3 or ALAC or FLAC - converts lossless FLAC files to set format
 ConversionBitrate="320" # Set to desired bitrate when converting to OPUS/AAC/MP3 format types
 ReplaygainTagging="TRUE" # TRUE = ENABLED, adds replaygain tags for compatible players (FLAC ONLY)
-BeetsProcessing="TRUE" # TRUE = ENABLED :: Match with beets, if unmatched mark download as failed
+BeetsProcessing="TRUE" # TRUE = ENABLED :: Match with beets
+BeetsFallbackToLidarr="TRUE" # TRUE = ENABLED :: If beets cannot match, allow lidarr to attempt match and import, if disabled, download will be marked as failed
 DetectNonSplitAlubms="TRUE" # TRUE = ENABLED :: Uses "MaxFileSize" to detect and mark download as failed if detected
 MaxFileSize="150M" # M = MB, G = GB :: Set size threshold for detecting single file albums
 
 #============FUNCTIONS============
+
+settings () {
+
+echo "Processing: $1" 
+echo ""
+echo "Configuration:"
+if [ "${RemoveNonAudioFiles}" = TRUE ]; then
+	echo "RemoveNonAudioFiles: ENABLED"
+else
+	echo "RemoveNonAudioFiles: DISABLED"
+fi
+
+if [ "${DuplicateFileCleanUp}" = TRUE ]; then
+	echo "DuplicateFileCleanUp: ENABLED"
+else
+	echo "DuplicateFileCleanUp: DISABLED"
+fi
+
+if [ "${AudioVerification}" = TRUE ]; then
+	echo "AudioVerification: ENABLED"
+else
+	echo "AudioVerification: DISABLED"
+fi
+
+if [ "${Convert}" = TRUE ]; then
+	echo "Convert: ENABLED"
+	echo "Convert Format: $ConversionFormat"
+	if [ "${ConversionFormat}" = FLAC ]; then
+		echo "Bitrate: lossless"
+	elif [ "${ConversionFormat}" = ALAC ]; then
+		echo "Bitrate: lossless"
+	else
+		echo "Conversion Bitrate: ${ConversionBitrate}k"
+	fi
+else
+	echo "Convert: DISABLED"
+fi
+
+if [ "${Convert}" = TRUE ]; then
+	if [ "${ConversionFormat}" = FLAC ]; then
+		if [ "${ReplaygainTagging}" = TRUE ]; then
+			echo "ReplaygainTagging: ENABLED"
+		else
+			echo "ReplaygainTagging: DISABLED"
+		fi
+	fi
+else
+	if [ "${ReplaygainTagging}" = TRUE ]; then
+		echo "ReplaygainTagging: ENABLED"
+	else
+		echo "ReplaygainTagging: DISABLED"
+	fi
+fi
+
+if [ "${BeetsProcessing}" = TRUE ]; then
+	echo "BeetsProcessing: ENABLED"
+	if [ "${BeetsFallbackToLidarr}" = TRUE ]; then
+		echo "BeetsFallbackToLidarr: ENABLED" 
+	else
+		echo "BeetsFallbackToLidarr: DISABLED" 
+	fi
+else
+	echo "BeetsProcessing: DISABLED"
+fi
+
+if [ "${DetectNonSplitAlubms}" = TRUE ]; then
+	echo "DetectNonSplitAlubms: ENABLED"
+	if [ "${MaxFileSize}" = TRUE ]; then
+		echo "MaxFileSize: $MaxFileSize" 
+	fi
+else
+	echo "DetectNonSplitAlubms: DISABLED"
+fi
+
+echo ""
+echo ""
+
+}
 
 clean () {
 	if find "$1" -type f -iregex ".*/.*\.\(flac\|mp3\|m4a\|alac\|ogg\|opus\)" | read; then
@@ -172,8 +251,12 @@ beets () {
 		if find "$1" -type f -iregex ".*/.*\.\(flac\|opus\|m4a\|mp3\)" -newer "$1/beets-match" | read; then
 			echo "SUCCESS: Matched with beets!"
 		else
-			rm -rf "$1"/* 
-			echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..." && exit 1
+			if [ "${BeetsFallbackToLidarr}" = TRUE ]; then
+				echo "ERROR: Unable to match using beets to a musicbrainz release..."
+			else
+				rm -rf "$1"/* 
+				echo "ERROR: Unable to match using beets to a musicbrainz release, deleting..." && exit 1
+			fi
 		fi	
 	fi
 	
@@ -184,6 +267,8 @@ beets () {
 }
 
 #============START SCRIPT============
+
+settings "$1"
 
 if [ "${RemoveNonAudioFiles}" = TRUE ]; then
 	clean "$1"
