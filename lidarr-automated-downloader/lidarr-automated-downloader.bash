@@ -53,6 +53,7 @@ ArtistsLidarrReq(){
 	for id in ${!MBArtistID[@]}; do
 		artistnumber=$(( $id + 1 ))
 		mbid="${MBArtistID[$id]}"
+		deezerartisturl=""
 		
 		source ./config
 		
