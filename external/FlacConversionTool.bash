@@ -2,7 +2,7 @@
 ################ FLAC CONVERSION TOOL ################
 
 ############ Usage
-# Execute via CLI using the following command: bash FlacToOpus.bash "/path/to/starting/directory"
+# Execute via CLI using the following command: bash FlacConversionTool.bash "/path/to/starting/directory"
 # Replace "/path/to/starting/directory" with the path to your starting directory
 
 ############ Requirements
