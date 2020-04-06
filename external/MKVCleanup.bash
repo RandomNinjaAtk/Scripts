@@ -184,9 +184,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 				MKVaudio=""
 			fi
 		elif [ -z "$SubtitleTracksLanguage" ]; then
-			echo "ERROR: no \"${VIDEO_LANG}\" audio/subtitle tracks found"
+			echo "ERROR: no \"${VIDEO_LANG}\" audio/subtitle tracks found!"
 			rm "$video" && echo "INFO: deleted: $filename"
 			continue
+		else
+			echo "$AudioTracksLanguageCount \"foreign\" audio tracks found!"
+			RemoveAudioTracks="false"
+			MKVaudio=""
 		fi
 	
 		# Check for unwanted subtitle tracks...
@@ -235,6 +239,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 		fi
 	fi
 	echo "===================================================="
+	sleep 2
 done
 
 echo "INFO: Video processing complete"
