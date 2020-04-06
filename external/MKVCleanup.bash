@@ -139,7 +139,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 				MKVvideo=""
 			fi
 		else
-			echo "$VideoTrackCount \"${VIDEO_LANG}\" video tracks found!"
+			echo "$VideoTrackCount \"foreign\" video tracks found!"
 			SetVideoLanguage="false"
 			MKVvideo=""
 		fi
