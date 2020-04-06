@@ -245,4 +245,4 @@ done
 echo "INFO: Video processing complete"
 
 # script complete, now exiting
-exit 0
+exit $?
