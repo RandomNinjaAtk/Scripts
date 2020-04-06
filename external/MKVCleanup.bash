@@ -223,7 +223,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 			if [ "$unwantedaudio" = true ]; then
 				echo "$unwantedaudiocount unwanted audio tracks to remove..."
 			fi	
-			if [ "$unwantedaudio" = true ]; then
+			if [ "$unwantedsubtitle" = true ]; then
 				echo "$unwantedsubtitlecount unwanted subtitle tracks to remove..."
 			fi
 		else
