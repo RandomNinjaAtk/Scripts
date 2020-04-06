@@ -53,26 +53,26 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 	if [ ! -z "${tracks}" ]; then
 		# video tracks
 		VideoTrack=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | select(.disposition.default==1) | .index')
-		VideoTrackCount=$(echo "${VideoTrack}" | wc -l)
+		VideoTrackCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | select(.disposition.default==1) | .index' | wc -l)
 		# video preferred language
 		VideoTrackLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"video\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
 		# audio tracks
 		AudioTracks=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="audio") | .index')
-		AudioTracksCount=$(echo "${AudioTracks}" | wc -l)
+		AudioTracksCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="audio") | .index' | wc -l)
 		# audio preferred language
 		AudioTracksLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
-		AudioTracksLanguageCount=$(echo "${AudioTracksLanguage}" | wc -l)
+		AudioTracksLanguageCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"${VIDEO_LANG}\") | .index" | wc -l)
 		# audio unkown laguage
 		AudioTracksLanguageUND=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"und\") | .index")
-		AudioTracksLanguageUNDCount=$(echo "${AudioTracksLanguageUND}" | wc -l)
+		AudioTracksLanguageUNDCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"und\") | .index" | wc -l)
 		AudioTracksLanguageNull=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==null) | .index")
-		AudioTracksLanguageNullCount=$(echo "${AudioTracksLanguageNull}" | wc -l)
+		AudioTracksLanguageNullCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==null) | .index" | wc -l)
 		# subtitle tracks
 		SubtitleTracks=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="subtitle") | .index')	
-		SubtitleTracksCount=$(echo "${SubtitleTracks}" | wc -l)
+		SubtitleTracksCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="subtitle") | .index' | wc -l)
 		# subtitle preferred langauge
 		SubtitleTracksLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"subtitle\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
-		SubtitleTracksLanguageCount=$(echo "${SubtitleTracksLanguage}" | wc -l)
+		SubtitleTracksLanguageCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"subtitle\") | select(.tags.language==\"${VIDEO_LANG}\") | .index" | wc -l)
 	else
 		echo "ERROR: ffprobe failed to read tracks and set values"
 		rm "$video" && echo "INFO: deleted: $video"
@@ -194,11 +194,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 		fi
 	
 		# Check for unwanted subtitle tracks...
-		if [ ! -z "$SubtitleTracks" ]; then	
+		if [ ! -z "$SubtitleTracks" ]; then
 			if [ "$SubtitleTracksCount" -ne "$SubtitleTracksLanguageCount" ]; then
 				RemoveSubtitleTracks="true"
 				MKVSubtitle=" -s ${VIDEO_LANG}"
-				echo "$SubtitleTracksLanguageCount \"${VIDEO_LANG}\" subtitle tracks found!"
+				if [ ! -z "$SubtitleTracksLanguage" ]; then
+					echo "$SubtitleTracksLanguageCount \"${VIDEO_LANG}\" subtitle tracks found!"
+				fi
 				unwanted=$(($SubtitleTracksCount-$SubtitleTracksLanguageCount))
 				if [ "$unwanted" -ne "$SubtitleTracksCount" ]; then
 					echo "$unwanted unwanted subtitle tracks to remove..."
