@@ -214,12 +214,13 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 		fi
 	
 		if [ "${RemoveAudioTracks}" = false ] && [ "${RemoveSubtitleTracks}" = false ] && [ "${SetVideoLanguage}" = false ]; then
-			echo "INFO: Video passed all checks, no processing needed"
-			touch "$video"
 			if find "$video" -type f -iname "*.${CONVERTER_OUTPUT_EXTENSION}" | read; then
+				echo "INFO: Video passed all checks, no processing needed"
+				touch "$video"
 				continue
 			else
-				MKVvideo=" -d ${allvideo} --language ${allvideo}:${VIDEO_LANG}"
+				echo "INFO: Video passed all checks, but is in the incorrect container, repackaging as mkv..."
+				MKVvideo=" -d ${VideoTrack} --language ${VideoTrack}:${VIDEO_LANG}"
 				MKVaudio=" -a ${VIDEO_LANG}"
 				MKVSubtitle=" -s ${VIDEO_LANG}"
 			fi
