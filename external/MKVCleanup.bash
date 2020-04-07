@@ -277,6 +277,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 		else
 			echo "ERROR: mkvmerge failed"
 			rm "$video" && echo "INFO: deleted: $video"
+			rm "${basefilename}.merged.mkv" && echo "INFO: deleted: ${basefilename}.merged.mkv"
 			continue
 		fi
 	fi
