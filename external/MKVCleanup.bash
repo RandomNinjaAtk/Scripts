@@ -145,13 +145,12 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 		fi
 	
 		# Check for unwanted audio tracks and remove/re-label as needed...
-		unwantedaudio="false"
 		if [ ! -z "$AudioTracksLanguage" ] || [ ! -z "$AudioTracksLanguageUND" ] || [ ! -z "$AudioTracksLanguageNull" ]; then
 			if [ $AudioTracksCount -ne $AudioTracksLanguageCount ]; then
 				RemoveAudioTracks="true"
 				if [ ! -z "$AudioTracksLanguage" ]; then
 					MKVaudio=" -a ${VIDEO_LANG}"
-					echo "$AudioTracksLanguageCount \"${VIDEO_LANG}\" audio tracks found!"
+					echo "$AudioTracksLanguageCount audio tracks found!"
 					unwantedaudiocount=$(($AudioTracksCount-$AudioTracksLanguageCount))
 					if [ $AudioTracksLanguageCount -ne $AudioTracksCount ]; then
 						unwantedaudio="true"
@@ -189,26 +188,25 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 			rm "$video" && echo "INFO: deleted: $filename"
 			continue
 		else
-			echo "$AudioTracksLanguageCount \"foreign\" audio tracks found!"
+			foreignaudio="true"
 			RemoveAudioTracks="false"
 			MKVaudio=""
 		fi
 	
 		# Check for unwanted subtitle tracks...
-		unwantedsubtitle="false"
 		if [ ! -z "$SubtitleTracks" ]; then
 			if [ $SubtitleTracksCount -ne $SubtitleTracksLanguageCount ]; then
 				RemoveSubtitleTracks="true"
 				MKVSubtitle=" -s ${VIDEO_LANG}"
 				if [ ! -z "$SubtitleTracksLanguage" ]; then
-					echo "$SubtitleTracksLanguageCount \"${VIDEO_LANG}\" subtitle tracks found!"
+					echo "$SubtitleTracksLanguageCount subtitle tracks found!"
 				fi
 				unwantedsubtitlecount=$(($SubtitleTracksCount-$SubtitleTracksLanguageCount))
 				if [ $SubtitleTracksLanguageCount -ne $SubtitleTracksCount ]; then
 					unwantedsubtitle="true"
 				fi
 			else
-				echo "$SubtitleTracksLanguageCount \"${VIDEO_LANG}\" subtitle tracks found!"
+				echo "$SubtitleTracksLanguageCount subtitle tracks found!"
 				RemoveSubtitleTracks="false"
 				MKVSubtitle=""
 			fi
@@ -217,17 +215,30 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 			MKVSubtitle=""
 		fi
 		
+		# Display foreign audio track counts
+		if [ "$foreignaudio" = true ] || [ "$foreignvideo" = true ]; then
+			echo "Checking for \"foreign\" audio/video tracks"
+			if [ "$foreignvideo" = true ]; then
+				echo "$VideoTrackCount video track found!"
+				foreignvideo="false"
+			fi
+			if [ "$foreignaudio" = true ]; then
+				echo "$AudioTracksLanguageForeignCount audio tracks found!"
+				foreignaudio="false"
+			fi
+		fi
+		
 		# Display unwanted audio/subtitle track counts
-		echo "Checking for unwanted \"not: ${VIDEO_LANG}\" audio/subtitle tracks"
 		if [ "$unwantedaudio" = true ] || [ "$unwantedsubtitle" = true ]; then
+			echo "Checking for unwanted \"not: ${VIDEO_LANG}\" audio/subtitle tracks"
 			if [ "$unwantedaudio" = true ]; then
-				echo "$unwantedaudiocount unwanted audio tracks to remove..."
+				echo "$unwantedaudiocount audio tracks to remove..."
+				unwantedaudio="false"
 			fi	
 			if [ "$unwantedsubtitle" = true ]; then
-				echo "$unwantedsubtitlecount unwanted subtitle tracks to remove..."
+				echo "$unwantedsubtitlecount subtitle tracks to remove..."
+				unwantedsubtitle="false"
 			fi
-		else
-			echo "0 unwanted audio/subtitle tracks found..."
 		fi
 	
 		if [ "${RemoveAudioTracks}" = false ] && [ "${RemoveSubtitleTracks}" = false ] && [ "${SetVideoLanguage}" = false ]; then
