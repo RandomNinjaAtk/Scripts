@@ -52,8 +52,8 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 	tracks=$(ffprobe -show_streams -print_format json -loglevel quiet "$video")
 	if [ ! -z "${tracks}" ]; then
 		# video tracks
-		VideoTrack=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | select(.disposition.default==1) | .index')
-		VideoTrackCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | select(.disposition.default==1) | .index' | wc -l)
+		VideoTrack=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | .index')
+		VideoTrackCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | .index' | wc -l)
 		# video preferred language
 		VideoTrackLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"video\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
 		if [ -z "$VideoTrackLanguage" ]; then
