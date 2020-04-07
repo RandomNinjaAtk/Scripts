@@ -179,7 +179,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 					fi
 				fi
 			else
-				echo "$AudioTracksLanguageCount \"${VIDEO_LANG}\" audio tracks found!"
+				echo "$AudioTracksLanguageCount audio tracks found!"
 				RemoveAudioTracks="false"
 				MKVaudio=""
 			fi
