@@ -51,47 +51,36 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 	filename="$(basename "$video")"
 	echo "Begin processing $j of $count: $filename"
 	echo "Checking for audio/subtitle tracks"
-	tracks=$(ffprobe -show_streams -print_format json -loglevel quiet "$video")
+	tracks=$(mkvmerge -J "$video" )
 	if [ ! -z "${tracks}" ]; then
 		# video tracks
-		VideoTrack=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | .index')
-		VideoTrackCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="video") | .index' | wc -l)
+		VideoTrack=$(echo "${tracks}" | jq ".tracks[] | select(.type==\"video\") | .id")
+		VideoTrackCount=$(echo "${tracks}" |  jq ".tracks[] | select(.type==\"video\") | .id" | wc -l)
 		# video preferred language
-		VideoTrackLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"video\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
-		if [ -z "$VideoTrackLanguage" ]; then
-			VideoTrackLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"video\") | select(.tags.LANGUAGE==\"${VIDEO_LANG}\") | .index")
-		fi
+		VideoTrackLanguage=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"video\") and select(.properties.language==\"${VIDEO_LANG}\")) | .id")
 		# audio tracks
-		AudioTracks=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="audio") | .index')
-		AudioTracksCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="audio") | .index' | wc -l)
+		AudioTracks=$(echo "${tracks}" | jq ".tracks[] | select(.type==\"audio\") | .id")
+		AudioTracksCount=$(echo "${tracks}" | jq ".tracks[] | select(.type==\"audio\") | .id" | wc -l)
 		# audio preferred language
-		AudioTracksLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
-		AudioTracksLanguageCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"${VIDEO_LANG}\") | .index" | wc -l)
-		if [ -z "$AudioTracksLanguage" ]; then
-			AudioTracksLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.LANGUAGE==\"${VIDEO_LANG}\") | .index")
-			AudioTracksLanguageCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.LANGUAGE==\"${VIDEO_LANG}\") | .index" | wc -l)
-		fi
+		AudioTracksLanguage=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==\"${VIDEO_LANG}\")) | .id")
+		AudioTracksLanguageCount=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==\"${VIDEO_LANG}\")) | .id" | wc -l)
 		# audio unkown laguage
-		AudioTracksLanguageUND=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"und\") | .index")
-		AudioTracksLanguageUNDCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==\"und\") | .index" | wc -l)
-		AudioTracksLanguageNull=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==null) | .index")
-		AudioTracksLanguageNullCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language==null) | .index" | wc -l)
+		AudioTracksLanguageUND=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==\"und\")) | .id")
+		AudioTracksLanguageUNDCount=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==\"und\")) | .id" | wc -l)
+		AudioTracksLanguageNull=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==null)) | .id")
+		AudioTracksLanguageNullCount=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language==null)) | .id" | wc -l)
 		# audio foreign language
-		AudioTracksLanguageForeignCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"audio\") | select(.tags.language!=\"${VIDEO_LANG}\") | .index" | wc -l)		
+		AudioTracksLanguageForeignCount=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"audio\") and select(.properties.language!=\"${VIDEO_LANG}\")) | .id" | wc -l)		
 		# subtitle tracks
-		SubtitleTracks=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="subtitle") | .index')	
-		SubtitleTracksCount=$(echo "${tracks}" | jq '. | .streams | .[] | select (.codec_type=="subtitle") | .index' | wc -l)
+		SubtitleTracks=$(echo "${tracks}" | jq ".tracks[] | select(.type==\"subtitles\") | .id")	
+		SubtitleTracksCount=$(echo "${tracks}" | jq ".tracks[] | select(.type==\"subtitles\") | .id" | wc -l)
 		# subtitle preferred langauge
-		SubtitleTracksLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"subtitle\") | select(.tags.language==\"${VIDEO_LANG}\") | .index")
-		SubtitleTracksLanguageCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"subtitle\") | select(.tags.language==\"${VIDEO_LANG}\") | .index" | wc -l)
-		if [ -z "$SubtitleTracksLanguage" ]; then
-			SubtitleTracksLanguage=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"subtitle\") | select(.tags.LANGUAGE==\"${VIDEO_LANG}\") | .index")
-			SubtitleTracksLanguageCount=$(echo "${tracks}" | jq ". | .streams | .[] | select(.codec_type==\"subtitle\") | select(.tags.LANGUAGE==\"${VIDEO_LANG}\") | .index" | wc -l)
-		fi	
+		SubtitleTracksLanguage=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language==\"${VIDEO_LANG}\")) | .id")
+		SubtitleTracksLanguageCount=$(echo "${tracks}" | jq ".tracks[] | select((.type==\"subtitles\") and select(.properties.language==\"${VIDEO_LANG}\")) | .id" | wc -l)
 	else
 		echo "ERROR: ffprobe failed to read tracks and set values"
 		rm "$video" && echo "INFO: deleted: $video"
-	fi
+	fi	
 	
 	# Check for video track
 	if [ -z "${VideoTrack}" ]; then
