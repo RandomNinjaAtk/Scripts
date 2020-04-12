@@ -278,7 +278,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 	sleep 2
 done
 
-echo "INFO: Video processing complete"
+echo "INFO: Finished processing $count files"
 
 # script complete, now exiting
 exit $?
