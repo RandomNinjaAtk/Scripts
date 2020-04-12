@@ -43,11 +43,21 @@ else
 fi
 echo "=========================="
 echo ""
-find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -r -d '' video; do
+OIFS="$IFS"
+IFS=$'\n'
+videolistfiles=$(find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)")
+count=$(echo "$videolistfiles" | wc -l)
+videolist=($(echo "$videolistfiles"))
+echo "Processing $count files..."
+sleep 5
+for videofile in ${!videolist[@]}
+do
+	currentprocess=$(( $videofile + 1 ))
+	video="${videolist[$videofile]}"
 	echo ""
 	echo "===================================================="
 	filename="$(basename "$video")"
-	echo "Begin processing: $filename"
+	echo "Begin processing $currentprocess of $count: $filename"
 	echo "Checking for audio/subtitle tracks"
 	tracks=$(ffprobe -show_streams -print_format json -loglevel quiet "$video")
 	if [ ! -z "${tracks}" ]; then
@@ -286,7 +296,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 	echo "===================================================="
 	sleep 2
 done
-
+IFS="$OIFS"
 echo "INFO: Video processing complete"
 
 # script complete, now exiting
