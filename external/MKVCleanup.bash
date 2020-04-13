@@ -133,24 +133,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 		fi
 	fi	
 		
-	if [ ${VIDEO_MKVCLEANER} = TRUE ]; then
-		# Correct video language, if needed...
-		if [ -z "$VideoTrackLanguage" ]; then	
-			if [ ! -z "$AudioTracksLanguage" ] || [ ! -z "$AudioTracksLanguageUND" ] || [ ! -z "$AudioTracksLanguageNull" ]; then
-				SetVideoLanguage="true"
-				echo "$VideoTrackCount \"unknown\" video language track found, re-tagging as \"${VIDEO_LANG}\""
-				MKVvideo=" -d ${VideoTrack} --language ${VideoTrack}:${VIDEO_LANG}"
-			else
-				foreignvideo="true"
-				SetVideoLanguage="false"
-				MKVvideo=""
-			fi
-		else
-			echo "$VideoTrackCount video tracks found!"
-			SetVideoLanguage="false"
-			MKVvideo=""
-		fi
-	
+	if [ ${VIDEO_MKVCLEANER} = TRUE ]; then	
 		# Check for unwanted audio tracks and remove/re-label as needed...
 		if [ ! -z "$AudioTracksLanguage" ] || [ ! -z "$AudioTracksLanguageUND" ] || [ ! -z "$AudioTracksLanguageNull" ]; then
 			if [ $AudioTracksCount -ne $AudioTracksLanguageCount ]; then
@@ -222,6 +205,25 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 			MKVSubtitle=""
 		fi
 		
+		# Correct video language, if needed...
+		if [ -z "$VideoTrackLanguage" ]; then	
+			if [ ! -z "$AudioTracksLanguage" ] || [ ! -z "$AudioTracksLanguageUND" ] || [ ! -z "$AudioTracksLanguageNull" ]; then
+				SetVideoLanguage="true"
+				if [ "${RemoveAudioTracks}" = true ] || [ "${RemoveSubtitleTracks}" = true ]; then
+					echo "$VideoTrackCount \"unknown\" video language track found, re-tagging as \"${VIDEO_LANG}\""
+				fi
+				MKVvideo=" -d ${VideoTrack} --language ${VideoTrack}:${VIDEO_LANG}"
+			else
+				foreignvideo="true"
+				SetVideoLanguage="false"
+				MKVvideo=""
+			fi
+		else
+			echo "$VideoTrackCount video tracks found!"
+			SetVideoLanguage="false"
+			MKVvideo=""
+		fi
+		
 		# Display foreign audio track counts
 		if [ "$foreignaudio" = true ] || [ "$foreignvideo" = true ]; then
 			echo "Checking for \"foreign\" audio/video tracks"
@@ -248,7 +250,7 @@ find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -
 			fi
 		fi
 		
-		if [ "${RemoveAudioTracks}" = false ] && [ "${RemoveSubtitleTracks}" = false ] && [ "${SetVideoLanguage}" = false ]; then
+		if [ "${RemoveAudioTracks}" = false ] && [ "${RemoveSubtitleTracks}" = false ]; then
 			if find "$video" -type f -iname "*.${CONVERTER_OUTPUT_EXTENSION}" | read; then
 				echo "INFO: Video passed all checks, no processing needed"
 				touch "$video"
