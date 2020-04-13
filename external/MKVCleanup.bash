@@ -41,15 +41,16 @@ if [ ! -x "$(command -v ffprobe)" ]; then
 else
 	echo "SUCCESS: ffprobe installed"
 fi
-count=$(find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | wc -l)
+filecount=$(find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" | wc -l)
 echo "=========================="
 echo ""
+count=0
 find "$1" -type f -iregex ".*/.*\.\(mkv\|mp4\|avi\)" -print0 | while IFS= read -r -d '' video; do
-	let j++
+	count=$(($count+1))
 	echo ""
 	echo "===================================================="
 	filename="$(basename "$video")"
-	echo "Begin processing $j of $count: $filename"
+	echo "Begin processing $count of $filecount: $filename"
 	echo "Checking for audio/subtitle tracks"
 	tracks=$(mkvmerge -J "$video" )
 	if [ ! -z "${tracks}" ]; then
