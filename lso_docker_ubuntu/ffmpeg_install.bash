@@ -56,6 +56,15 @@ if ! [ -x "$(command -v ffmpeg)" ]; then
 	make install
 	echo ""
 	
+	echo "COMPILING NVENC"
+	cd ~/ffmpeg_sources && \
+	git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+	cd nv-codec-headers
+	./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && \
+	make && \
+	make install
+	echo ""
+	
 	echo "COMPILING X265"
 	apt-get -qq -y install mercurial libnuma-dev && \
 	cd ~/ffmpeg_sources && \
@@ -154,6 +163,7 @@ if ! [ -x "$(command -v ffmpeg)" ]; then
 	--enable-libx264 \
 	--enable-libx265 \
 	--enable-vaapi \
+	--enable-nvenc \
 	--enable-nonfree && \
 
 	PATH="/usr/bin:$PATH" make && \
